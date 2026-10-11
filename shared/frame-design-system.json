@@ -1,0 +1,17 @@
+{
+  "version": "1.1.0",
+  "understanding": {"deriveFromIndividualRequest": true, "explicitProductSelectionWins": true, "exactScreenCounts": true, "conflicts": "clarify", "predefinedJourneys": false},
+  "direction": {"selection": "product-audience-task-fit", "requireRationale": true, "industryPalettes": false, "promptHashSelection": false},
+  "capabilities": {
+    "components": ["Text", "Button", "Card", "Image", "Icon", "Input", "Search", "Avatar", "List", "Navigation", "Divider", "Progress", "Chart", "Container", "Stack", "Group"],
+    "layouts": ["absolute", "flex", "grid"],
+    "fonts": ["Inter", "Instrument Serif", "JetBrains Mono", "Arial", "Georgia", "Verdana", "Tahoma", "Trebuchet MS", "Courier New", "system-ui", "sans-serif", "serif", "monospace"],
+    "icons": ["home", "search", "profile", "heart", "plus", "settings", "activity", "back", "check", "menu", "compass", "bookmark", "location", "calendar", "star"],
+    "responsiveOverrides": ["fontSize", "columns", "paddingX", "paddingY", "hidden", "direction", "gap", "alignItems", "justifyContent"],
+    "shadows": ["none", "subtle", "medium", "strong"]
+  },
+  "tokens": {"semanticColors": ["background", "surface", "card", "border", "text", "textMuted", "accent", "primary", "secondary", "success", "warning", "error"], "textRoles": ["display", "heading", "subheading", "body", "caption", "button", "label"]},
+  "validation": {"maxScreens": 20, "navigationTargetsMustExist": true, "validatePlannedJourney": true, "unsupportedCapabilities": "reject"},
+  "redesign": {"defaultScope": "screen", "preserveUnrelatedScreens": true, "sharedSettings": "projectScopeOnly"},
+  "quality": {"maxCorrectionPasses": 1, "maxCaptures": 2, "reviewModifications": true, "reviewRenderedComposition": true, "whitespace": "contextualAdvisory", "atomicPublication": true}
+}

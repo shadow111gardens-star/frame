@@ -1,0 +1,90 @@
+Create a premium, visually distinctive, single-page personal portfolio website for Abhay Solanki, a solo SaaS founder and indie software builder who builds AI-powered products, SaaS applications, and creative developer tools.
+The website should feel like a portfolio of a serious product builder, not a generic developer portfolio template. The visual direction should be modern, minimal, experimental, and editorial, with excellent typography, intentional whitespace, subtle motion, and a strong visual hierarchy. Make it look custom-designed and memorable.
+DESIGN DIRECTION
+Use a sophisticated dark theme with a near-black background, warm white text, subtle gray borders, and a distinctive electric violet or lime accent used selectively. Use a premium typography pairing with a strong display font for headings and a clean sans-serif for body text. Create depth using subtle gradients, soft glows, fine borders, and carefully composed visual elements rather than excessive glassmorphism or random decorations.
+The layout must be responsive, polished, and visually balanced on desktop, tablet, and mobile. Use subtle animations and hover interactions where appropriate, without sacrificing readability or performance.
+SINGLE-PAGE STRUCTURE
+1. NAVIGATION
+Create a minimal sticky navigation bar with the name “Abhay Solanki” on the left and anchor links on the right: Work, About, Building, and Contact. Add a small availability indicator such as “Building independently.” Include a clear contact action. On mobile, use a compact responsive navigation menu.
+2. HERO SECTION
+Create a striking hero section with a small eyebrow label: “INDEPENDENT PRODUCT BUILDER.”
+Main headline:
+“I turn ideas into products people can use.”
+Supporting text:
+“I’m Abhay Solanki, a solo SaaS founder building useful software, AI-powered workflows, and creative tools from idea to launch.”
+Include two clear CTA buttons:
+“Explore My Work” and “Get in Touch”.
+Add a small status line:
+“Currently building Vekto.”
+Create a distinctive visual element beside or behind the hero text, such as a product-builder workspace, layered interface previews, or an abstract composition inspired by software interfaces. It should feel intentional and artistic, not like a generic stock illustration. Keep the hero focused on the headline and the projects.
+3. SELECTED WORK
+Create a premium project showcase with large, visually distinct project cards. Each project should have its own visual identity, a concise description, relevant technology tags, and a clear link action.
+Feature these known projects:
+Vekto
+A platform concept for creators and product teams to turn product visuals into animated experiences for marketing and product storytelling.
+Status: In development.
+Website: [https://vekto.website/](https://vekto.website/)
+OneGlanse
+An open-source GEO and AI visibility tracking project focused on understanding when and how brands appear in AI-generated responses.
+Repository: [https://github.com/aryamantodkar/oneglanse](https://github.com/aryamantodkar/oneglanse)
+VaultPass
+A SaaS product project.
+Website: [https://vaultpass.site/](https://vaultpass.site/)
+Babycry
+A software product project.
+Website: [https://babycry.lol/](https://babycry.lol/)
+SVG Motion
+A creative software project focused on SVG and motion workflows.
+Status: In production.
+Do not invent product features, revenue numbers, user counts, testimonials, awards, or performance statistics. If a project URL or feature is uncertain, show only the verified information provided here. Use custom project mockups or editable interface compositions instead of generic stock photos. Each project should have a distinct visual treatment while remaining consistent with the overall portfolio.
+4. ABOUT ME
+Heading:
+“Building software, learning by shipping.”
+Content:
+“I’m an independent builder who enjoys turning ideas into working products. My interests include SaaS development, AI-powered tools, product design, and developer-focused software. I focus on building, testing, and improving products through hands-on experimentation.”
+Present this information in a clean editorial layout with a few short principles:
+- Build useful things.
+- Ship, learn, and improve.
+- Keep exploring better ways to build software.
+Do not invent employment history, qualifications, education, or personal achievements.
+5. WHAT I BUILD
+Create a refined section presenting my main areas of work:
+- SaaS products and MVPs
+- AI-powered applications and workflows
+- Web applications and product interfaces
+- Creative tools for developers and product teams
+Use a distinctive grid or asymmetric editorial composition rather than four identical generic cards. Each item should have a meaningful visual detail or simple icon.
+6. CURRENTLY BUILDING
+Give Vekto a dedicated highlight section because it is my current main project.
+Heading:
+“Currently building Vekto.”
+Description:
+“Exploring better ways for creators and product teams to transform product visuals into engaging animated experiences.”
+Include a clear “Explore Vekto” link to [https://vekto.website/](https://vekto.website/).
+Create a visually rich but restrained product-preview area showing abstract animation timelines, visual layers, or product-interface concepts. Do not pretend that mockups are actual live product features.
+7. CONNECT WITH ME
+Create a compact social section with real links:
+X: [https://x.com/abhay8769](https://x.com/abhay8769)
+LinkedIn: [https://www.linkedin.com/in/abhay-solanki-b2a503234/](https://www.linkedin.com/in/abhay-solanki-b2a503234/)
+Use recognizable social icons, clear labels, and accessible hover states. Do not invent an email address. Provide a contact CTA that can use the available social links until a real contact email is configured.
+8. FOOTER
+Use a minimal footer with:
+“Designed and built by Abhay Solanki.”
+Include the current year dynamically and links to X and LinkedIn.
+FUNCTIONAL REQUIREMENTS
+- This must be one complete, single-page website, not multiple pages.
+- Navigation links must smoothly scroll to the correct sections.
+- All project links and social links must work and open the correct destinations.
+- CTA buttons must perform their intended actions.
+- Responsive layouts must work on desktop, tablet, and mobile.
+- Include accessible contrast, semantic HTML, keyboard navigation, visible focus states, and reduced-motion support.
+- Add subtle, purposeful motion and transitions without making the website feel slow.
+- Optimize images, assets, loading performance, and mobile usability.
+- Keep the code and components maintainable.
+- Do not add unnecessary backend functionality, authentication, a database, paid APIs, or external services.
+VISUAL QUALITY REQUIREMENTS
+Avoid generic portfolio templates, repetitive cards, excessive rounded rectangles, unnecessary gradients, oversized empty spaces, random floating objects, and meaningless animations.
+Use deliberate composition, strong typography, controlled color, varied section layouts, clear content hierarchy, and high-quality project presentation. The hero, projects, and Vekto highlight should each feel visually distinctive.
+Make the page feel like a thoughtful combination of an independent product builder's portfolio and a premium digital product studio website.
+Use editable HTML/CSS and normal web components for all interface elements. Do not generate the website as a screenshot or a single flattened image.
+Before finalizing, review the entire page for visual consistency, responsive behavior, broken links, spacing issues, readability, and unfinished sections. The final result should be production-quality and ready to deploy.
