@@ -1,3 +1,4 @@
+import {useAuth} from "../../auth/AuthProvider";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { useHome } from "../store";
@@ -144,6 +145,7 @@ export function SettingsModal() {
 }
 
 function AccountSection() {
+  const {user}=useAuth();
   const { state, dispatch } = useHome();
   const { settings } = state;
   return (
@@ -156,7 +158,8 @@ function AccountSection() {
       </div>
       <Row label="Display name">
         <input
-          value={settings.displayName}
+          value={user?.displayName??settings.displayName}
+          readOnly={!!user}
           onChange={(e) =>
             dispatch({ type: "UPDATE_SETTINGS", partial: { displayName: e.target.value } })
           }
@@ -165,7 +168,8 @@ function AccountSection() {
       </Row>
       <Row label="Email">
         <input
-          value={settings.email}
+          value={user?.email??settings.email}
+          readOnly={!!user}
           onChange={(e) =>
             dispatch({ type: "UPDATE_SETTINGS", partial: { email: e.target.value } })
           }

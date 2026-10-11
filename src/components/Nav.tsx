@@ -1,3 +1,4 @@
+import {AuthLink} from "../auth/AuthProvider";
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -67,18 +68,18 @@ export function Nav() {
 
           {/* Right CTA */}
           <div className="flex items-center gap-2">
-            <a
+            <AuthLink
               href="#"
               className="hidden sm:inline-flex items-center text-[13.5px] text-white/60 hover:text-white transition-colors px-3"
             >
               Sign in
-            </a>
-            <a
+            </AuthLink>
+            <AuthLink
               href="#home"
               className="btn-primary px-4 py-2 text-[13px]"
             >
               Start Designing
-            </a>
+            </AuthLink>
             <button
               onClick={() => setMobileOpen((s) => !s)}
               className="md:hidden ml-1 inline-flex h-8 w-8 items-center justify-center rounded-full border border-white/10"

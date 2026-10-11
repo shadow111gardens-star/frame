@@ -157,3 +157,8 @@ See `docs/universal-design-improvements.md` for exact changes, acceptance checks
 FRAME uses only the official Google Gemini API through `server/geminiResponse.ts`. Configure server-only `GEMINI_API_KEY` and `GEMINI_MODEL=gemini-3.8-flash`, then restart the server. Analysis, planning, draft, review, modifications and browser-rendered corrections all use this adapter with the existing schemas and validation. Credentials must never use a `VITE_` prefix or enter source control.
 
 The API reports nonsecret routing evidence in `X-FRAME-Provider` and `X-FRAME-Model` response headers. Offline routing tests mock every upstream call; they do not establish live model availability. Gemini's existing retry, cancellation and deadline handling remain in place.
+
+
+## Google authentication
+
+Start Designing uses Firebase Google sign-in for project `frame-44bbd`. The existing home/workspace hash routes wait for Firebase session restoration; logout uses Firebase signOut. See [Firebase setup and verification](docs/firebase-auth.md) for required Console/domain settings and deployment considerations. No additional environment variables are needed. Project storage and server API authorization remain unchanged.

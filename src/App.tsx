@@ -1,3 +1,5 @@
+import {useAuth} from "./auth/AuthProvider";
+import {protectedRoute} from "./auth/store";
 import { useEffect, useState } from "react";
 import { Nav } from "./components/Nav";
 import { Hero } from "./components/Hero";
@@ -88,6 +90,7 @@ function resolveRoute(): Resolved {
 }
 
 export default function App() {
+  const auth=useAuth();
   const [resolved, setResolved] = useState<Resolved>(resolveRoute());
 
   useEffect(() => {
@@ -103,6 +106,15 @@ export default function App() {
     window.addEventListener("hashchange", onHashChange);
     return () => window.removeEventListener("hashchange", onHashChange);
   }, []);
+
+  useEffect(()=>{
+    if(protectedRoute(resolved.route)&&auth.status==='unauthenticated'){
+      auth.remember(resolved.route==='home'?'#home':'#workspace');
+      window.location.hash='';
+    }
+  },[resolved.route,auth.status]);
+  if(protectedRoute(resolved.route)&&auth.status==='loading')return <div role="status" className="min-h-screen grid place-items-center bg-[#050507] text-white/65">Restoring your session?</div>;
+  if(protectedRoute(resolved.route)&&auth.status!=='authenticated')return <div className="min-h-screen bg-[#050507] text-white"><Nav /><Hero /></div>;
 
   // Workspace — full-screen, no global chrome
   if (resolved.route === "workspace") {
