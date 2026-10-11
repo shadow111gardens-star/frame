@@ -1,4 +1,3 @@
-import {AuthLink} from "../../auth/AuthProvider";
 import { useState } from "react";
 import { PageLayout } from "../PageLayout";
 import { PageHero } from "./PageHero";
@@ -81,7 +80,7 @@ export function Templates() {
 
 function TemplateCard({ t }: { t: Template }) {
   return (
-    <AuthLink
+    <a
       href="#home"
       className="group rounded-2xl border border-white/[0.06] bg-white/[0.015] hover:bg-white/[0.03] hover:border-white/[0.1] p-5 transition-all"
     >
@@ -145,6 +144,6 @@ function TemplateCard({ t }: { t: Template }) {
           </svg>
         </span>
       </div>
-    </AuthLink>
+    </a>
   );
 }

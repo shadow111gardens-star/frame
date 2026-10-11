@@ -1,4 +1,3 @@
-import {AuthLink} from "../../auth/AuthProvider";
 import { PageLayout } from "../PageLayout";
 import { PageHero } from "./PageHero";
 
@@ -173,7 +172,7 @@ export function About() {
           <p className="text-[14px] text-white/50 mb-6">
             The fastest way to know what we believe is to use the product.
           </p>
-          <AuthLink
+          <a
             href="#home"
             className="btn-primary px-6 py-3 text-[13px] inline-flex items-center gap-2"
           >
@@ -181,7 +180,7 @@ export function About() {
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
               <path d="M5 12h14M13 5l7 7-7 7" />
             </svg>
-          </AuthLink>
+          </a>
         </div>
       </section>
     </PageLayout>

@@ -1,9 +1,7 @@
-import {useAuth} from "../../auth/AuthProvider";
 import { motion } from "framer-motion";
 import { useHome } from "../store";
 
 export function LogoutConfirm() {
-  const auth=useAuth();
   const { state, dispatch } = useHome();
   const modal = state.modal;
   if (modal.type !== "logout") return null;
@@ -47,9 +45,11 @@ export function LogoutConfirm() {
               Cancel
             </button>
             <button
-              disabled={auth.busy}
-              onClick={async () => {
-                try{await auth.logout();dispatch({ type: "LOGOUT" });dispatch({ type: "CLOSE_MODAL" });}catch{/* AuthNotice displays the error; retain the session. */}
+              onClick={() => {
+                dispatch({ type: "LOGOUT" });
+                dispatch({ type: "CLOSE_MODAL" });
+                // Reset to landing
+                window.location.hash = "";
               }}
               className="px-4 py-2 text-[12px] rounded-full bg-white text-black hover:bg-white/90 transition-colors"
             >
