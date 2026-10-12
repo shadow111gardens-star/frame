@@ -1,3 +1,4 @@
+import {AuthButton} from "../auth/AuthProvider";
 import { motion } from "framer-motion";
 
 const ease = [0.22, 1, 0.36, 1] as const;
@@ -44,15 +45,14 @@ export function FinalCTA() {
           </p>
 
           <div className="mt-12 flex flex-col sm:flex-row items-center justify-center gap-3">
-            <a
-              href="#home"
+            <AuthButton
               className="btn-primary px-7 py-3.5 text-[14.5px] inline-flex items-center gap-2.5"
             >
               Start Designing
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <path d="M5 12h14M13 5l7 7-7 7" />
               </svg>
-            </a>
+            </AuthButton>
             <a
               href="#"
               className="text-white/60 hover:text-white px-4 py-3 text-[13.5px] transition-colors inline-flex items-center gap-2"
