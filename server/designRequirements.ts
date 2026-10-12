@@ -1,6 +1,8 @@
 import {z} from 'zod';
 import {GeminiError} from './geminiResponse';
 import {designPolicy} from '../shared/designPolicy';
+import {screenNameKey,screenRequirement,type ScreenRequirement} from './screenRequirements';
+import {DesignValidationError} from './designDiagnostics';
 
 export const requirementsSchema=z.object({
   purpose:z.string().max(500),
@@ -55,16 +57,19 @@ export function resolveRequirements(prompt:string,namedScreens:string[],input?:R
   result.exclusions=result.exclusions.filter(includes);
  result.conflicts=result.conflicts.filter(c=>c.evidence.every(includes)&&!( /\b(?:screen|page)[ -]*count|number of (?:screens|pages)|counts?\b/i.test(c.reason)&&minimum<=maximum));
   if(result.conflicts.length)throw conflict('the request contains incompatible requirements. Please specify which should take priority.');
-  if(result.requestedScreenCount!==null&&new Set(namedScreens.map(s=>s.toLowerCase())).size>result.requestedScreenCount)throw conflict('the number of required named screens exceeds the requested total.');
-  if(namedScreens.some(name=>result.excludedScreens.some(e=>e.name.toLowerCase()===name.toLowerCase())))throw conflict('a screen is both required and excluded.');
+  const names=new Set(namedScreens.map(screenNameKey));
+  if(names.size>designPolicy.validation.maxScreens)throw conflict('the number of required named screens exceeds FRAME capabilities.');
+  if(result.requestedScreenCount!==null&&names.size>result.requestedScreenCount)throw conflict('the number of required named screens exceeds the requested total.');
+  if(namedScreens.some(name=>result.excludedScreens.some(e=>screenNameKey(e.name)===screenNameKey(name))))throw conflict('a screen is both required and excluded.');
   return result;
 }
-export function enforceScreenRequirements(screens:{name:string}[],requiredNames:string[],requirements:Requirements,prompt?:string){
+export function enforceScreenRequirements(screens:{name:string}[],requiredNames:string[],requirements:Requirements,prompt?:string,details:ScreenRequirement[]=[]){
+  const missing=[...new Map(requiredNames.map(name=>[screenNameKey(name),name])).values()].filter(name=>!screens.some(s=>screenNameKey(s.name)===screenNameKey(name))).map(name=>details.find(d=>d.key===screenNameKey(name))??screenRequirement(name));
+  if(missing.length)throw new DesignValidationError('The design omitted a requested named screen: '+missing.map(s=>`${s.expectedName} [${s.id}]`).join(', ')+'. Your prompt and existing design are preserved.','REQUIREMENT_SCREEN',{reason:'REQUESTED_SCREENS',missingScreens:missing});
   if(requirements.requestedScreenCount!==null&&screens.length!==requirements.requestedScreenCount)throw new GeminiError(`The design must contain exactly ${requirements.requestedScreenCount} screens. Your prompt and existing design are preserved.`,'REQUIREMENT_COUNT');
  if(prompt!==undefined){
   const constraints=screenCountConstraints(prompt),min=Math.max(1,...constraints.map(c=>c.min)),max=Math.min(designPolicy.validation.maxScreens,...constraints.map(c=>c.max));
   if(screens.length<min||screens.length>max)throw new GeminiError(`The design must contain between ${min} and ${max} screens as requested. Your prompt and existing design are preserved.`,'REQUIREMENT_COUNT');
  }
-  if(requiredNames.some(name=>!screens.some(s=>s.name.toLowerCase()===name.toLowerCase())))throw new GeminiError('The design omitted a requested named screen. Your prompt and existing design are preserved.','REQUIREMENT_SCREEN');
-  if(screens.some(s=>requirements.excludedScreens.some(e=>e.name.toLowerCase()===s.name.toLowerCase())))throw new GeminiError('The design included an excluded screen. Your prompt and existing design are preserved.','REQUIREMENT_EXCLUSION');
+  if(screens.some(s=>requirements.excludedScreens.some(e=>screenNameKey(e.name)===screenNameKey(s.name))))throw new GeminiError('The design included an excluded screen. Your prompt and existing design are preserved.','REQUIREMENT_EXCLUSION');
 }

@@ -3,7 +3,7 @@ import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {flowSizing} from '../src/design/layoutStyle';
 import {inspectStructure,qualityReviewSchema} from '../shared/designQuality';
-import {contrastRatio} from '../src/design/renderQuality';
+import {contrastRatio,representativeScreenIds,paintedTextBounds} from '../src/design/renderQuality';
 import {fixture} from './fixture';
 import {validatePlannedDesign,designPlanSchema} from '../server/designPlanning';
 import {planFixture} from './planFixture';
@@ -35,4 +35,18 @@ test('planning accepts numeric region budgets and preserves editorial/empty inte
 test('an empty measured flow group is not text and must not push an overlaid heading',()=>{
   const result=reflowText([{id:'empty-flow',type:'Stack',name:'Empty stack',position:{x:16,y:16,width:358,height:48},styles:{layout:'flex'}},{id:'heading',type:'Text',name:'Heading',text:'Destination',position:{x:16,y:16,width:200,height:44},styles:{fontSize:36}}],{'empty-flow':48,heading:42},844);
   assert.equal(result.positions.heading,undefined);assert.equal(result.height,844);
+});
+test('representative capture selection prioritizes errors beyond the first two screens and varied component types',()=>{
+  const app=fixture();app.screens.push({...structuredClone(app.screens[1]),id:'third',components:[{id:'photo',name:'Hero',type:'Image',position:{x:0,y:0,width:390,height:200},styles:{}}]});
+  assert.deepEqual(representativeScreenIds(app,[],2),['home','third']);
+  assert.deepEqual(representativeScreenIds(app,[{screenId:'third',componentIds:['photo'],code:'bounds',severity:'error',detail:'Actual clipping'}],2),['third','home']);
+  assert.deepEqual(representativeScreenIds(app,[],0),[]);
+});
+test('painted glyph bounds exclude unused font metric space without accepting actual clipping',()=>{
+ const range={left:40,right:159,top:62,bottom:104};
+ const ink=paintedTextBounds(range,{fontBoundingBoxAscent:32,actualBoundingBoxAscent:24,actualBoundingBoxDescent:2,actualBoundingBoxLeft:0,actualBoundingBoxRight:119});
+ assert.deepEqual(ink,{left:40,right:159,top:70,bottom:96});
+ const clipped=paintedTextBounds(range,{fontBoundingBoxAscent:32,actualBoundingBoxAscent:34,actualBoundingBoxDescent:15,actualBoundingBoxLeft:2,actualBoundingBoxRight:119});
+ assert.equal(clipped.top,60);assert.equal(clipped.bottom,109);assert.equal(clipped.left,38);
+ assert.deepEqual(paintedTextBounds(range,{fontBoundingBoxAscent:NaN,actualBoundingBoxAscent:24,actualBoundingBoxDescent:2,actualBoundingBoxLeft:0,actualBoundingBoxRight:119}),range);
 });

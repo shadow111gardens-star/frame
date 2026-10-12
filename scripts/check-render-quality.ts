@@ -4,10 +4,11 @@ import {mkdtemp,readFile,mkdir,writeFile} from 'node:fs/promises';
 import {tmpdir} from 'node:os';
 import path from 'node:path';
 import {createServer} from 'vite';
-let candidate:any;const requests:any[]=[];const savedMode=process.argv.includes('--live-saved');if(savedMode){const saved=JSON.parse(await readFile('artifacts/render-quality/live-gemini.json','utf8'));candidate={productType:'mobile_app',name:'Saved live Gemini generation',designSystem:saved.designSystem,screens:saved.screens.map((s:any)=>({...s,components:s.components.map((id:string)=>saved.components[id])}))};}
+const artifactFile=process.argv.find(arg=>arg.startsWith('--artifact='))?.slice('--artifact='.length),repairArtifact=process.argv.includes('--repair-artifact');let artifactResult:any=artifactFile?JSON.parse(await readFile(artifactFile,'utf8')):undefined;
+let candidate:any=artifactResult?.app;const requests:any[]=[];const savedMode=process.argv.includes('--live-saved');if(savedMode){const saved=JSON.parse(await readFile('artifacts/render-quality/live-gemini.json','utf8'));candidate={productType:'mobile_app',name:'Saved live Gemini generation',designSystem:saved.designSystem,screens:saved.screens.map((s:any)=>({...s,components:s.components.map((id:string)=>saved.components[id])}))};}
 const server=await createServer({server:{host:'127.0.0.1',port:0},plugins:[{name:'quality-acceptance',enforce:'pre',configureServer(vite){
   vite.middlewares.use('/__quality-test',async(_req,res)=>{res.setHeader('Content-Type','text/html');res.end(await vite.transformIndexHtml('/__quality-test','<!doctype html><html><head>'+((await readFile('index.html','utf8')).match(/<link[^>]*fonts.googleapis.com\/css[^>]*>/)?.[0]??'')+'</head><body><div id="root"></div><script type="module" src="/tests/qualityHarness.tsx"></script></body></html>'));});
-  if(!process.argv.includes('--live'))vite.middlewares.use('/api/design',async(req,res,next)=>{let body='';for await(const chunk of req)body+=chunk;const input=JSON.parse(body);if(savedMode&&input.mode!=='generate'){req.url='/api/design';const result=await import('../server/gemini');const {loadEnv}=await import('vite');await result.designRoute({...loadEnv(vite.config.mode,process.cwd(),''),...process.env})(Object.assign(req,{[Symbol.asyncIterator]:async function*(){yield body;}}),res,next);return;}requests.push(input);res.setHeader('Content-Type','application/json');if(input.mode==='generate'){res.end(JSON.stringify({message:'Generated candidate',app:candidate}));return;}
+  if(!process.argv.includes('--live'))vite.middlewares.use('/api/design',async(req,res,next)=>{let body='';for await(const chunk of req)body+=chunk;const input=JSON.parse(body);if((savedMode||repairArtifact)&&input.mode!=='generate'){req.url='/api/design';const end=res.end.bind(res);res.end=((chunk:any,...args:any[])=>{try{const parsed=JSON.parse(String(chunk));const data=parsed.event==='result'?parsed.data:parsed;if(artifactFile)void writeFile('artifacts/fixed-flow/'+path.basename(artifactFile,'.json')+'-correction.json',JSON.stringify(data,null,2));}catch{}return (end as any)(chunk,...args);}) as typeof res.end;const result=await import('../server/gemini');const {loadEnv}=await import('vite');await result.designRoute({...loadEnv(vite.config.mode,process.cwd(),''),...process.env},async()=> 'local-verification-owner')(Object.assign(req,{[Symbol.asyncIterator]:async function*(){yield body;}}),res,next);return;}requests.push(input);res.setHeader('Content-Type','application/json');if(input.mode==='generate'){res.end(JSON.stringify({message:'Generated candidate',app:candidate,generationArtifact:artifactResult?.generationArtifact}));return;}
     const corrected=structuredClone(input.app);const c=corrected.screens[0].components.find((n:any)=>n.id==='copy');c.position.height=80;c.styles.color='#27352f';res.end(JSON.stringify({message:'Corrected measured copy',app:corrected}));
   });
 }}]});await server.listen();
@@ -30,8 +31,37 @@ try {
   await send('Emulation.setDeviceMetricsOverride',{width:1600,height:900,deviceScaleFactor:1,mobile:false});
   await mkdir('artifacts/render-quality',{recursive:true});
   await send('Page.navigate',{url:`${server.resolvedUrls!.local[0]}__quality-test`});
-  for(let i=0;i<100;i++){if(await evaluate('!!window.qualityTest?.state.screens.length'))break;await pause(100);}await pause(500);
-  if((process.argv.includes('--live')||savedMode)){
+  let ready=false;
+  for(let i=0;i<300;i++){if(await evaluate('!!window.qualityTest && !!document.querySelector("[data-component-id=left]")')){ready=true;break;}await pause(100);}
+  assert.ok(ready,'Actual fixture components mounted before browser measurements');await pause(500);
+  const artifactArg=process.argv.find(arg=>arg.startsWith('--artifact='));
+  if(artifactArg){
+    const file=artifactArg.slice('--artifact='.length),result=JSON.parse(await readFile(file,'utf8'));
+    assert.ok(result.app,'Saved API response contains a valid candidate');
+    await send('Emulation.setDeviceMetricsOverride',{width:1800,height:1000,deviceScaleFactor:1,mobile:false});
+    if(repairArtifact){await evaluate('window.qualityTest.generateDesign('+JSON.stringify(result.generationArtifact.originalPrompt)+',false,'+JSON.stringify(result.app.productType)+')');}
+    else await evaluate('window.qualityTest.dispatch('+JSON.stringify({type:'APPLY_DESIGN',app:result.app,generationArtifact:result.generationArtifact})+')');await pause(600);
+    await evaluate(`Promise.race([Promise.all([...document.querySelectorAll('img')].map(img=>img.decode().catch(()=>{}))),new Promise(resolve=>setTimeout(resolve,10000))])`);
+    const issues=await evaluate('window.qualityTest.inspect()');
+    const layoutEvidence=await evaluate(`Array.from(document.querySelectorAll('[data-component-id]')).filter(element=>element.querySelector('[data-text-content]')).map(element=>{const text=element.querySelector('[data-text-content]'),range=document.createRange();range.selectNodeContents(text);const style=getComputedStyle(element);return {id:element.dataset.componentId,box:element.getBoundingClientRect().toJSON(),textBox:text.getBoundingClientRect().toJSON(),glyphBox:range.getBoundingClientRect().toJSON(),scrollHeight:text.scrollHeight,clientHeight:text.clientHeight,fontSize:style.fontSize,lineHeight:style.lineHeight,padding:style.padding,margin:style.margin};})`);
+    await writeFile('artifacts/fixed-flow/'+path.basename(file,'.json')+'-layout-evidence.json',JSON.stringify(layoutEvidence,null,2));
+    const state=await evaluate('({generationArtifact:window.qualityTest.state.generationArtifact,messages:window.qualityTest.state.messages,screens:window.qualityTest.state.screens,components:window.qualityTest.state.components})');
+    if(repairArtifact)await writeFile('artifacts/fixed-flow/'+path.basename(file,'.json')+'-browser-result.json',JSON.stringify(state,null,2));
+    const stem=path.basename(file,'.json');await mkdir('artifacts/fixed-flow',{recursive:true});
+    const metrics=await send('Page.getLayoutMetrics');
+    await writeFile('artifacts/fixed-flow/'+stem+'-render.png',Buffer.from((await send('Page.captureScreenshot',{format:'png',captureBeyondViewport:true,clip:{x:0,y:0,width:Math.min(3200,metrics.cssContentSize.width),height:Math.min(4000,metrics.cssContentSize.height),scale:1}})).data,'base64'));
+    await writeFile('artifacts/fixed-flow/'+stem+'-measurements.json',JSON.stringify(issues,null,2));
+    if(repairArtifact&&state.messages.at(-1)?.retryPrompt)throw new Error('Browser rejected candidate and preserved existing design: '+state.messages.at(-1).content);
+    if(state.generationArtifact){
+      await evaluate(`window.qualityTest.dispatch({type:'OPEN_MODAL',modal:{type:'export'}})`);await pause(200);
+      await evaluate(`Array.from(document.querySelectorAll('button')).find(button=>button.textContent.includes('DESIGN.md')).click()`);await pause(100);
+      assert.equal(await evaluate(`document.querySelector('[aria-label="DESIGN.md preview"]').textContent`),state.generationArtifact.designMd,'Reopened artifact is viewable without HTML execution');
+      await evaluate(`(()=>{const original=URL.createObjectURL;URL.createObjectURL=blob=>{window.mdDownload=blob;return original(blob);};const click=HTMLAnchorElement.prototype.click;HTMLAnchorElement.prototype.click=function(){window.mdFilename=this.download;return click.call(this);};Array.from(document.querySelectorAll('button')).find(button=>button.textContent==='Export').click();})()`);await pause(100);
+      assert.equal(await evaluate('window.mdDownload.text()'),state.generationArtifact.designMd);assert.equal(await evaluate('window.mdFilename'),'DESIGN.md');
+      await evaluate(`window.qualityTest.dispatch({type:'CLOSE_MODAL'})`);
+    }
+    console.log(JSON.stringify({fixture:stem,screens:result.app.screens.map((screen:any)=>screen.name),issues,verification:'Actual Chrome render of saved live Gemini candidate; no production Firebase sign-in claimed; bounded live browser correction only when --repair-artifact is passed.'},null,2));
+  }else  if((process.argv.includes('--live')||savedMode)){
     await send('Emulation.setDeviceMetricsOverride',{width:1800,height:1000,deviceScaleFactor:1,mobile:false});
     await evaluate(`window.qualityResponses=[];const nativeFetch=window.fetch;window.fetch=async(...args)=>{const response=await nativeFetch(...args);if(args[0]==='/api/design')window.qualityResponses.push(await response.clone().json());return response;}`);
     await evaluate(`window.qualityTest.generateDesign('Create a premium travel planning mobile app with Explore, Trip Detail, Saved and Profile screens. Make Explore useful for destination discovery with search, a clear featured destination and browsable seasonal recommendations. Use a coherent restrained warm palette, readable typography and a polished linked bottom navigation. Unknown personal data must use actionable empty states.',false,'mobile_app')`);
@@ -51,7 +81,21 @@ try {
   assert.equal(geometry.left.width,165);assert.equal(geometry.right.width,165);assert.equal(geometry.right.x-geometry.left.x-165,12);assert.equal(geometry.long.width,165);assert.equal(geometry.long.overflow,0);assert.equal(geometry.nav.y,792);assert.equal(geometry.nav.width,382);assert.equal(geometry.nav.height,72);assert.equal(geometry.searchColor,'rgb(39, 53, 47)');assert.equal(geometry.imageFit,'contain');
   report.push({layout:geometry,issues:await evaluate('window.qualityTest.inspect()')});
   await writeFile('artifacts/render-quality/mobile-flow.png',Buffer.from((await send('Page.captureScreenshot',{format:'png'})).data,'base64'));
+  const clipping=await evaluate(`(()=>{const copy=document.querySelector('[data-component-id="copy"] [data-text-content]');const before=copy.style.cssText;copy.style.transform='translate(-12px, -8px)';const text=window.qualityTest.inspect().filter(i=>i.code==='text-clipping'&&i.componentIds.includes('copy'));copy.style.cssText=before;const grid=document.querySelector('[data-component-id="grid"]');const original=grid.style.cssText;grid.style.height='20px';grid.style.overflow='hidden';const ancestor=window.qualityTest.inspect().filter(i=>i.code==='bounds'&&i.detail.includes('ancestor'));grid.style.cssText=original;return {text,ancestor};})()`);
+  assert.ok(clipping.text.length,'Text extending left/top of padded content is detected');
+  assert.ok(clipping.ancestor.length,'Absolute ancestor clipping is detected from rendered geometry');
+  await evaluate(`(()=>{const app=window.qualityTest.fixture(),row=app.screens[0].components.find(c=>c.id==='row');row.children.push('third-control');const third=structuredClone(app.screens[0].components.find(c=>c.id==='left'));third.id='third-control';third.text='More';third.position.height=36;app.screens[0].components.push(third);window.qualityTest.dispatch({type:'APPLY_DESIGN',app});})()`);await pause(250);
+  const spacing=await evaluate(`window.qualityTest.inspect().filter(i=>i.code==='spacing'&&i.detail.includes('Peer control row'))`);
+  assert.ok(spacing.length,'Actual peer control height differences are measured');
+  await writeFile('artifacts/render-quality/consistency-regressions.json',JSON.stringify({clipping,spacing,wrappedGrid:geometry.long},null,2));
+  await writeFile('artifacts/render-quality/spacing-regression.png',Buffer.from((await send('Page.captureScreenshot',{format:'png'})).data,'base64'));
+  await evaluate(`window.qualityTest.dispatch({type:'APPLY_DESIGN',app:window.qualityTest.fixture()})`);await pause(250);
   await evaluate(`window.qualityTest.dispatch({type:'SET_CENTER_TAB',tab:'prototype'})`);await pause(200);await evaluate(`document.querySelector('[data-component-id="tab2"] button').click()`);await pause(200);assert.equal(await evaluate('window.qualityTest.state.currentScreen'),'other');
+  for(const type of ['Text','Card']){
+    await evaluate(`(()=>{const app=window.qualityTest.fixture();app.screens[0].components.find(c=>c.id==='right').type='${type}';window.qualityTest.dispatch({type:'APPLY_DESIGN',app});window.qualityTest.dispatch({type:'SET_CENTER_TAB',tab:'prototype'});window.qualityTest.dispatch({type:'SELECT_SCREEN',id:'flow'});})()`);await pause(200);
+    await evaluate(`document.querySelector('[data-component-id="right"]').click()`);await pause(200);
+    assert.equal(await evaluate('window.qualityTest.state.currentScreen'),'other',type+' is a working renderer navigation surface');
+  }
   await evaluate(`(()=>{const app=window.qualityTest.fixture();app.productType='website';app.screens.forEach(s=>{s.width=1200;s.height=1200});window.qualityTest.dispatch({type:'APPLY_DESIGN',app})})()`);await pause(300);
   assert.equal(await evaluate(`document.querySelector('[data-generated-screen]').offsetWidth`),1200);assert.equal(await evaluate(`document.querySelector('[data-component-id="right"]').offsetWidth`),165);
   report.push({websiteFlow:true,navigation:true});
@@ -63,8 +107,11 @@ try {
   const review=requests[1].qualityReview;assert.ok(requests[1].app.screens[0].components.find((c:any)=>c.id==='copy').position.height>=54,'Measured text reflow is applied before Gemini review');assert.ok(review.issues.some((i:any)=>i.code==='contrast'));assert.ok(review.screenshots.length>=1,'Actual rendered DOM capture accompanies targeted correction');
   assert.equal(await evaluate(`window.qualityTest.state.components.copy.styles.color`),'#27352f');assert.equal(await evaluate(`window.qualityTest.state.components.copy.position.height`),80);
   assert.equal(JSON.stringify(requests[1].app.screens[1]),other);assert.equal(await evaluate(`document.querySelectorAll('[aria-hidden="true"] [data-generated-screen]').length`),0);
-  const errors=await evaluate(`window.qualityTest.inspect().filter(i=>i.severity==='error')`);assert.deepEqual(errors,[]);
+  const errors=await evaluate(`window.qualityTest.inspect().filter(i=>i.severity==='error')`);
+  if(errors.length){await writeFile('artifacts/render-quality/rejected-fixture.png',Buffer.from((await send('Page.captureScreenshot',{format:'png'})).data,'base64'));await writeFile('artifacts/render-quality/rejected-fixture.json',JSON.stringify(errors,null,2));}
+  assert.deepEqual(errors,[]);
   await writeFile('artifacts/render-quality/targeted-correction.jpg',Buffer.from(review.screenshots[0].data,'base64'));
+  await pause(250); // Let the compositor paint the newly applied, reviewed snapshot.
   await writeFile('artifacts/render-quality/mobile-after-correction.png',Buffer.from((await send('Page.captureScreenshot',{format:'png'})).data,'base64'));
   report.push({correction:{requestCount:requests.length,issues:review.issues,screenshots:review.screenshots.map((s:any)=>({screenId:s.screenId,bytes:s.data.length})),remainingErrors:errors}});
   // Intentional empty state and parent/image layering are never overlap/whitespace failures.

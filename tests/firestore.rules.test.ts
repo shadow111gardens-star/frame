@@ -17,6 +17,11 @@ import {
 } from "firebase/firestore";
 import { FirestoreProjects } from "../src/projects/firestore";
 import { projectFixture } from "./projectFixture";
+import {designMdFixture} from './designMdFixture';
+import {planFixture} from './planFixture';
+import {fixture} from './fixture';
+import {hashArtifact} from '../server/designDocument';
+import type {GenerationArtifact} from '../shared/generationArtifact';
 
 test(
   "Firestore emulator enforces ownership, field validation, atomic revisions, and repository lifecycle",
@@ -175,3 +180,39 @@ test(
     }
   },
 );
+
+test('fixed-flow run, Markdown and matching immutable revision survive reopen with UID isolation and idempotency', {skip:!process.env.FIRESTORE_EMULATOR_HOST},async()=>{
+  const [host,port]=process.env.FIRESTORE_EMULATOR_HOST!.split(':');
+  const env=await initializeTestEnvironment({projectId:'demo-frame',firestore:{host,port:Number(port),rules:await readFile('firestore.rules','utf8')}});
+  try{
+    await env.clearFirestore();
+    const a=env.authenticatedContext('UID-A').firestore() as unknown as Firestore,b=env.authenticatedContext('UID-B').firestore() as unknown as Firestore;
+    const repo=new FirestoreProjects(a,()=>({uid:'UID-A'})),snapshot=projectFixture(),path=['users','UID-A','projects',snapshot.projectId];
+    await repo.save({snapshot,initialPrompt:'Original',favorite:false,expectedRevision:0,writeId:'legacy-revision'});
+    const run={projectId:snapshot.projectId,generationRunId:'run-one',idempotencyKey:'run-one',originalPrompt:'Generate exactly two screens.'};
+    await repo.startGeneration(run);await assert.rejects(repo.startGeneration(run),/already exists/);
+    await assert.rejects(repo.startGeneration({...run,generationRunId:'other-run',idempotencyKey:'other-run'}),/Another generation/);
+    await repo.updateGeneration(run,'design-md');
+    assert.equal((await getDoc(doc(a,...path,'generationRuns','run-one'))).data()?.currentStage,'design-md');
+    const md=designMdFixture(planFixture(fixture()),run.originalPrompt).designMd;
+    const artifact:GenerationArtifact={version:1,...run,designMd:md,designMdHash:hashArtifact(md),status:'complete',warnings:[],attemptCounts:{'design-md':1},validationSummary:{schema:'valid',screens:'valid',navigation:'valid',tokens:'valid',render:'measured',measuredScreenIds:['home','profile']}};
+    snapshot.generationArtifact=artifact;
+    const write={snapshot,initialPrompt:'Original',favorite:false,expectedRevision:1,writeId:'generation-run-one'};
+    const saved=await repo.save(write);assert.equal(saved.revision,2);assert.equal((await repo.save(write)).revision,2);
+    assert.deepEqual((await new FirestoreProjects(a,()=>({uid:'UID-A'})).load(snapshot.projectId)).snapshot,snapshot);
+    const recorded=(await getDoc(doc(a,...path,'generationRuns','run-one'))).data()!;assert.equal(recorded.status,'complete');assert.equal(recorded.revisionId,'generation-run-one');
+    for(const tail of [['generationRuns','run-one'],['revisions','generation-run-one'],['revisions','generation-run-one','chunks','design-md-0']]){
+      await assertFails(getDoc(doc(b,...path,...tail)));await assertFails(updateDoc(doc(b,...path,...tail),{userId:'UID-B'}));
+    }
+    await assertFails(updateDoc(doc(a,...path,'revisions','generation-run-one'),{designMdHash:'0'.repeat(64)}));
+    const failed={...run,generationRunId:'run-failed',idempotencyKey:'run-failed'};await repo.startGeneration(failed);await repo.failGeneration(failed,{code:'RENDER_QUALITY',message:'Unsafe candidate preserved.'});
+    assert.equal((await getDoc(doc(a,...path))).data()?.snapshotId,'generation-run-one');assert.deepEqual((await repo.load(snapshot.projectId)).snapshot,snapshot);
+    await assertFails(updateDoc(doc(a,...path),{userId:'UID-B',updatedAt:serverTimestamp()}));
+    const racing=await Promise.allSettled(['race-a','race-b'].map(id=>repo.startGeneration({...run,generationRunId:id,idempotencyKey:id})));
+    assert.equal(racing.filter(result=>result.status==='fulfilled').length,1,'Only one simultaneous submission reserves the project');
+    const winner=racing[0].status==='fulfilled'?'race-a':'race-b';await repo.failGeneration({...run,generationRunId:winner,idempotencyKey:winner},{code:'CANCELLED',message:'Cancelled without changing saved output.'});
+    await env.withSecurityRulesDisabled(async context=>{await updateDoc(doc(context.firestore(),...path,'revisions','generation-run-one','chunks','design-md-0'),{data:JSON.stringify(md+' corrupted')});});
+    await assert.rejects(repo.load(snapshot.projectId),/checksum/);
+    await repo.remove(snapshot.projectId,2);assert.equal((await getDoc(doc(a,...path,'generationRuns','run-one'))).exists(),false);
+  }finally{await env.cleanup();}
+});

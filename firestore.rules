@@ -9,7 +9,7 @@ service cloud.firestore {
     }
     function project(d) {
       return d.keys().hasAll(['title','initialPrompt','projectType','designDocument','conversationHistory','snapshotId','revision','status','favorite','createdAt','updatedAt']) &&
-        d.keys().hasOnly(['title','initialPrompt','projectType','designDocument','conversationHistory','snapshotId','revision','status','favorite','createdAt','updatedAt']) &&
+        d.keys().hasOnly(['title','initialPrompt','projectType','designDocument','conversationHistory','snapshotId','revision','status','favorite','createdAt','updatedAt','userId','productType','generationStatus','currentRevisionId','currentGenerationRunId','schemaVersion','designMdDocument','designJsonSnapshotId']) &&
         d.title is string && d.title.size() > 0 && d.title.size() <= 200 &&
         d.initialPrompt is string && d.initialPrompt.size() <= 50000 &&
         d.projectType in [null, 'mobile_app', 'website'] &&
@@ -17,7 +17,15 @@ service cloud.firestore {
         d.snapshotId is string && d.snapshotId.matches('^[A-Za-z0-9_-]{1,128}$') &&
         d.revision is int && d.revision > 0 &&
         d.status in ['draft','ready','deleting'] && d.favorite is bool &&
-        d.createdAt is timestamp && d.updatedAt is timestamp;
+        d.createdAt is timestamp && d.updatedAt is timestamp &&
+        (!('userId' in d) || d.userId == request.auth.uid) &&
+        (!('productType' in d) || d.productType == d.projectType) &&
+        (!('generationStatus' in d) || d.generationStatus in ['generating','complete','partial','failed']) &&
+        (!('currentRevisionId' in d) || d.currentRevisionId == d.snapshotId) &&
+        (!('designJsonSnapshotId' in d) || d.designJsonSnapshotId == d.snapshotId) &&
+        (!('currentGenerationRunId' in d) || (d.currentGenerationRunId is string && d.currentGenerationRunId.matches('^[A-Za-z0-9_-]{1,128}$'))) &&
+        (!('schemaVersion' in d) || d.schemaVersion == 1) &&
+        (!('designMdDocument' in d) || pointer(d.designMdDocument));
     }
     match /users/{uid} {
       allow read: if owner(uid);
@@ -33,14 +41,36 @@ service cloud.firestore {
           request.resource.data.updatedAt == request.time &&
           (resource.data.initialPrompt == '' || request.resource.data.initialPrompt == resource.data.initialPrompt) &&
           ((resource.data.status != 'deleting' && request.resource.data.status != 'deleting' &&
-            request.resource.data.revision == resource.data.revision + 1) ||
+            (request.resource.data.revision == resource.data.revision + 1 ||
+             (request.resource.data.revision == resource.data.revision && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['userId','generationStatus','currentGenerationRunId','updatedAt'])))) ||
            (request.resource.data.status == 'deleting' &&
             request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status','updatedAt'])));
         allow delete: if owner(uid) && resource.data.status == 'deleting';
+        match /generationRuns/{runId} {
+          function validRun(d) {
+            return d.keys().hasAll(['userId','projectId','idempotencyKey','originalPrompt','status','currentStage','revisionId','attemptCounts','warnings','error','startedAt','updatedAt','completedAt']) &&
+              d.keys().hasOnly(['userId','projectId','idempotencyKey','originalPrompt','status','currentStage','revisionId','attemptCounts','warnings','error','startedAt','updatedAt','completedAt']) &&
+              d.userId == uid && d.projectId == projectId && d.idempotencyKey == runId &&
+              d.originalPrompt is string && d.originalPrompt.size() <= 20000 &&
+              d.status in ['generating','complete','partial','failed'] &&
+              d.currentStage in ['analysis','planning','design-md','design-json','validation','render-review','repair','save','complete'] &&
+              (d.revisionId == null || d.revisionId is string) && d.attemptCounts is map && d.warnings is list && d.warnings.size() <= 100 &&
+              (d.error == null || d.error is map) && d.startedAt is timestamp && d.updatedAt == request.time && (d.completedAt == null || d.completedAt is timestamp);
+          }
+          allow read, delete: if owner(uid);
+          allow create: if owner(uid) && validRun(request.resource.data) && request.resource.data.status == 'generating' && request.resource.data.startedAt == request.time && request.resource.data.completedAt == null && request.resource.data.revisionId == null &&
+            getAfter(/databases/$(database)/documents/users/$(uid)/projects/$(projectId)).data.currentGenerationRunId == runId;
+          allow update: if owner(uid) && validRun(request.resource.data) && resource.data.status == 'generating' &&
+            request.resource.data.startedAt == resource.data.startedAt && request.resource.data.originalPrompt == resource.data.originalPrompt &&
+            (request.resource.data.status == 'generating' || request.resource.data.completedAt == request.time) &&
+            (!(request.resource.data.status in ['complete','partial']) ||
+              getAfter(/databases/$(database)/documents/users/$(uid)/projects/$(projectId)/revisions/$(request.resource.data.revisionId)).data.generationRunId == runId);
+        }
         match /revisions/{revisionId} {
           allow read, delete: if owner(uid);
           allow create: if owner(uid) && request.resource.data.keys().hasAll(['createdAt','revision']) &&
-            request.resource.data.keys().hasOnly(['createdAt','revision']) &&
+            request.resource.data.keys().hasOnly(['createdAt','revision','userId','revisionId','generationRunId','originalPrompt','designMdHash','designMd','designJsonManifest','screenIds','status','validationSummary']) &&
+            (!('userId' in request.resource.data) || (request.resource.data.userId == uid && request.resource.data.revisionId == revisionId && request.resource.data.status in ['complete','partial'] && pointer(request.resource.data.designMd) && request.resource.data.designMdHash.matches('^[a-f0-9]{64}$'))) &&
             request.resource.data.createdAt == request.time && request.resource.data.revision is int &&
             request.resource.data.revision > 0 &&
             getAfter(/databases/$(database)/documents/users/$(uid)/projects/$(projectId)).data.snapshotId == revisionId &&
@@ -49,8 +79,9 @@ service cloud.firestore {
           match /chunks/{chunkId} {
             allow read, delete: if owner(uid);
             allow create: if owner(uid) && request.resource.data.keys().hasAll(['kind','index','data']) &&
-              request.resource.data.keys().hasOnly(['kind','index','data']) &&
-              request.resource.data.kind in ['design','conversation'] &&
+              request.resource.data.keys().hasOnly(['kind','index','data','userId','artifactType','byteLength','checksum','createdAt']) &&
+              (!('userId' in request.resource.data) || (request.resource.data.userId == uid && ((request.resource.data.kind == 'design' && request.resource.data.artifactType == 'design-json') || (request.resource.data.kind == 'conversation' && request.resource.data.artifactType == 'conversation-history') || (request.resource.data.kind == 'design-md' && request.resource.data.artifactType == 'design-md')) && request.resource.data.byteLength is int && request.resource.data.byteLength >= 0 && request.resource.data.byteLength <= 240000 && request.resource.data.createdAt == request.time)) &&
+              request.resource.data.kind in ['design','conversation','design-md'] &&
               request.resource.data.index is int && request.resource.data.index >= 0 && request.resource.data.index < 26 &&
               request.resource.data.data is string && request.resource.data.data.size() <= 240000 &&
               getAfter(/databases/$(database)/documents/users/$(uid)/projects/$(projectId)).data.snapshotId == revisionId;

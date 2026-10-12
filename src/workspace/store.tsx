@@ -1,3 +1,4 @@
+import type {GenerationArtifact} from '../../shared/generationArtifact';
 import {designPolicy} from '../../shared/designPolicy';
 import {useProjects} from '../projects/ProjectsProvider';
 import {mergeScreenEdit,type EditScope} from '../../shared/editScope';
@@ -440,6 +441,7 @@ export interface PersistedState {
   device: DeviceType;
   productType: ProductType | null;
   designSystem?: DesignApp["designSystem"];
+  generationArtifact?:GenerationArtifact;
   projectName: string;
   screens: ScreenFile[];
   components: Record<string, DesignComponent>;
@@ -495,6 +497,7 @@ export interface WorkspaceState {
   // Persistent project data
   productType: ProductType | null;
   designSystem?: DesignApp["designSystem"];
+  generationArtifact?:GenerationArtifact;
   projectName: string;
   components: Record<string, DesignComponent>;
   screens: ScreenFile[];
@@ -529,7 +532,7 @@ export interface WorkspaceState {
 type Action =
   | {type:'REFLOW_TEXT';screenId:string;expectedComponents:Record<string,DesignComponent>;positions:Record<string,ComponentPosition>;height:number}
   | { type: "FINISH_TASKS"; success: boolean }
-  | { type: "APPLY_DESIGN"; app: DesignApp }
+  | { type: "APPLY_DESIGN"; app: DesignApp; generationArtifact?:GenerationArtifact }
   | { type: "UPDATE_COMPONENT_DATA"; id: string; data: Partial<DesignComponent> }
   | { type: "UPDATE_SCREEN_DATA"; id: string; data: Partial<ScreenFile> }
   // Navigation / selection
@@ -604,6 +607,7 @@ export function toPersisted(state: WorkspaceState): PersistedState {
     device: state.device,
     productType: state.productType,
     designSystem: state.designSystem,
+    generationArtifact:state.generationArtifact,
     projectName: state.projectName,
     screens: state.screens,
     components: state.components,
@@ -623,6 +627,7 @@ function fromPersisted(p: PersistedState): Partial<WorkspaceState> {
     device: p.device,
     productType: p.productType,
     designSystem: p.designSystem,
+    generationArtifact:p.generationArtifact,
     projectName: p.projectName,
     screens: p.screens,
     components: p.components,
@@ -645,6 +650,7 @@ function snapshotForUndo(state: WorkspaceState): string {
     device: state.device,
     productType: state.productType,
     designSystem: state.designSystem,
+    generationArtifact:state.generationArtifact,
     currentScreen: state.currentScreen,
     projectName: state.projectName,
     screens: state.screens,
@@ -663,6 +669,7 @@ function applySnapshot(state: WorkspaceState, raw: string): WorkspaceState {
     device: snap.device??previewConfig(snap.productType).defaultDevice,
     productType: snap.productType,
     designSystem: snap.designSystem,
+    generationArtifact:snap.generationArtifact,
     currentScreen: snap.screens.some((screen:ScreenFile)=>screen.id===snap.currentScreen)?snap.currentScreen:snap.screens[0]?.id??"",
     projectName: snap.projectName,
     screens: snap.screens,
@@ -693,7 +700,7 @@ function reducer(state: WorkspaceState, action: Action): WorkspaceState {
       if(!state.designSystem) projectCreatedAt=Date.now();
       projectEditedAt=Date.now();
       const screens = app.screens.map(screen => ({id:screen.id,name:screen.name,label:screen.name,width:screen.width,height:screen.height,background:screen.background,backgroundToken:screen.backgroundToken,components:screen.components.map(c=>c.id),createdAt:state.screens.find(s=>s.id===screen.id)?.createdAt??Date.now()}));
-      return pushUndoSnapshot(state, {...state,productType:app.productType,device:state.productType===app.productType?state.device:previewConfig(app.productType).defaultDevice,projectName:app.name,designSystem:app.designSystem,screens,components:Object.fromEntries(app.screens.flatMap(s=>s.components.map(c=>[c.id,c]))),tokens:{...app.designSystem.colors,radius:app.designSystem.radii[0]??16},files:[],currentScreen:screens.some(s=>s.id===state.currentScreen)?state.currentScreen:screens[0].id,selectedComponentId:null,selectedFileId:null,saveState:"saving"});
+      return pushUndoSnapshot(state, {...state,productType:app.productType,device:state.productType===app.productType?state.device:previewConfig(app.productType).defaultDevice,projectName:app.name,designSystem:app.designSystem,generationArtifact:action.generationArtifact??state.generationArtifact,screens,components:Object.fromEntries(app.screens.flatMap(s=>s.components.map(c=>[c.id,c]))),tokens:{...app.designSystem.colors,radius:app.designSystem.radii[0]??16},files:[],currentScreen:screens.some(s=>s.id===state.currentScreen)?state.currentScreen:screens[0].id,selectedComponentId:null,selectedFileId:null,saveState:"saving"});
     }
     case "UPDATE_COMPONENT_DATA": {
       const c=state.components[action.id];if(!c) return state;
@@ -1215,10 +1222,16 @@ export function WorkspaceProvider({ children }: { children: ReactNode }) {
     dispatch({type:"SEND_MESSAGE",message:prompt});
     dispatch({type:"AI_TYPING",typing:true});
     dispatch({type:"AI_RESPOND",message:{id:`tasks-${Date.now()}`,role:"assistant",content:modify?"Updating your current design...":"Creating your editable screens...",tasks:[{id:"request",label:modify?"Apply instruction to the current screen and design":"Generate all requested screens and editable components",status:"active"}],timestamp:Date.now()}});
+    const generationRunId=crypto.randomUUID();
+    const run={projectId:state.projectId,generationRunId,idempotencyKey:generationRunId,originalPrompt:prompt};
+    const startedAt=Date.now();
+    const onStage=async(stage:import('../../shared/generationProgress').GenerationStage)=>{if(!active())return;dispatch({type:'AI_RESPOND',message:{id:'stage-'+generationRunId+'-'+stage,role:'assistant',content:stage.replace(/-/g,' ')+' - '+Math.round((Date.now()-startedAt)/1000)+'s elapsed',timestamp:Date.now()}});if(cloud)await cloud.store.updateGeneration(run,stage);};
     const before=JSON.stringify({screens:state.screens,components:state.components,tokens:state.tokens,designSystem:state.designSystem,name:state.projectName,productType:state.productType});
     try {
-      let result=await requestDesign(prompt,modify?workspaceToApp(state):undefined,state.currentScreen,productType,undefined,abort.signal,{editScope});
+      if(cloud)await cloud.store.startGeneration(run);
+      let result=await requestDesign(prompt,modify?workspaceToApp(state):undefined,state.currentScreen,productType,undefined,abort.signal,{editScope,projectId:state.projectId,generationRunId,idempotencyKey:generationRunId,generationArtifact:modify?state.generationArtifact:undefined,onStage});
       if(!active())return;
+      await onStage('render-review');
       let quality:RenderReview={issues:[],screenshots:[]};
       let visualReviewedIds:string[]=[];
       const reviewScreenIds=modify&&editScope==='screen'?[state.currentScreen]:result.app.screens.map(s=>s.id);
@@ -1228,7 +1241,7 @@ export function WorkspaceProvider({ children }: { children: ReactNode }) {
         if(!active())return;
         if(quality.visualReview||quality.issues.some(i=>i.severity==='error'||i.code==='contrast'||i.code==='empty-area'||i.code==='navigation'||i.code==='spacing'&&i.detail.includes('Peer control row'))){
           dispatch({type:'AI_RESPOND',message:{id:`review-${Date.now()}`,role:'assistant',content:'Checking the rendered layout and correcting measured issues...',timestamp:Date.now()}});
-          result=await requestDesign(prompt,result.app,undefined,productType,quality,abort.signal);
+          result=await requestDesign(prompt,result.app,undefined,productType,quality,abort.signal,{projectId:state.projectId,generationRunId,idempotencyKey:generationRunId,generationArtifact:result.generationArtifact,onStage});
           if(!active())return;
           visualReviewedIds=quality.screenshots.map(s=>s.screenId);
           quality=await reviewApp(result.app,reviewScreenIds); // One bounded correction, never a retry loop.
@@ -1238,10 +1251,13 @@ export function WorkspaceProvider({ children }: { children: ReactNode }) {
       if(!active()) return;
       const latest=latestState.current;
       if(before!==JSON.stringify({screens:latest.screens,components:latest.components,tokens:latest.tokens,designSystem:latest.designSystem,name:latest.projectName,productType:latest.productType})) throw new Error("The design changed while generation was running. Your edits have been kept. Retry to apply the instruction to your latest design.");
+      await onStage('save');
       dispatch({type:"FINISH_TASKS",success:true});
-      dispatch({type:"APPLY_DESIGN",app:result.app});
-      dispatch({type:"AI_RESPOND",message:{id:`done-${Date.now()}`,role:"assistant",content:result.message+(visualReviewedIds.length?' Rendered captures reviewed for '+visualReviewedIds.join(', ')+'.':'')+(quality.issues.length?' Browser review flagged '+quality.issues.length+' advisory layout/asset issues; review these before publishing.':''),tasks:result.app.screens.map(s=>({id:s.id,label:s.name,status:"done"})),timestamp:Date.now()}});
+      if(result.generationArtifact){result.generationArtifact.validationSummary={...result.generationArtifact.validationSummary,render:'measured',measuredScreenIds:reviewScreenIds};result.generationArtifact.warnings=[...result.generationArtifact.warnings,...quality.issues.map(i=>(i.screenId+': '+i.code+': '+i.detail).slice(0,1000))].slice(0,100);result.generationArtifact.status=result.generationArtifact.warnings.length?'partial':'complete';}
+      dispatch({type:"APPLY_DESIGN",app:result.app,generationArtifact:result.generationArtifact});
+      dispatch({type:"AI_RESPOND",message:{id:`done-${Date.now()}`,role:"assistant",content:(result.generationArtifact?.status==='partial'?'Partial result. ':'')+result.message+(result.generationArtifact?.warnings.length?'\n'+result.generationArtifact.warnings.join('\n'):'')+(visualReviewedIds.length?' Rendered captures reviewed for '+visualReviewedIds.join(', ')+'.':'')+(quality.issues.length?' Browser review flagged '+quality.issues.length+' advisory layout/asset issues; review these before publishing.':''),tasks:result.app.screens.map(s=>({id:s.id,label:s.name,status:"done"})),timestamp:Date.now()}});
     } catch(e) {
+      if(cloud)try{await cloud.store.failGeneration(run,{code:e instanceof DesignRequestError?e.code??"GENERATION_FAILED":"GENERATION_FAILED",message:e instanceof Error?e.message:"Generation failed."});}catch(saveError){cloud.store.report(saveError);}
       if(active()) dispatch({type:"FINISH_TASKS",success:false});
       if(active()) dispatch({type:"AI_RESPOND",message:{retryPrompt:prompt,retryModify:modify,retryProductType:productType,retryEditScope:editScope,retryable:e instanceof DesignRequestError?e.retryable:true,id:`error-${Date.now()}`,role:"assistant",content:e instanceof Error?e.message:"Generation failed. Your prompt is preserved.",timestamp:Date.now()}});
     } finally { if(active()){requestLock.current=false;controller.current=null;dispatch({type:"AI_TYPING",typing:false});} }

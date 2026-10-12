@@ -3,6 +3,7 @@ import {createRoot} from 'react-dom/client';
 import {WorkspaceProvider,useWorkspace} from '../src/workspace/store';
 import {GeneratedSurface} from '../src/workspace/components/GeneratedSurface';
 import {DesignPropertiesPanel} from '../src/workspace/components/DesignPropertiesPanel';
+import {ExportModal} from '../src/workspace/components/ExportModal';
 import {inspectRenderedScreen} from '../src/design/renderQuality';
 import {fixture} from './fixture';
 import type {DesignApp} from '../shared/design';
@@ -23,6 +24,6 @@ export function layoutFixture():DesignApp {
 }
 function Harness(){const ws=useWorkspace();useEffect(()=>ws.dispatch({type:'APPLY_DESIGN',app:layoutFixture()}),[]);
   (window as any).qualityTest={...ws,fixture:layoutFixture,inspect:()=>{const app={...layoutFixture(),productType:ws.state.productType!,designSystem:ws.state.designSystem!,screens:ws.state.screens.map(s=>({...s,components:s.components.map(id=>ws.state.components[id])}))};return [...document.querySelectorAll<HTMLElement>('[data-generated-screen]')].flatMap(root=>inspectRenderedScreen(root,app.screens.find(s=>s.id===root.dataset.generatedScreen)!,app as DesignApp));}};
-  return <main style={{padding:24,display:'flex',gap:24,background:'#d9dedb'}}>{ws.state.screens.map(screen=><GeneratedSurface key={screen.id} screen={screen} interactive={ws.state.centerTab==='prototype'}/>)}{ws.state.selectedComponentId&&<aside style={{width:360,flexShrink:0,background:'#09090b'}}><DesignPropertiesPanel/></aside>}</main>;
+  return <main style={{padding:24,display:'flex',gap:24,background:'#d9dedb'}}>{ws.state.screens.map(screen=><GeneratedSurface key={screen.id} screen={screen} interactive={ws.state.centerTab==='prototype'}/>)}{ws.state.selectedComponentId&&<aside style={{width:360,flexShrink:0,background:'#09090b'}}><DesignPropertiesPanel/></aside>}{ws.state.modal.type==='export'&&<ExportModal/>}</main>;
 }
 createRoot(document.getElementById('root')!).render(<WorkspaceProvider><Harness/></WorkspaceProvider>);

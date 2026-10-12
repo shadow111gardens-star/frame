@@ -7,7 +7,7 @@ import {validateApp} from "../../../shared/design";
 import {downloadBlob,ExportAssets,renderRasterSvg,svgToImage,screenFilenames,safeFilename,zipImages,EXPORT_LIMITS,type ImageFormat,type ExportScope} from "../../design/imageExport";
 import type {ScreenFile} from "../types";
 
-type ExportFormat = "rn" | "json" | "screenshots";
+type ExportFormat = "rn" | "json" | "screenshots" | "design-md";
 
 export function ExportModal() {
   const { state, dispatch } = useWorkspace();
@@ -51,7 +51,8 @@ export function ExportModal() {
       }finally{assets.clear();activeAssets.current=null;if(alive.current)setJob(null);}
     }else {
 
-    if (format === "rn") {
+    if(format==='design-md'){if(!state.generationArtifact)throw new Error('This older project has no saved DESIGN.md. Generate a new design to create one.');downloadBlob('DESIGN.md',new Blob([state.generationArtifact.designMd],{type:'text/markdown;charset=utf-8'}));}
+    else if (format === "rn") {
       downloadFile(
         `${state.projectName.replace(/\s+/g, "-")}.zip-placeholder.txt`,
         generateRNReadme(state)
@@ -89,6 +90,7 @@ export function ExportModal() {
         {(
           [
             ...(state.productType==="website"?[{ id: "rn" as const, label: "Website project", desc: "ZIP with screens, components, theme." }]:[]),
+            { id:"design-md" as const,label:"DESIGN.md",desc:"View and download the approved visual specification." },
             { id: "json" as const, label: "JSON", desc: "Full design state for backup or migration." },
             { id: "screenshots" as const, label: "Screenshots", desc: "Full-screen PNG or JPEG images." },
           ]
@@ -117,6 +119,7 @@ export function ExportModal() {
           </button>
         ))}
       </div>
+      {format==='design-md'&&<pre aria-label="DESIGN.md preview" className="mt-4 max-h-64 overflow-auto whitespace-pre-wrap text-[11px] text-white/70">{state.generationArtifact?.designMd??'No DESIGN.md exists for this legacy project.'}</pre>}
       {format==='screenshots'&&<div className="mt-4 space-y-3 text-[11px] text-white/60">
         <label className="flex justify-between items-center gap-3">Image format<select aria-label="Image format" className="ws-input px-2 py-1" disabled={busy} value={imageFormat} onChange={e=>{setImageFormat(e.target.value as ImageFormat);setDone(false);}}><option value="png">PNG</option><option value="jpeg">JPG / JPEG</option></select></label>
         <label className="flex justify-between items-center gap-3">Export scope<select aria-label="Export scope" className="ws-input px-2 py-1" disabled={busy} value={scope} onChange={e=>{setScope(e.target.value as ExportScope);setDone(false);}}><option value="current">Current Screen</option><option value="all">All Screens (ZIP)</option></select></label>

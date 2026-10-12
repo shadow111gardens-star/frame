@@ -13,3 +13,13 @@ test('frontend preserves one 503 error, normalizes cancellation/timeout, never r
  await assert.rejects(requestDesign('original',undefined,undefined,undefined,undefined,undefined,{fetch:(async()=>{throw new DOMException('signal is aborted without reason','AbortError');}) as typeof fetch}),(e:unknown)=>e instanceof DesignRequestError&&e.code==='NETWORK'&&e.retryable&&!e.message.includes('cancelled'));
  const app=await requestDesign('original',undefined,undefined,undefined,undefined,undefined,{fetch:(async()=>new Response(JSON.stringify({message:'ok',app:fixture()}))) as typeof fetch});assert.equal(app.message,'ok');
 });
+
+test('stage stream preserves server failure status and awaits ordered progress callbacks',async()=>{
+ const stages:string[]=[];
+ const payload=[{event:'stage',stage:'analysis'},{event:'stage',stage:'design-md'},{event:'result',httpStatus:502,data:{status:'failed',error:'Specification failed. Existing design is preserved.',code:'DESIGN_MD',retryable:false}}].map(v=>JSON.stringify(v)+'\n').join('');
+ await assert.rejects(requestDesign('original',undefined,undefined,undefined,undefined,undefined,{idToken:'synthetic-token',onStage:async stage=>{stages.push(stage);},fetch:(async(_url,init)=>{
+  assert.equal((init!.headers as Record<string,string>).Authorization,'Bearer synthetic-token');
+  return new Response(payload,{headers:{'content-type':'application/x-ndjson'}});
+ }) as typeof fetch}),(error:unknown)=>error instanceof DesignRequestError&&error.code==='DESIGN_MD'&&!error.retryable);
+ assert.deepEqual(stages,['analysis','design-md']);
+});

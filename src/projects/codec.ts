@@ -87,6 +87,7 @@ export function splitJson(value: unknown): string[] {
 export function encodeSnapshot(snapshot: PersistedState) {
   validateSnapshot(snapshot);
   const { messages, ...design } = snapshot;
+  if(design.generationArtifact){const {designMd,...metadata}=design.generationArtifact;design.generationArtifact={...metadata,designMd:undefined} as unknown as typeof design.generationArtifact;}
   return {
     design: splitJson(design),
     conversation: splitJson(messages),

@@ -154,7 +154,7 @@ See `docs/universal-design-improvements.md` for exact changes, acceptance checks
 
 ## Generation API
 
-FRAME uses only the official Google Gemini API through `server/geminiResponse.ts`. Configure server-only `GEMINI_API_KEY` and `GEMINI_MODEL=gemini-3.8-flash`, then restart the server. Analysis, planning, draft, review, modifications and browser-rendered corrections all use this adapter with the existing schemas and validation. Credentials must never use a `VITE_` prefix or enter source control.
+FRAME uses only the official Google Gemini API through `server/geminiResponse.ts`. Configure server-only `GEMINI_API_KEY` and `GEMINI_MODEL=gemini-3.1-flash-lite`, then restart the server. Analysis, planning, draft, review, modifications and browser-rendered corrections all use this adapter with the existing schemas and validation. Credentials must never use a `VITE_` prefix or enter source control.
 
 The API reports nonsecret routing evidence in `X-FRAME-Provider` and `X-FRAME-Model` response headers. Offline routing tests mock every upstream call; they do not establish live model availability. Gemini's existing retry, cancellation and deadline handling remain in place.
 ## Firebase Authentication
@@ -164,3 +164,6 @@ FRAME uses the supplied `frame-44bbd` web configuration directly; no Firebase en
 ## Firestore project persistence
 
 Authenticated projects now save under `users/{firebaseUID}/projects/{projectID}`, including the editable design, conversation, and editor preferences. Existing project actions and debounced autosave use Cloud Firestore. Publish the supplied rules/indexes before using production persistence; see [Step 2 setup, schema, security, tests, and limits](docs/firestore-persistence.md).
+
+
+The fixed generation workflow, DESIGN.md persistence, compatible metadata fields, verification evidence and deployment requirements are documented in [docs/fixed-generation-flow.md](docs/fixed-generation-flow.md).

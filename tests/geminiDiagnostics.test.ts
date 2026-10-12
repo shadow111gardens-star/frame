@@ -8,13 +8,13 @@ test('observed draft HTTP 400 preserves actual Google error and safe request evi
  const key='synthetic-credential',prompt='sensitive user instructions';
  const body={systemInstruction:{parts:[{text:'sensitive system instructions'}]},contents:[{role:'user',parts:[{text:prompt}]}],generationConfig:{responseMimeType:'application/json',responseJsonSchema}};
  const logs:any[]=[];let calls=0;
- await assert.rejects(generateGeminiText(body,{key,model:'gemini-3.8-flash',stage:'draft',deadline:Date.now()+10000},{log:d=>logs.push(d),fetch:async(url,init)=>{
-  calls++;assert.equal(String(url),'https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent');
+ await assert.rejects(generateGeminiText(body,{key,model:'gemini-3.1-flash-lite',stage:'draft',deadline:Date.now()+10000},{log:d=>logs.push(d),fetch:async(url,init)=>{
+  calls++;assert.equal(String(url),'https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-lite:generateContent');
   assert.deepEqual(JSON.parse(String(init?.body)),body);
   return Response.json({error:{code:400,status:'INVALID_ARGUMENT',message:'Request contains an invalid argument.'}},{status:400});
  }}),(e:unknown)=>e instanceof GeminiError&&e.upstreamStatus===400&&e.stage==='draft'&&!e.retryable);
  assert.equal(calls,1);assert.equal(logs.length,1);const event=logs[0];
- assert.equal(event.googleCode,400);assert.equal(event.googleStatus,'INVALID_ARGUMENT');assert.equal(event.googleMessage,'Request contains an invalid argument.');assert.equal(event.model,'gemini-3.8-flash');assert.equal(event.stage,'draft');assert.equal(event.attempt,1);
+ assert.equal(event.googleCode,400);assert.equal(event.googleStatus,'INVALID_ARGUMENT');assert.equal(event.googleMessage,'Request contains an invalid argument.');assert.equal(event.model,'gemini-3.1-flash-lite');assert.equal(event.stage,'draft');assert.equal(event.attempt,1);
  assert.deepEqual(event.requestConfiguration,googleRequestSummary(body));assert.equal(event.requestConfiguration.structuredOutput,true);assert.equal(event.requestConfiguration.schemaBytes,Buffer.byteLength(JSON.stringify(responseJsonSchema)));
  assert.match(event.requestConfiguration.schemaSha256,/^[a-f0-9]{64}$/);assert.ok(event.elapsedMs>=0);
  for(const value of [key,prompt,'sensitive system instructions','x-goog-api-key'])assert.ok(!JSON.stringify(logs).includes(value));

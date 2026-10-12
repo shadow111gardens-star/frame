@@ -1,3 +1,4 @@
+import {designMdFixture} from './designMdFixture';
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {createServer} from 'node:http';
@@ -18,6 +19,7 @@ test('server forwards exact prompts, uses the server key and validates generatio
       forwarded.push(request);
       if(upstreamFail)return new Response('{}',{status:503});
       const properties=request.generationConfig.responseJsonSchema.properties;
+      if(properties.designMd){const payload=JSON.parse(request.contents[0].parts[0].text);return Response.json({candidates:[{finishReason:"STOP",content:{parts:[{text:JSON.stringify(designMdFixture(payload.designPlan,payload.originalPrompt))}]}}]});}
       if(!properties.app && !properties.visualTokens) return new Response(JSON.stringify({candidates:[{finishReason:'STOP',content:{parts:[{text:badAnalysis?'{}':JSON.stringify({productType:analysisType??productType,category:'fitness',audience:'Adults',styleHints:[],theme:'unspecified',preferences:{style:[],colors:[],typography:[],branding:[]},goals:[],screens:[],sections:[],uxNeeds:['data']})}]}}]}));
       const app=fixture();app.productType=productType;
       app.screens.forEach(s=>{s.width=previewConfig(productType).viewportWidth;s.height=previewConfig(productType).viewportHeight;});
@@ -28,7 +30,7 @@ test('server forwards exact prompts, uses the server key and validates generatio
     }
     return originalFetch(input,init);
   }) as typeof fetch;
-  const route=designRoute({GEMINI_API_KEY:'server-only-key',GEMINI_MODEL:'configured-model'});
+  const route=designRoute({GEMINI_API_KEY:'server-only-key',GEMINI_MODEL:'configured-model'},async()=> 'test-uid');
   const server=createServer((req,res)=>void route(req,res,()=>{res.writeHead(404);res.end();}));
   await new Promise<void>(resolve=>server.listen(0,'127.0.0.1',resolve));
   const url=`http://127.0.0.1:${(server.address() as AddressInfo).port}/api/design`;
@@ -43,29 +45,29 @@ test('server forwards exact prompts, uses the server key and validates generatio
     const planInput=JSON.parse(planning.contents[0].parts[0].text);
     assert.ok(planInput.selectedGuidance.rules.length>0);
     assert.equal(planInput.promptAnalysis.productType,'mobile_app');
-    const generated=JSON.parse((forwarded[2] as any).contents[0].parts[0].text);
+    const generated=JSON.parse((forwarded[3] as any).contents[0].parts[0].text);
     assert.equal(generated.prompt,prompt);
     assert.deepEqual(generated.designPlan.designSystem,fixture().designSystem);
     assert.deepEqual(generated.selectedGuidance,planInput.selectedGuidance);
-    const reviewed=JSON.parse((forwarded[3] as any).contents[0].parts[0].text);
+    const reviewed=JSON.parse((forwarded[4] as any).contents[0].parts[0].text);
     assert.equal(reviewed.mode,'review');assert.equal(reviewed.prompt,prompt);
     assert.deepEqual(reviewed.selectedGuidance,planInput.selectedGuidance);
     assert.deepEqual(reviewed.candidateDesign,fixture());
-    assert.ok((forwarded[3] as any).systemInstruction.parts[0].text.includes('FINAL VISUAL CRITIQUE AND REVISION'));
-    const mobileInstruction=(forwarded[2] as any).systemInstruction.parts[0].text;
+    assert.ok((forwarded[4] as any).systemInstruction.parts[0].text.includes('FINAL VISUAL CRITIQUE AND REVISION'));
+    const mobileInstruction=(forwarded[3] as any).systemInstruction.parts[0].text;
     assert.ok(mobileInstruction.includes('MOBILE DESIGN QUALITY'));
     assert.ok(mobileInstruction.includes('PROJECT DESIGN SYSTEM'));
     assert.ok(mobileInstruction.includes('STRUCTURED EDITABLE OUTPUT'));
     assert.ok(!mobileInstruction.includes('WEBSITE DESIGN QUALITY'));
     assert.ok(!(forwarded[0] as any).systemInstruction.parts[0].text.includes('MOBILE DESIGN QUALITY'));
     const update=await post({mode:'modify',prompt:'Make the button purple',app:fixture(),activeScreen:'home'});assert.equal(update.status,200);
-    assert.equal(JSON.parse((forwarded[4] as any).contents[0].parts[0].text).currentDesign.screens[0].components[1].text,'Daily activity');
-    assert.equal(forwarded.length,5);
-    assert.equal(JSON.parse((forwarded[4] as any).contents[0].parts[0].text).designPlan,undefined);
-    const editInput=JSON.parse((forwarded[4] as any).contents[0].parts[0].text);
+    assert.equal(JSON.parse((forwarded[5] as any).contents[0].parts[0].text).currentDesign.screens[0].components[1].text,'Daily activity');
+    assert.equal(forwarded.length,6);
+    assert.equal(JSON.parse((forwarded[5] as any).contents[0].parts[0].text).designPlan,undefined);
+    const editInput=JSON.parse((forwarded[5] as any).contents[0].parts[0].text);
     assert.equal(editInput.activeScreen,'home');assert.equal(editInput.selectedGuidance.direction,'preserve-existing');
     assert.equal(editInput.selectedGuidance.paletteSuggestion,undefined);
-    const modification=(forwarded[4] as any).systemInstruction.parts[0].text;
+    const modification=(forwarded[5] as any).systemInstruction.parts[0].text;
     assert.ok(modification.includes('MODIFY THE EXISTING DESIGN'));
     assert.ok(modification.includes('Treat currentDesign as the source of truth'));
     assert.ok(modification.includes('do not recolor unrelated screens or rewrite content'));

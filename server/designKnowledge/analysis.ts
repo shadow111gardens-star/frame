@@ -5,6 +5,7 @@ import {policyInstructions} from '../../shared/designPolicy';
 import {PRODUCT_INTENT_INSTRUCTION} from '../productDetection';
 import {categories,directions,needs} from './catalog';
 import {GeminiError,parseGeminiJson,analysisDiagnostic} from '../geminiResponse';
+import {requestedScreenDetails} from '../screenRequirements';
 
 const phrases=z.array(z.string().max(300)).max(20);
 export const analysisSchema=z.object({
@@ -39,7 +40,7 @@ export async function analyzeDesignPrompt(prompt:string,generate:(body:unknown)=
     const result=validation.data;
     // Treat the original prompt as authoritative, never a model-invented quote.
     for(const key of ['style','colors','typography','branding'] as const)result.preferences[key]=result.preferences[key].filter(value=>value.trim() && prompt.toLowerCase().includes(value.toLowerCase()));
-    result.screens=result.screens.filter(value=>value.trim() && prompt.toLowerCase().includes(value.toLowerCase()));
+    result.screens=requestedScreenDetails(prompt,result.screens).map(screen=>screen.expectedName);
     result.requirements=resolveRequirements(prompt,result.screens,result.requirements);
     if(!selectedProductType&&result.productType==='ambiguous')throw new GeminiError('Please select Web or App, or clarify the intended deliverable. Your prompt and existing design are preserved.','REQUIREMENT_CONFLICT',false,422);
     return {...result,productType:selectedProductType??result.productType as ProductType};

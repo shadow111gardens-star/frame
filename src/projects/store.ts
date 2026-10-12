@@ -2,6 +2,8 @@ import type { PersistedState } from "../workspace/store";
 import {
   projectError,
   ProjectDataError,
+  ProjectCancelledError,
+  isProjectCancellation,
   type LoadedProject,
   type ProjectRepository,
   type ProjectSummary,
@@ -19,6 +21,7 @@ export interface ProjectsState {
   saves: Record<string, "saving" | "saved" | "failed">;
 }
 export class ProjectsStore {
+  private generationEpochs=new Map<string,number>();
   state: ProjectsState = {
     uid: null,
     loading: false,
@@ -38,6 +41,8 @@ export class ProjectsStore {
   private fingerprints = new Map<string, string>();
   private deletions = new Map<string, number>();
   private duplicates = new Map<string, string>();
+  private openings = new Map<string, Promise<void>>();
+  private selection = 0;
   constructor(
     private load: () => Promise<ProjectRepository>,
     private storage: () => Storage | undefined,
@@ -102,11 +107,14 @@ export class ProjectsStore {
   connect(uid: string | null) {
     if (uid === this.state.uid && this.startup) return this.startup;
     this.epoch++;
+    this.selection++;
+    this.openings.clear();
     this.timers.forEach(clearTimeout);
     this.timers.clear();
     this.pending.clear();
     this.flights.clear();
     this.fingerprints.clear();
+    this.generationEpochs.clear();
     this.deletions.clear();
     this.duplicates.clear();
     this.repo = undefined;
@@ -175,8 +183,7 @@ export class ProjectsStore {
     return this.repo;
   }
   private checkEpoch(epoch: number) {
-    if (epoch !== this.epoch)
-      throw new ProjectDataError("The account changed.", "unauthenticated");
+    if (epoch !== this.epoch) throw new ProjectCancelledError();
   }
   private put(summary: ProjectSummary) {
     this.update({
@@ -209,7 +216,7 @@ export class ProjectsStore {
       initialPrompt: prompt,
       favorite: favorite ?? old?.favorite ?? prior?.favorite ?? false,
       expectedRevision: prior?.expectedRevision ?? old?.revision ?? 0,
-      writeId: crypto.randomUUID(),
+      writeId: clean.generationArtifact&&prior?.snapshot.generationArtifact?.generationRunId!==clean.generationArtifact.generationRunId&&this.state.active?.snapshot.generationArtifact?.generationRunId!==clean.generationArtifact.generationRunId?"generation-"+clean.generationArtifact.generationRunId:crypto.randomUUID(),
     };
     this.pending.set(clean.projectId, write);
     this.journal(); // Retain pending work before scheduling any network operation.
@@ -225,17 +232,34 @@ export class ProjectsStore {
       }, this.debounceMs),
     );
   }
+  async startGeneration(run:import('./artifacts').GenerationRunStart){
+    const epoch=this.epoch,repo=this.owned();this.generationEpochs.set(run.generationRunId,epoch);
+    await this.flush();
+    this.checkEpoch(epoch);await repo.startGeneration?.(run);this.checkEpoch(epoch);
+  }
+  async updateGeneration(run:import('./artifacts').GenerationRunStart,stage:import('../../shared/generationProgress').GenerationStage){const epoch=this.generationEpochs.get(run.generationRunId);if(epoch===undefined)throw new ProjectCancelledError();this.checkEpoch(epoch);await this.owned().updateGeneration?.(run,stage);this.checkEpoch(epoch);}
+  async failGeneration(run:import('./artifacts').GenerationRunStart,error:{code:string;message:string}){
+    const epoch=this.generationEpochs.get(run.generationRunId);if(epoch===undefined)throw new ProjectCancelledError();this.checkEpoch(epoch);
+    try{await this.owned().failGeneration?.(run,error);this.checkEpoch(epoch);}finally{this.generationEpochs.delete(run.generationRunId);}
+  }
   private saveOne(id: string): Promise<void> {
     const flight = this.flights.get(id);
     if (flight) return flight;
     const epoch = this.epoch;
-    const operation = (async () => {
+    let complete!: () => void, fail!: (error: unknown) => void;
+    const operation = new Promise<void>((resolve, reject) => {
+      complete = resolve;
+      fail = reject;
+    });
+    this.flights.set(id, operation);
+    void (async () => {
       try {
         while (this.pending.has(id) && epoch === this.epoch) {
           const write = this.pending.get(id)!;
           const saved = await this.owned().save(write);
           if (epoch !== this.epoch) return;
           this.put(saved);
+          if(write.snapshot.generationArtifact)this.generationEpochs.delete(write.snapshot.generationArtifact.generationRunId);
           const latest = this.pending.get(id);
           if (latest?.writeId === write.writeId) this.pending.delete(id);
           else if (latest) latest.expectedRevision = saved.revision;
@@ -261,17 +285,17 @@ export class ProjectsStore {
             saves: { ...this.state.saves, [id]: "saved" },
           });
       } catch (error) {
+        if (epoch !== this.epoch) throw new ProjectCancelledError();
         if (epoch === this.epoch)
           this.update({
-            error: projectError(error),
+            error: isProjectCancellation(error) ? null : projectError(error),
             saves: { ...this.state.saves, [id]: "failed" },
           });
         throw error;
       } finally {
         if (epoch === this.epoch) this.flights.delete(id);
       }
-    })();
-    this.flights.set(id, operation);
+    })().then(complete, fail);
     return operation;
   }
   async flush() {
@@ -287,6 +311,7 @@ export class ProjectsStore {
     return this.pending.size > 0 || this.deletions.size > 0;
   }
   report(error: unknown) {
+    if (isProjectCancellation(error)) return;
     this.update({ error: projectError(error) });
   }
   async retry() {
@@ -303,10 +328,15 @@ export class ProjectsStore {
     this.update({ loading: true, error: null });
     try {
       const projects = await this.owned().list();
-      if (epoch === this.epoch) this.update({ projects, loading: false });
+      this.checkEpoch(epoch);
+      this.update({ projects, loading: false });
     } catch (error) {
+      if (epoch !== this.epoch) throw new ProjectCancelledError();
       if (epoch === this.epoch)
-        this.update({ loading: false, error: projectError(error) });
+        this.update({
+          loading: false,
+          error: isProjectCancellation(error) ? null : projectError(error),
+        });
       throw error;
     }
   }
@@ -318,87 +348,106 @@ export class ProjectsStore {
     await this.open(snapshot.projectId, { fresh: true });
     return snapshot.projectId;
   }
-  async open(id: string, options: { fresh?: boolean } = {}) {
+  open(id: string, options: { fresh?: boolean } = {}): Promise<void> {
+    const key = this.epoch + "|" + id + "|" + !!options.fresh;
+    const existing = this.openings.get(key);
+    if (existing) return existing;
     const epoch = this.epoch;
+    const selection = ++this.selection;
     this.update({ opening: true, error: null });
-    try {
-      await this.flush();
-      this.checkEpoch(epoch);
-      const project = await this.owned().load(id);
-      if (epoch !== this.epoch) return;
-      const loadedFingerprint = JSON.stringify([
-        project.snapshot,
-        project.initialPrompt,
-        project.favorite,
-      ]);
-      if (
-        !options.fresh &&
-        !project.snapshot.messages.length &&
-        !Object.keys(project.snapshot.components).length &&
-        project.initialPrompt
-      ) {
-        project.snapshot.messages = [
-          {
-            id: crypto.randomUUID(),
-            role: "user",
-            timestamp: Date.now(),
-            content: project.initialPrompt,
-          },
-          {
+    const operation = Promise.resolve().then(async () => {
+      try {
+        await this.flush();
+        this.checkEpoch(epoch);
+        const project = await this.owned().load(id);
+        if (epoch !== this.epoch || selection !== this.selection)
+          throw new ProjectCancelledError();
+        const loadedFingerprint = JSON.stringify([
+          project.snapshot,
+          project.initialPrompt,
+          project.favorite,
+        ]);
+        if (
+          !options.fresh &&
+          !project.snapshot.messages.length &&
+          !Object.keys(project.snapshot.components).length &&
+          project.initialPrompt
+        ) {
+          project.snapshot.messages = [
+            {
+              id: crypto.randomUUID(),
+              role: "user",
+              timestamp: Date.now(),
+              content: project.initialPrompt,
+            },
+            {
+              id: crypto.randomUUID(),
+              role: "assistant",
+              timestamp: Date.now(),
+              content:
+                "Your project was created before generation completed. Retry your prompt to continue.",
+              retryable: true,
+              retryPrompt: project.initialPrompt,
+              retryProductType: project.projectType ?? undefined,
+              retryModify: false,
+            },
+          ];
+        }
+        // Interrupted generation is a recoverable conversation, not a finished design.
+        if (
+          project.snapshot.messages.some((m) =>
+            m.tasks?.some((t) => t.status === "active"),
+          )
+        ) {
+          project.snapshot.messages = project.snapshot.messages.map((m) => ({
+            ...m,
+            tasks: m.tasks?.map((t) => ({
+              ...t,
+              status: t.status === "active" ? ("pending" as const) : t.status,
+            })),
+          }));
+          project.snapshot.messages.push({
             id: crypto.randomUUID(),
             role: "assistant",
             timestamp: Date.now(),
             content:
-              "Your project was created before generation completed. Retry your prompt to continue.",
+              "Generation was interrupted. Your last saved design is preserved. Retry your prompt to continue.",
             retryable: true,
-            retryPrompt: project.initialPrompt,
+            retryPrompt:
+              project.snapshot.messages.filter((m) => m.role === "user").at(-1)
+                ?.content || project.initialPrompt,
+            retryModify: !!Object.keys(project.snapshot.components).length,
             retryProductType: project.projectType ?? undefined,
-            retryModify: false,
-          },
-        ];
-      }
-      // Interrupted generation is a recoverable conversation, not a finished design.
-      if (
-        project.snapshot.messages.some((m) =>
-          m.tasks?.some((t) => t.status === "active"),
-        )
-      ) {
-        project.snapshot.messages = project.snapshot.messages.map((m) => ({
-          ...m,
-          tasks: m.tasks?.map((t) => ({
-            ...t,
-            status: t.status === "active" ? ("pending" as const) : t.status,
-          })),
-        }));
-        project.snapshot.messages.push({
-          id: crypto.randomUUID(),
-          role: "assistant",
-          timestamp: Date.now(),
-          content:
-            "Generation was interrupted. Your last saved design is preserved. Retry your prompt to continue.",
-          retryable: true,
-          retryPrompt:
-            project.snapshot.messages.filter((m) => m.role === "user").at(-1)
-              ?.content || project.initialPrompt,
-          retryModify: !!Object.keys(project.snapshot.components).length,
-          retryProductType: project.projectType ?? undefined,
+          });
+        }
+        this.fingerprints.set(id, loadedFingerprint);
+        this.put(project);
+        this.update({
+          active: project,
+          opening: false,
+          saves: { ...this.state.saves, [id]: "saved" },
         });
+        try {
+          this.storage()?.setItem(
+            `frame.projects.active.${this.state.uid}`,
+            id,
+          );
+        } catch {}
+      } catch (error) {
+        if (epoch !== this.epoch || selection !== this.selection)
+          throw new ProjectCancelledError();
+        if (epoch === this.epoch)
+          this.update({
+            opening: false,
+            error: isProjectCancellation(error) ? null : projectError(error),
+          });
+        throw error;
+      } finally {
+        if (this.openings.get(key) === operation) this.openings.delete(key);
       }
-      this.fingerprints.set(id, loadedFingerprint);
-      this.put(project);
-      this.update({
-        active: project,
-        opening: false,
-        saves: { ...this.state.saves, [id]: "saved" },
-      });
-      try {
-        this.storage()?.setItem(`frame.projects.active.${this.state.uid}`, id);
-      } catch {}
-    } catch (error) {
-      if (epoch === this.epoch)
-        this.update({ opening: false, error: projectError(error) });
-      throw error;
-    }
+    });
+    this.openings.set(key, operation);
+    return operation;
   }
   async rename(id: string, title: string) {
     const epoch = this.epoch;
@@ -479,6 +528,7 @@ export class ProjectsStore {
           this.storage()?.removeItem(`frame.projects.active.${this.state.uid}`);
         } catch {}
     } catch (error) {
+      if (epoch !== this.epoch) throw new ProjectCancelledError();
       if (epoch === this.epoch) this.update({ error: projectError(error) });
       throw error;
     }

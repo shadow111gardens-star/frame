@@ -3,7 +3,7 @@ import {GeneratedSurface} from './GeneratedSurface';
 import type {DesignApp} from '../../../shared/design';
 import type {QualityIssue} from '../../../shared/designQuality';
 import type {WorkspaceState} from '../store';
-import {measureRenderedReflow,inspectRenderedScreen} from '../../design/renderQuality';
+import {measureRenderedReflow,inspectRenderedScreen,representativeScreenIds} from '../../design/renderQuality';
 import {ExportAssets,renderRasterSvg,svgToImage} from '../../design/imageExport';
 import {designPolicy} from '../../../shared/designPolicy';
 export type RenderReview={issues:QualityIssue[];screenshots:{screenId:string;data:string}[];visualReview?:boolean;screenIds?:string[];reflow?:{screenId:string;layout:ReturnType<typeof measureRenderedReflow>}[]};
@@ -21,10 +21,17 @@ export function RenderedDesignReview({job}:{job:ReviewJob}){
         const captureTimer=setTimeout(()=>assets.clear(),8000);
         const reflow:NonNullable<RenderReview['reflow']>=[];
         const issues:QualityIssue[]=[],screenshots:RenderReview['screenshots']=[];
-        for(const root of [...ref.current!.querySelectorAll<HTMLElement>('[data-generated-screen]')]){const original=job.app.screens.find(s=>s.id===root.dataset.generatedScreen)!;const screen={...original,width:root.offsetWidth,height:root.offsetHeight};
+        const roots=[...ref.current!.querySelectorAll<HTMLElement>('[data-generated-screen]')];
+        for(const root of roots){const original=job.app.screens.find(s=>s.id===root.dataset.generatedScreen)!;const screen={...original,width:root.offsetWidth,height:root.offsetHeight};
           if(root.offsetWidth===original.width)reflow.push({screenId:screen.id,layout:measureRenderedReflow(root,screen,job.app)});
           const found=inspectRenderedScreen(root,screen,job.app).map(i=>({...i,detail:`At ${screen.width}px: ${i.detail}`}));issues.push(...found);
-          if(screenshots.length<designPolicy.quality.maxCaptures&&!screenshots.some(s=>s.screenId===screen.id)){
+        }
+        const selected=representativeScreenIds({...job.app,screens:job.app.screens.filter(s=>job.snapshot.screens.some(reviewed=>reviewed.id===s.id))},issues,designPolicy.quality.maxCaptures);
+        for(const id of selected){
+          const original=job.app.screens.find(s=>s.id===id)!;
+          const root=roots.find(r=>r.dataset.generatedScreen===id&&r.offsetWidth===original.width)!;
+          const screen={...original,width:root.offsetWidth,height:root.offsetHeight};
+          if(!cancelled){
             try{const svg=await renderRasterSvg(root,assets);const factor=Math.min(1,1200/screen.width,2400/screen.height);const blob=await svgToImage(svg,'jpeg',Math.max(1,Math.round(screen.width*factor)),Math.max(1,Math.round(screen.height*factor)),'#ffffff');if(blob.size<500000){const bytes=new Uint8Array(await blob.arrayBuffer());let binary='';for(const byte of bytes)binary+=String.fromCharCode(byte);screenshots.push({screenId:screen.id,data:btoa(binary)});}}catch{/* Metrics remain useful when assets cannot be captured safely. */}
           }
         }

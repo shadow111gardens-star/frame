@@ -1,3 +1,4 @@
+import {designMdFixture} from './designMdFixture';
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {createServer} from 'node:http';
@@ -100,7 +101,7 @@ test('actual API route applies redesign isolation and rejects requirement confli
     if(String(url).startsWith('https://generativelanguage.googleapis.com')){calls++;const app=fixture();app.screens[1].components[0].text='Rogue change';app.designSystem.colors.accent='#8822cc';app.screens[0].components[2].styles.backgroundToken='accent';if(addScreen)app.screens.push({id:'new-screen',name:'New screen',width:390,height:844,background:'#fff',components:[]});return new Response(JSON.stringify({candidates:[{finishReason:'STOP',content:{parts:[{text:JSON.stringify({message:'Updated',app})}]}}]}));}
     return nativeFetch(url,init);
   }) as typeof fetch;
-  const route=designRoute({GEMINI_API_KEY:'test-only',GEMINI_MODEL:'unchanged-model'}),server=createServer((req,res)=>void route(req,res,()=>res.end()));
+  const route=designRoute({GEMINI_API_KEY:'test-only',GEMINI_MODEL:'unchanged-model'},async()=> 'test-uid'),server=createServer((req,res)=>void route(req,res,()=>res.end()));
   await new Promise<void>(r=>server.listen(0,'127.0.0.1',r));const url=`http://127.0.0.1:${(server.address() as AddressInfo).port}/api/design`;
   const post=(data:unknown)=>nativeFetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)});
   try{
