@@ -1,9 +1,11 @@
 import { previewConfig, screenDimensions } from "../../../shared/product";
+import {useProjects} from '../../projects/ProjectsProvider';
 import { useEffect, useState } from "react";
 import { useWorkspace, getDevice } from "../store";
 
 export function StatusBar() {
   const { state, dispatch } = useWorkspace();
+  const cloud=useProjects();
   const currentScreen = state.screens.find((s) => s.id === state.currentScreen);
   const device = getDevice(state.device);
   const config=previewConfig(state.productType);
@@ -50,7 +52,7 @@ export function StatusBar() {
         ) : (
           <>
             <span className="h-1.5 w-1.5 rounded-full bg-emerald-400/80" />
-            <span>{state.designSystem ? "Changes kept in this session" : "No design generated"}</span>
+            <span>{cloud?(state.saveState==='saved'?'Saved to Firestore':'Not saved yet'):state.designSystem ? "Changes kept in this session" : "No design generated"}</span>
             {justSaved && <span className="text-white/25">· just now</span>}
           </>
         )}

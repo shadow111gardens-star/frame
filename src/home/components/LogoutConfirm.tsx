@@ -1,9 +1,11 @@
 import {useAuth} from "../../auth/AuthProvider";
+import {useProjects} from "../../projects/ProjectsProvider";
 import { motion } from "framer-motion";
 import { useHome } from "../store";
 
 export function LogoutConfirm() {
   const auth=useAuth();
+  const cloud=useProjects();
   const { state, dispatch } = useHome();
   const modal = state.modal;
   if (modal.type !== "logout") return null;
@@ -49,7 +51,7 @@ export function LogoutConfirm() {
             <button
               disabled={auth.busy}
               onClick={async () => {
-                try{await auth.logout();dispatch({ type: "LOGOUT" });dispatch({ type: "CLOSE_MODAL" });}catch{/* AuthNotice displays the error; retain the session. */}
+                try{await cloud?.store.settleAll();await auth.logout();dispatch({ type: "LOGOUT" });dispatch({ type: "CLOSE_MODAL" });}catch(error){cloud?.store.report(error);}
               }}
               className="px-4 py-2 text-[12px] rounded-full bg-white text-black hover:bg-white/90 transition-colors"
             >

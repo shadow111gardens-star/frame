@@ -160,3 +160,7 @@ The API reports nonsecret routing evidence in `X-FRAME-Provider` and `X-FRAME-Mo
 ## Firebase Authentication
 
 FRAME uses the supplied `frame-44bbd` web configuration directly; no Firebase environment file is required. See [Step 1 authentication setup and verification](docs/firebase-auth.md) for routing, manual Console checks, and live-login acceptance steps.
+
+## Firestore project persistence
+
+Authenticated projects now save under `users/{firebaseUID}/projects/{projectID}`, including the editable design, conversation, and editor preferences. Existing project actions and debounced autosave use Cloud Firestore. Publish the supplied rules/indexes before using production persistence; see [Step 2 setup, schema, security, tests, and limits](docs/firestore-persistence.md).

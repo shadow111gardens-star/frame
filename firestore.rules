@@ -1,0 +1,64 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function owner(uid) { return request.auth != null && request.auth.uid == uid; }
+    function pointer(p) {
+      return p is map && p.keys().hasAll(['encoding', 'chunkCount']) &&
+        p.keys().hasOnly(['encoding', 'chunkCount']) && p.encoding == 'frame-json-v1' &&
+        p.chunkCount is int && p.chunkCount > 0 && p.chunkCount <= 26;
+    }
+    function project(d) {
+      return d.keys().hasAll(['title','initialPrompt','projectType','designDocument','conversationHistory','snapshotId','revision','status','favorite','createdAt','updatedAt']) &&
+        d.keys().hasOnly(['title','initialPrompt','projectType','designDocument','conversationHistory','snapshotId','revision','status','favorite','createdAt','updatedAt']) &&
+        d.title is string && d.title.size() > 0 && d.title.size() <= 200 &&
+        d.initialPrompt is string && d.initialPrompt.size() <= 50000 &&
+        d.projectType in [null, 'mobile_app', 'website'] &&
+        pointer(d.designDocument) && pointer(d.conversationHistory) &&
+        d.snapshotId is string && d.snapshotId.matches('^[A-Za-z0-9_-]{1,128}$') &&
+        d.revision is int && d.revision > 0 &&
+        d.status in ['draft','ready','deleting'] && d.favorite is bool &&
+        d.createdAt is timestamp && d.updatedAt is timestamp;
+    }
+    match /users/{uid} {
+      allow read: if owner(uid);
+      // Step 2 stores projects only; user profile documents are not written.
+      allow write: if false;
+      match /projects/{projectId} {
+        allow read: if owner(uid);
+        allow create: if owner(uid) && project(request.resource.data) &&
+          request.resource.data.revision == 1 && request.resource.data.status != 'deleting' &&
+          request.resource.data.createdAt == request.time && request.resource.data.updatedAt == request.time;
+        allow update: if owner(uid) && project(request.resource.data) &&
+          request.resource.data.createdAt == resource.data.createdAt &&
+          request.resource.data.updatedAt == request.time &&
+          (resource.data.initialPrompt == '' || request.resource.data.initialPrompt == resource.data.initialPrompt) &&
+          ((resource.data.status != 'deleting' && request.resource.data.status != 'deleting' &&
+            request.resource.data.revision == resource.data.revision + 1) ||
+           (request.resource.data.status == 'deleting' &&
+            request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status','updatedAt'])));
+        allow delete: if owner(uid) && resource.data.status == 'deleting';
+        match /revisions/{revisionId} {
+          allow read, delete: if owner(uid);
+          allow create: if owner(uid) && request.resource.data.keys().hasAll(['createdAt','revision']) &&
+            request.resource.data.keys().hasOnly(['createdAt','revision']) &&
+            request.resource.data.createdAt == request.time && request.resource.data.revision is int &&
+            request.resource.data.revision > 0 &&
+            getAfter(/databases/$(database)/documents/users/$(uid)/projects/$(projectId)).data.snapshotId == revisionId &&
+            getAfter(/databases/$(database)/documents/users/$(uid)/projects/$(projectId)).data.revision == request.resource.data.revision;
+          allow update: if false;
+          match /chunks/{chunkId} {
+            allow read, delete: if owner(uid);
+            allow create: if owner(uid) && request.resource.data.keys().hasAll(['kind','index','data']) &&
+              request.resource.data.keys().hasOnly(['kind','index','data']) &&
+              request.resource.data.kind in ['design','conversation'] &&
+              request.resource.data.index is int && request.resource.data.index >= 0 && request.resource.data.index < 26 &&
+              request.resource.data.data is string && request.resource.data.data.size() <= 240000 &&
+              getAfter(/databases/$(database)/documents/users/$(uid)/projects/$(projectId)).data.snapshotId == revisionId;
+            allow update: if false;
+          }
+        }
+      }
+    }
+    match /{document=**} { allow read, write: if false; }
+  }
+}

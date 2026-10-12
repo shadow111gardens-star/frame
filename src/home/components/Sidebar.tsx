@@ -1,4 +1,4 @@
-import {activateSessionProject,beginNewProject} from '../../workspace/store';
+import {beginNewProject} from '../../workspace/store';
 import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useHome, formatRelative } from "../store";
@@ -7,7 +7,7 @@ import { ProjectMenu } from "./ProjectMenu";
 import type { HomeProject } from "../types";
 
 export function Sidebar() {
-  const { state, dispatch } = useHome();
+  const { state, dispatch, projectsLoading } = useHome();
   const sortedProjects = [...state.projects].sort((a, b) => {
     // Favorites first, then by lastEdited desc
     if ((a.favorite ?? false) !== (b.favorite ?? false))
@@ -89,7 +89,8 @@ export function Sidebar() {
       <div className="px-3 pb-2"><button onClick={()=>{beginNewProject();window.location.hash='workspace';}} className="w-full h-9 rounded-md border border-white/10 text-white/75 text-[12px]" title="New Project">{state.collapsedSidebar?'+':'New Project'}</button></div>
       {/* Projects list (scrollable) */}
       <div className="flex-1 min-h-0 overflow-y-auto ws-scrollbar px-2 pb-2">
-        {sortedProjects.length===0 && !state.collapsedSidebar && <div className="px-2 pt-4 text-[12px] text-white/35">No projects yet.</div>}
+        {projectsLoading && !state.collapsedSidebar && <div role="status" className="px-2 pt-4 text-xs text-white/45">Loading your projects…</div>}
+        {sortedProjects.length===0 && !projectsLoading && !state.collapsedSidebar && <div className="px-2 pt-4 text-[12px] text-white/35">No projects yet.</div>}
         {favorites.length > 0 && !state.collapsedSidebar && (
           <SectionLabel>Favorites</SectionLabel>
         )}
@@ -116,7 +117,7 @@ export function Sidebar() {
           />
         ))}
 
-        {state.projects.length === 0 && !state.collapsedSidebar && (
+        {state.projects.length === 0 && !projectsLoading && !state.collapsedSidebar && (
           <div className="text-center text-white/30 text-[12px] py-8">
             No projects yet
           </div>
@@ -220,7 +221,7 @@ function ProjectRow({
   collapsed: boolean;
   menuOpen: boolean;
 }) {
-  const { dispatch } = useHome();
+  const { dispatch, openProject } = useHome();
   const buttonRef = useRef<HTMLAnchorElement>(null);
 
   useEffect(() => {
@@ -245,12 +246,7 @@ function ProjectRow({
         href="#workspace"
         onClick={(e) => {
           e.preventDefault();
-          activateSessionProject(project.id);
-          // Persist project as active
-          try {
-            sessionStorage.setItem("frame.activeProject", project.id);
-          } catch {}
-          window.location.hash = "workspace";
+          void openProject(project.id).catch(() => {});
         }}
         className={`flex items-center gap-2 ${
           collapsed ? "h-9 justify-center px-0" : "h-9 px-2.5"

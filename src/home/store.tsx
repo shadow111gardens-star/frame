@@ -1,4 +1,8 @@
-import { getSessionProjects, renameSessionProject, deleteSessionProject, duplicateSessionProject } from "../workspace/store";
+import { getSessionProjects, activateSessionProject, renameSessionProject, deleteSessionProject, duplicateSessionProject } from "../workspace/store";
+import { buildEmptyState, toPersisted, type PersistedState } from '../workspace/store';
+import { useProjects } from '../projects/ProjectsProvider';
+import { beginGeneration } from '../design/api';
+import type { ProductType } from '../../shared/product';
 import {
   createContext,
   useContext,
@@ -6,6 +10,7 @@ import {
   useEffect,
   ReactNode,
   Dispatch,
+  useRef,
 } from "react";
 import type {
   Credits,
@@ -374,19 +379,64 @@ function reducer(state: HomeState, action: Action): HomeState {
 interface CtxShape {
   state: HomeState;
   dispatch: Dispatch<Action>;
+  projectsLoading: boolean;
+  startProject: (prompt: string, productType: ProductType) => Promise<void>;
+  openProject: (id: string) => Promise<void>;
 }
 
 const HomeCtx = createContext<CtxShape | null>(null);
 
 export function HomeProvider({ children }: { children: ReactNode }) {
-  const [state, dispatch] = useReducer(reducer, undefined, buildHomeState);
+  const cloud = useProjects();
+  const [state, rawDispatch] = useReducer(reducer, undefined, buildHomeState);
+  const draft = useRef<{uid:string;prompt:string;type:ProductType;snapshot:PersistedState}|null>(null);
+  const projectOperation=useRef(false);
+  const dispatch: Dispatch<Action> = action => {
+    if (cloud && ['RENAME_PROJECT','DELETE_PROJECT','DUPLICATE_PROJECT','TOGGLE_FAVORITE'].includes(action.type)) {
+      if(projectOperation.current)return;
+      projectOperation.current=true;
+      const run = async () => {
+        if (action.type === 'RENAME_PROJECT') await cloud.store.rename(action.id, action.name);
+        if (action.type === 'DELETE_PROJECT') await cloud.store.remove(action.id);
+        if (action.type === 'DUPLICATE_PROJECT') await cloud.store.duplicate(action.id);
+        if (action.type === 'TOGGLE_FAVORITE') await cloud.store.favorite(action.id);
+        rawDispatch({type:'CLOSE_MODAL'});
+      };
+      void run().catch(error => cloud.store.report(error)).finally(()=>{projectOperation.current=false;});
+      return;
+    }
+    rawDispatch(action);
+  };
+  const openProject = async (id:string) => {
+    if (cloud) {
+      const uid=cloud.state.uid;
+      try { await cloud.store.open(id); } catch(error) { cloud.store.report(error); throw error; }
+      if(cloud.store.state.uid!==uid)throw new Error('The account changed.');
+    } else activateSessionProject(id);
+    window.location.hash = 'workspace';
+  };
+  const startProject = async (prompt:string, productType:ProductType) => {
+    if (cloud) {
+      const uid = cloud.state.uid;
+      if (!uid || cloud.state.loading) throw new Error('Wait until your projects have loaded.');
+      if (!draft.current || draft.current.uid !== uid || draft.current.prompt !== prompt || draft.current.type !== productType) {
+        const empty = buildEmptyState();
+        draft.current = { uid, prompt, type:productType, snapshot:toPersisted({...empty, projectName:prompt.trim().slice(0,60),productType}) };
+      }
+      try { await cloud.store.create(draft.current.snapshot, prompt); } catch(error) { cloud.store.report(error); throw error; }
+      if(cloud.store.state.uid!==uid)throw new Error('The account changed.');
+    }
+    beginGeneration(prompt, productType);
+    window.location.hash = 'workspace';
+  };
+  const displayState = cloud ? { ...state, projects: cloud.state.projects.filter(p=>p.status!=='deleting').map(p=>({id:p.id,name:p.title,icon:'\u25c7',color:'#FFFFFF',createdAt:p.createdAt,lastEdited:p.updatedAt,favorite:p.favorite})),chats:[],currentChatId:null } : state;
 
   // Persist
   useEffect(() => {
     const t = setTimeout(() => {
       persist({
-        projects: state.projects,
-        chats: state.chats,
+        projects: cloud ? [] : state.projects,
+        chats: cloud ? [] : state.chats,
         currentChatId: state.currentChatId,
         settings: state.settings,
         credits: state.credits,
@@ -403,7 +453,7 @@ export function HomeProvider({ children }: { children: ReactNode }) {
     state.authed,
   ]);
 
-  return <HomeCtx.Provider value={{ state, dispatch }}>{children}</HomeCtx.Provider>;
+  return <HomeCtx.Provider value={{ state:displayState, dispatch, projectsLoading:!!cloud?.state.loading || !!cloud?.state.opening, startProject, openProject }}>{children}</HomeCtx.Provider>;
 }
 
 export function useHome() {

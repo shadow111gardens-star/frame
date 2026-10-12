@@ -1,5 +1,4 @@
 import type { ProductType } from "../../../shared/product";
-import { beginGeneration } from "../../design/api";
 import { forwardRef, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { useHome } from "../store";
@@ -11,18 +10,22 @@ interface PromptBoxProps {
 
 export const PromptBox = forwardRef<HTMLTextAreaElement, PromptBoxProps>(
   ({ value, onChange }, ref) => {
-    const { state } = useHome();
+    const { state, startProject, projectsLoading } = useHome();
+    const [creating, setCreating] = useState(false);
+    const [creationError, setCreationError] = useState<string|null>(null);
     const [productType, setProductType] = useState<ProductType>("mobile_app");
     const [focused, setFocused] = useState(false);
     const [attachments, setAttachments] = useState<File[]>([]);
     const fileRef = useRef<HTMLInputElement>(null);
 
     const submitting = useRef(false);
-    const submit = () => {
-      if (!value.trim() || state.generating || submitting.current) return;
+    const submit = async () => {
+      if (!value.trim() || state.generating || projectsLoading || submitting.current) return;
       submitting.current = true;
-      beginGeneration(value, productType);
-      window.location.hash = "workspace";
+      setCreating(true);setCreationError(null);
+      try { await startProject(value, productType); }
+      catch { setCreationError('Could not create your cloud project. Your prompt is preserved. Check the project error and retry.'); }
+      finally { submitting.current=false;setCreating(false); }
     };
 
     const handleKey = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
@@ -50,6 +53,7 @@ export const PromptBox = forwardRef<HTMLTextAreaElement, PromptBoxProps>(
             : "border-white/[0.08] hover:border-white/[0.12]"
         }`}
       >
+        {(creating || creationError) && <div role={creationError?'alert':'status'} className="px-5 pt-3 text-xs text-white/65">{creationError || 'Creating your project…'}</div>}
         <textarea
           ref={ref}
           value={value}
@@ -122,7 +126,7 @@ export const PromptBox = forwardRef<HTMLTextAreaElement, PromptBoxProps>(
             <motion.button
               whileTap={{ scale: 0.96 }}
               onClick={submit}
-              disabled={!value.trim() || state.generating}
+              disabled={!value.trim() || state.generating || creating || projectsLoading}
               className="btn-primary h-8 px-4 text-[12.5px] disabled:opacity-30 flex items-center gap-1.5"
             >
               {state.generating ? (

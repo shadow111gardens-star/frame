@@ -2,7 +2,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useHome } from "../store";
 
 export function ProjectMenu() {
-  const { state, dispatch } = useHome();
+  const { state, dispatch, openProject } = useHome();
   const modal = state.modal;
   if (modal.type !== "project-menu") return null;
   const project = state.projects.find((p) => p.id === modal.projectId);
@@ -27,11 +27,8 @@ export function ProjectMenu() {
             </svg>
           }
           onClick={() => {
-            try {
-              sessionStorage.setItem("frame.activeProject", project.id);
-            } catch {}
             dispatch({ type: "CLOSE_MODAL" });
-            window.location.hash = "workspace";
+            void openProject(project.id).catch(() => {});
           }}
         />
         <MenuButton

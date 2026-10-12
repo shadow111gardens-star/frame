@@ -1,4 +1,5 @@
 import {Dialog} from './Dialog';
+import {useProjects} from '../../projects/ProjectsProvider';
 import {NewProjectModal} from './NewProjectModal';
 import { useEffect, useRef, useState } from "react";
 import { useWorkspace } from "../store";
@@ -357,6 +358,7 @@ function ConfirmDeleteProjectModal() {
 
 function SaveStatus() {
   const { state, dispatch } = useWorkspace();
+  const cloud=useProjects();
   return (
     <div className="hidden lg:flex items-center gap-1 text-[11px] text-white/35">
       {state.saveState === "saving" ? (
@@ -380,7 +382,7 @@ function SaveStatus() {
       ) : (
         <>
           <span className="h-1 w-1 rounded-full bg-emerald-400/80" />
-          <span>{state.designSystem?"Session":"Empty"}</span>
+          <span>{cloud?(state.saveState==='saved'?'Saved':'Not saved'):state.designSystem?"Session":"Empty"}</span>
         </>
       )}
     </div>

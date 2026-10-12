@@ -1,4 +1,5 @@
 import {designPolicy} from '../../shared/designPolicy';
+import {useProjects} from '../projects/ProjectsProvider';
 import {mergeScreenEdit,type EditScope} from '../../shared/editScope';
 import {COLOR_ROLES} from '../design/designProperties';
 import {RenderedDesignReview,type ReviewJob,type RenderReview} from './components/RenderedDesignReview';
@@ -424,6 +425,7 @@ let workspaceSnapshot: string | null = null;
 let pendingNewProject=false;
 export function beginNewProject(){pendingNewProject=true;}
 const sessionProjects=new Map<string,{snapshot:string;createdAt:number;editedAt:number}>();
+export function clearSessionProjects(){sessionProjects.clear();workspaceSnapshot=null;pendingNewProject=false;projectCreatedAt=0;projectEditedAt=0;}
 export function getSessionProjects(){return [...sessionProjects.entries()].map(([id,p])=>({id,name:JSON.parse(p.snapshot).projectName,icon:'\u25c7',color:'#FFFFFF',createdAt:p.createdAt,lastEdited:p.editedAt}));}
 export function activateSessionProject(id:string){const p=sessionProjects.get(id);if(p){workspaceSnapshot=p.snapshot;projectCreatedAt=p.createdAt;projectEditedAt=p.editedAt;}return !!p;}
 export function duplicateSessionProject(id:string){const p=sessionProjects.get(id);if(!p)return null;const next=crypto.randomUUID(),data=JSON.parse(p.snapshot);data.projectId=next;data.projectName+=' copy';data.selectedComponentId=null;data.selectedFileId=null;sessionProjects.set(next,{snapshot:JSON.stringify(data),createdAt:Date.now(),editedAt:Date.now()});return getSessionProjects().find(p=>p.id===next)!;}
@@ -433,7 +435,7 @@ export function deleteSessionProject(id:string){sessionProjects.delete(id);if(lo
 let projectCreatedAt=0;
 let projectEditedAt=0;
 
-interface PersistedState {
+export interface PersistedState {
   projectId:string;
   device: DeviceType;
   productType: ProductType | null;
@@ -447,6 +449,11 @@ interface PersistedState {
   currentScreen: ScreenId;
   selectedComponentId: string | null;
   selectedFileId: string | null;
+  centerTab?: CenterTab;
+  rightTab?: RightTab;
+  zoom?: number;
+  fit?: boolean;
+  expandedFolders?: Record<string,boolean>;
 }
 
 function loadPersisted(): Partial<PersistedState> | null {
@@ -591,7 +598,7 @@ type Action =
 // Persistence helpers — derive a persisted snapshot
 // ─────────────────────────────────────────────────────────
 
-function toPersisted(state: WorkspaceState): PersistedState {
+export function toPersisted(state: WorkspaceState): PersistedState {
   return {
     projectId:state.projectId,
     device: state.device,
@@ -606,6 +613,7 @@ function toPersisted(state: WorkspaceState): PersistedState {
     currentScreen: state.currentScreen,
     selectedComponentId: state.selectedComponentId,
     selectedFileId: state.selectedFileId,
+    centerTab:state.centerTab,rightTab:state.rightTab,zoom:state.zoom,fit:state.fit,expandedFolders:state.expandedFolders,
   };
 }
 
@@ -624,6 +632,7 @@ function fromPersisted(p: PersistedState): Partial<WorkspaceState> {
     currentScreen: p.currentScreen,
     selectedComponentId: p.selectedComponentId,
     selectedFileId: p.selectedFileId,
+    centerTab:p.centerTab??'home',rightTab:p.rightTab??'design',zoom:p.zoom??100,fit:p.fit??true,expandedFolders:p.expandedFolders??{screens:true,components:true,styles:true,assets:true},
   };
 }
 
@@ -1031,7 +1040,7 @@ function reducer(state: WorkspaceState, action: Action): WorkspaceState {
     case "HYDRATE": {
       const p = action.snapshot;
       return {
-        ...state,
+        ...(p.projectId===state.projectId?state:buildEmptyState()),
         ...fromPersisted(p),
       };
     }
@@ -1058,7 +1067,7 @@ function pushUndoSnapshot(prev: WorkspaceState, next: WorkspaceState): Workspace
 // Initial state
 // ─────────────────────────────────────────────────────────
 
-function buildEmptyState(): WorkspaceState {
+export function buildEmptyState(): WorkspaceState {
 
   const base: WorkspaceState = {
     projectId:crypto.randomUUID(),
@@ -1104,7 +1113,7 @@ function buildInitialState(): WorkspaceState {
   const base=buildEmptyState();
   const persisted=pendingPrompt?null:loadPersisted();
   const initial=persisted?.designSystem ? {...base,...persisted} : base;
-  if(pendingNewProject){pendingNewProject=false;initial.modal={type:'new-project'};}
+  if(pendingNewProject){initial.modal={type:'new-project'};}
   return initial;
 }
 export function getCurrentProject() {
@@ -1129,9 +1138,37 @@ interface CtxShape {
 const WorkspaceCtx = createContext<CtxShape | null>(null);
 
 export function WorkspaceProvider({ children }: { children: ReactNode }) {
-  const [state, rawDispatch] = useReducer(reducer, undefined, buildInitialState);
+  const cloud = useProjects();
+  const [state, rawDispatch] = useReducer(reducer, undefined, () => {
+    const initial=buildInitialState();
+    return cloud?.state.active ? {...initial,...cloud.state.active.snapshot,saveState:'saved' as const,lastSavedAt:cloud.state.active.updatedAt} : initial;
+  });
+  useEffect(()=>{pendingNewProject=false;},[]);
   const epoch=useRef(0),controller=useRef<AbortController|null>(null);
+  const projectOperation=useRef(false);
+  const pendingCreation=useRef<{key:string;snapshot:PersistedState}|null>(null);
   const dispatch:Dispatch<Action>=useCallback((action:Action)=>{
+    if (cloud && ['OPEN_PROJECT','DUPLICATE_PROJECT','RESET_PROJECT','CREATE_PROJECT','RETRY_SAVE'].includes(action.type)) {
+      if (action.type==='RETRY_SAVE') {void cloud.store.flush().catch(error=>cloud.store.report(error));return;}
+      if(projectOperation.current)return;
+      projectOperation.current=true;
+      const run=async()=>{
+        const latest=latestState.current;
+        if(latest.designSystem||latest.messages.length)cloud.store.queue(toPersisted(latest));
+        await cloud.store.flush();
+        epoch.current++;controller.current?.abort(new DOMException('Project changed.','AbortError'));requestLock.current=false;
+        pendingReview.current?.(new Error('Project changed.'));setReviewJob(null);transactionDepth=0;transactionSnapshot=null;
+        if(action.type==='OPEN_PROJECT')await cloud.store.open(action.id);
+        if(action.type==='DUPLICATE_PROJECT'){const id=await cloud.store.duplicate(latest.projectId);await cloud.store.open(id);}
+        if(action.type==='CREATE_PROJECT'){
+          const key=latest.projectId+'|'+action.productType+'|'+(action.name??'');
+          if(pendingCreation.current?.key!==key)pendingCreation.current={key,snapshot:toPersisted(createProjectState(action.productType,action.name))};
+          await cloud.store.create(pendingCreation.current.snapshot);pendingCreation.current=null;
+        }
+        if(action.type==='RESET_PROJECT'){await cloud.store.remove(latest.projectId);rawDispatch(action);}
+      };
+      void run().catch(error=>cloud.store.report(error)).finally(()=>{projectOperation.current=false;});return;
+    }
     if(action.type==="OPEN_PROJECT"&&!sessionProjects.has(action.id))return;
     if(['CREATE_PROJECT','OPEN_PROJECT','RESET_PROJECT','DUPLICATE_PROJECT'].includes(action.type)){
       if(latestState.current.designSystem){const snapshot=toPersisted(latestState.current);snapshot.messages=snapshot.messages.map(m=>({...m,tasks:m.tasks?.map(t=>t.status==='active'?{...t,status:'pending',label:t.label+' - cancelled when leaving project'}:t)}));persistState(snapshot);}
@@ -1140,7 +1177,7 @@ export function WorkspaceProvider({ children }: { children: ReactNode }) {
       transactionDepth=0;transactionSnapshot=null;
     }
     rawDispatch(action);
-  },[]);
+  },[cloud?.store]);
 
   const [reviewJob,setReviewJob]=useState<ReviewJob|null>(null);
   const pendingReview=useRef<((e:Error)=>void)|null>(null);
@@ -1216,11 +1253,38 @@ export function WorkspaceProvider({ children }: { children: ReactNode }) {
     return ()=>clearTimeout(timer);
   }, []);
 
-  useEffect(() => { if(state.designSystem) persistState(toPersisted(state)); }, [state]);
+  useEffect(() => { if(!cloud && state.designSystem) persistState(toPersisted(state)); }, [state,cloud?.store]);
+
+  // Feed the real editor snapshot to the page-lifetime autosave queue. The
+  // queue journals immediately and survives home/workspace navigation.
+  const cloudSnapshot = JSON.stringify(toPersisted(state));
+  useEffect(()=>{
+    if(!cloud || cloud.state.loading || (!state.designSystem && !state.messages.length))return;
+    try{cloud.store.queue(JSON.parse(cloudSnapshot));}catch(error){cloud.store.report(error);}
+  },[cloud?.store,cloud?.state.loading,cloudSnapshot]);
+  useEffect(()=>()=>{
+    if(!cloud)return;
+    if(cloud.store.state.uid!==cloud.state.uid)return;
+    const latest=latestState.current;
+    try{if(latest.designSystem||latest.messages.length)cloud.store.queue(toPersisted(latest));void cloud.store.flush().catch(error=>cloud.store.report(error));}catch(error){cloud.store.report(error);}
+  },[cloud?.store]);
+  useEffect(()=>{
+    const active=cloud?.state.active;
+    if(!active||active.id===latestState.current.projectId)return;
+    epoch.current++;controller.current?.abort(new DOMException('Project changed.','AbortError'));requestLock.current=false;
+    rawDispatch({type:'HYDRATE',snapshot:active.snapshot});
+  },[cloud?.state.active?.id]);
+  useEffect(()=>{
+    if(!cloud)return;
+    const status=cloud.state.saves[state.projectId];
+    if(status==='saving'&&state.saveState!=='saving')rawDispatch({type:'SAVING'});
+    if(status==='saved'&&state.saveState!=='saved')rawDispatch({type:'SAVED'});
+    if(status==='failed'&&state.saveState!=='failed')rawDispatch({type:'SAVE_FAILED',error:cloud.state.error||'Save failed. Please retry.'});
+  },[cloud?.state.saves,state.projectId,state.saveState]);
 
   // Session snapshot observer — when state.saveState is "saving", keep the client-memory snapshot
   useEffect(() => {
-    if (state.saveState !== "saving") return;
+    if (cloud || state.saveState !== "saving") return;
     const t = setTimeout(() => {
       try {
         persistState(toPersisted(state));
@@ -1233,7 +1297,7 @@ export function WorkspaceProvider({ children }: { children: ReactNode }) {
       }
     }, 700);
     return () => clearTimeout(t);
-  }, [state.saveState, state]);
+  }, [state.saveState, state,cloud?.store]);
 
   return (
     <WorkspaceCtx.Provider

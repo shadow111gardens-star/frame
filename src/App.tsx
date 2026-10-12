@@ -1,4 +1,5 @@
 import {useAuth} from "./auth/AuthProvider";
+import {WorkspaceCloudGate} from "./projects/ProjectsProvider";
 import {protectedRoute} from "./auth/store";
 import { useEffect, useState } from "react";
 import { Nav } from "./components/Nav";
@@ -120,9 +121,9 @@ export default function App() {
   // Workspace — full-screen, no global chrome
   if (resolved.route === "workspace") {
     return (
-      <WorkspaceProvider>
+      <WorkspaceCloudGate><WorkspaceProvider key={auth.uid}>
         <WorkspaceLayout />
-      </WorkspaceProvider>
+      </WorkspaceProvider></WorkspaceCloudGate>
     );
   }
 
