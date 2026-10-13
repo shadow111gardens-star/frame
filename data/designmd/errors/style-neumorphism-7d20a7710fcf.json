@@ -1,0 +1,20 @@
+{
+  "id": 2,
+  "slug": "neumorphism",
+  "title": "Neumorphism",
+  "description": "Interface soft UI com 3D suave, sombras duplas e efeito embossed. Perfeito para apps modernas e dashboards. Prompt copy-paste para ChatGPT, Claude e Gemini.",
+  "type": "Flat & Soft UI",
+  "cover": "/images/library/2.png",
+  "use_case": "Apps modernas, Dashboards, Saúde/Fitness, Produtividade",
+  "era": "2020s Modern",
+  "style_type": "Soft, Embossed, Monochromatic, Rounded",
+  "keywords": "[\"Soft UI\",\"embossed\",\"debossed\",\"convex\",\"concave\",\"light source\",\"subtle depth\",\"rounded (12-16px)\",\"monochromatic\"]",
+  "historical_context": "Emerge em 2020, Neumorphism combina Skeuomorphism (realismo) com Flat (simplicidade) criando soft UI com sombras duplas e efeito 3D suave.",
+  "related_style_ids": "[19,3,1,4,5]",
+  "cores_primarias": "Light pastels: Soft Blue #C8E0F4, Soft Pink #F5E0E8, Soft Grey #E8E8E8",
+  "cores_secundarias": "Tints/shades (±30%), gradient subtlety, color harmony",
+  "efeitos": "Soft box-shadow (multiple: -5px -5px 15px, 5px 5px 15px), smooth press (150ms), inner subtle shadow",
+  "light_dark": "✓ Full / ◐ Partial",
+  "video_description": null,
+  "synced_at": "2026-04-01T23:50:59.911Z"
+}

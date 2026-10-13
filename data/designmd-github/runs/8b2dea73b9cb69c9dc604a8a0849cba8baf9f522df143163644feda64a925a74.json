@@ -1,0 +1,2708 @@
+{
+  "version": 1,
+  "repository": "https://github.com/VoltAgent/awesome-design-md",
+  "commit": "c7c1bada4eda972236d124e06ee58df129a9266b",
+  "startedAt": "2026-10-13T09:43:13.949Z",
+  "finishedAt": "2026-10-13T09:43:42.193Z",
+  "discoveryComplete": true,
+  "complete": true,
+  "counts": {
+    "discovered": 84,
+    "downloaded": 84,
+    "failed": 0,
+    "missingOrAmbiguousLicense": 0,
+    "markdownBytes": 2466141
+  },
+  "errors": [],
+  "licensingIssues": [],
+  "styles": [
+    {
+      "repositoryPath": "design-md/1win/DESIGN.md",
+      "slug": "1win",
+      "title": "1win",
+      "titleSource": "repository-path",
+      "sourceUrl": "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/design-md/1win/DESIGN.md",
+      "gitBlob": "ba28da8ae0f39c358befc9d4d91f077c2672466d",
+      "status": "succeeded",
+      "license": {
+        "status": "repository-license",
+        "identifier": "MIT",
+        "sourcePaths": [
+          "LICENSE"
+        ],
+        "localFiles": [
+          "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/attribution/style-LICENSE-c693279643b8.txt"
+        ],
+        "sourceUrls": [
+          "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/LICENSE"
+        ],
+        "attribution": [
+          "Copyright (c) 2026 VoltAgent",
+          "The above copyright notice and this permission notice shall be included in all",
+          "AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER"
+        ]
+      },
+      "contentHash": "64d02d344cb16d68b6882054f35e3bfb7241ad60dc8b7f84f6636a7d1379496a",
+      "bytes": 23906,
+      "fetchedAt": "2026-10-13T09:43:13.949Z",
+      "markdownFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-1win-DESIGN-md-13c56c16cfca.md",
+      "metadataFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-1win-DESIGN-md-13c56c16cfca.json"
+    },
+    {
+      "repositoryPath": "design-md/airbnb/DESIGN.md",
+      "slug": "airbnb",
+      "title": "airbnb",
+      "titleSource": "repository-path",
+      "sourceUrl": "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/design-md/airbnb/DESIGN.md",
+      "gitBlob": "088254920b745ed12c9ad14429f3cd96128ab9b2",
+      "status": "succeeded",
+      "license": {
+        "status": "repository-license",
+        "identifier": "MIT",
+        "sourcePaths": [
+          "LICENSE"
+        ],
+        "localFiles": [
+          "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/attribution/style-LICENSE-c693279643b8.txt"
+        ],
+        "sourceUrls": [
+          "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/LICENSE"
+        ],
+        "attribution": [
+          "Copyright (c) 2026 VoltAgent",
+          "The above copyright notice and this permission notice shall be included in all",
+          "AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER"
+        ]
+      },
+      "contentHash": "add34130d67209ad105346d60fe2b290728b9711683969db4b7760e29477a5fe",
+      "bytes": 30517,
+      "fetchedAt": "2026-10-13T09:43:13.949Z",
+      "markdownFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-airbnb-DESIGN-md-5d593aab94ca.md",
+      "metadataFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-airbnb-DESIGN-md-5d593aab94ca.json"
+    },
+    {
+      "repositoryPath": "design-md/airtable/DESIGN.md",
+      "slug": "airtable",
+      "title": "airtable",
+      "titleSource": "repository-path",
+      "sourceUrl": "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/design-md/airtable/DESIGN.md",
+      "gitBlob": "d885f4984c2ca5c2840a62e2d828167957c02385",
+      "status": "succeeded",
+      "license": {
+        "status": "repository-license",
+        "identifier": "MIT",
+        "sourcePaths": [
+          "LICENSE"
+        ],
+        "localFiles": [
+          "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/attribution/style-LICENSE-c693279643b8.txt"
+        ],
+        "sourceUrls": [
+          "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/LICENSE"
+        ],
+        "attribution": [
+          "Copyright (c) 2026 VoltAgent",
+          "The above copyright notice and this permission notice shall be included in all",
+          "AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER"
+        ]
+      },
+      "contentHash": "1d225e511213044d3c705bde50265ad010932bfd8a15740a144dd4f480128889",
+      "bytes": 35266,
+      "fetchedAt": "2026-10-13T09:43:13.949Z",
+      "markdownFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-airtable-DESIGN-md-6e1931b614df.md",
+      "metadataFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-airtable-DESIGN-md-6e1931b614df.json"
+    },
+    {
+      "repositoryPath": "design-md/aljazeera/DESIGN.md",
+      "slug": "aljazeera",
+      "title": "aljazeera",
+      "titleSource": "repository-path",
+      "sourceUrl": "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/design-md/aljazeera/DESIGN.md",
+      "gitBlob": "339e75bd715247700180cc6636c3f97027036ca1",
+      "status": "succeeded",
+      "license": {
+        "status": "repository-license",
+        "identifier": "MIT",
+        "sourcePaths": [
+          "LICENSE"
+        ],
+        "localFiles": [
+          "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/attribution/style-LICENSE-c693279643b8.txt"
+        ],
+        "sourceUrls": [
+          "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/LICENSE"
+        ],
+        "attribution": [
+          "Copyright (c) 2026 VoltAgent",
+          "The above copyright notice and this permission notice shall be included in all",
+          "AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER"
+        ]
+      },
+      "contentHash": "37614fc72658ffa30faca01049bd1efa8a9baafa4750501405eeea66f149466a",
+      "bytes": 28031,
+      "fetchedAt": "2026-10-13T09:43:13.949Z",
+      "markdownFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-aljazeera-DESIGN-md-bb012d31a81a.md",
+      "metadataFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-aljazeera-DESIGN-md-bb012d31a81a.json"
+    },
+    {
+      "repositoryPath": "design-md/apple/DESIGN.md",
+      "slug": "apple",
+      "title": "apple",
+      "titleSource": "repository-path",
+      "sourceUrl": "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/design-md/apple/DESIGN.md",
+      "gitBlob": "0d37e1e5f6b621ccbdc666f6d9c82f2ada26208b",
+      "status": "succeeded",
+      "license": {
+        "status": "repository-license",
+        "identifier": "MIT",
+        "sourcePaths": [
+          "LICENSE"
+        ],
+        "localFiles": [
+          "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/attribution/style-LICENSE-c693279643b8.txt"
+        ],
+        "sourceUrls": [
+          "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/LICENSE"
+        ],
+        "attribution": [
+          "Copyright (c) 2026 VoltAgent",
+          "The above copyright notice and this permission notice shall be included in all",
+          "AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER"
+        ]
+      },
+      "contentHash": "83fbc614443a9b3d7569e9956a43e7b8740f9d0f939f58b8154f7a7cec3002b2",
+      "bytes": 37096,
+      "fetchedAt": "2026-10-13T09:43:13.949Z",
+      "markdownFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-apple-DESIGN-md-3d8c24540c86.md",
+      "metadataFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-apple-DESIGN-md-3d8c24540c86.json"
+    },
+    {
+      "repositoryPath": "design-md/binance/DESIGN.md",
+      "slug": "binance",
+      "title": "binance",
+      "titleSource": "repository-path",
+      "sourceUrl": "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/design-md/binance/DESIGN.md",
+      "gitBlob": "27ec482198f450621b747a007e3135656b95f70e",
+      "status": "succeeded",
+      "license": {
+        "status": "repository-license",
+        "identifier": "MIT",
+        "sourcePaths": [
+          "LICENSE"
+        ],
+        "localFiles": [
+          "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/attribution/style-LICENSE-c693279643b8.txt"
+        ],
+        "sourceUrls": [
+          "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/LICENSE"
+        ],
+        "attribution": [
+          "Copyright (c) 2026 VoltAgent",
+          "The above copyright notice and this permission notice shall be included in all",
+          "AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER"
+        ]
+      },
+      "contentHash": "378ff97d568ccbc316519b9d45a29d6649ed8961c9c486c3ed4cea7501d72371",
+      "bytes": 39918,
+      "fetchedAt": "2026-10-13T09:43:13.949Z",
+      "markdownFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-binance-DESIGN-md-e384595d5f24.md",
+      "metadataFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-binance-DESIGN-md-e384595d5f24.json"
+    },
+    {
+      "repositoryPath": "design-md/bmw-m/DESIGN.md",
+      "slug": "bmw-m",
+      "title": "bmw-m",
+      "titleSource": "repository-path",
+      "sourceUrl": "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/design-md/bmw-m/DESIGN.md",
+      "gitBlob": "fb1cd84a66900406038017902fb42a0e3e67122d",
+      "status": "succeeded",
+      "license": {
+        "status": "repository-license",
+        "identifier": "MIT",
+        "sourcePaths": [
+          "LICENSE"
+        ],
+        "localFiles": [
+          "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/attribution/style-LICENSE-c693279643b8.txt"
+        ],
+        "sourceUrls": [
+          "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/LICENSE"
+        ],
+        "attribution": [
+          "Copyright (c) 2026 VoltAgent",
+          "The above copyright notice and this permission notice shall be included in all",
+          "AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER"
+        ]
+      },
+      "contentHash": "824a1707c0a8d1609d72477d0fa211b9ebe4bdeb3e1fd701790af7b7bb669a4a",
+      "bytes": 30697,
+      "fetchedAt": "2026-10-13T09:43:13.949Z",
+      "markdownFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-bmw-m-DESIGN-md-e86e35e19228.md",
+      "metadataFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-bmw-m-DESIGN-md-e86e35e19228.json"
+    },
+    {
+      "repositoryPath": "design-md/bmw/DESIGN.md",
+      "slug": "bmw",
+      "title": "bmw",
+      "titleSource": "repository-path",
+      "sourceUrl": "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/design-md/bmw/DESIGN.md",
+      "gitBlob": "8cb0be59fa1d2e839d5eddec3a4876f326f176bc",
+      "status": "succeeded",
+      "license": {
+        "status": "repository-license",
+        "identifier": "MIT",
+        "sourcePaths": [
+          "LICENSE"
+        ],
+        "localFiles": [
+          "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/attribution/style-LICENSE-c693279643b8.txt"
+        ],
+        "sourceUrls": [
+          "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/LICENSE"
+        ],
+        "attribution": [
+          "Copyright (c) 2026 VoltAgent",
+          "The above copyright notice and this permission notice shall be included in all",
+          "AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER"
+        ]
+      },
+      "contentHash": "b7268279e7c98e85fb80890e06765f4ee8340ba1ea1ccb5a8a5b134de43dac3e",
+      "bytes": 27907,
+      "fetchedAt": "2026-10-13T09:43:13.949Z",
+      "markdownFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-bmw-DESIGN-md-5c296fa9db65.md",
+      "metadataFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-bmw-DESIGN-md-5c296fa9db65.json"
+    },
+    {
+      "repositoryPath": "design-md/bugatti/DESIGN.md",
+      "slug": "bugatti",
+      "title": "bugatti",
+      "titleSource": "repository-path",
+      "sourceUrl": "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/design-md/bugatti/DESIGN.md",
+      "gitBlob": "c6067fed091f2edfc787fe52aa8f61bd7c2a672f",
+      "status": "succeeded",
+      "license": {
+        "status": "repository-license",
+        "identifier": "MIT",
+        "sourcePaths": [
+          "LICENSE"
+        ],
+        "localFiles": [
+          "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/attribution/style-LICENSE-c693279643b8.txt"
+        ],
+        "sourceUrls": [
+          "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/LICENSE"
+        ],
+        "attribution": [
+          "Copyright (c) 2026 VoltAgent",
+          "The above copyright notice and this permission notice shall be included in all",
+          "AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER"
+        ]
+      },
+      "contentHash": "375f0a20ada88cdee5e995ca7edcfbd584ddf5f887024deebd1bc75bfd55b1bc",
+      "bytes": 28535,
+      "fetchedAt": "2026-10-13T09:43:13.949Z",
+      "markdownFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-bugatti-DESIGN-md-47f3d12b38a6.md",
+      "metadataFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-bugatti-DESIGN-md-47f3d12b38a6.json"
+    },
+    {
+      "repositoryPath": "design-md/cal/DESIGN.md",
+      "slug": "cal",
+      "title": "cal",
+      "titleSource": "repository-path",
+      "sourceUrl": "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/design-md/cal/DESIGN.md",
+      "gitBlob": "1f8525c5bb7510000a1a986ae7be4c413054adb3",
+      "status": "succeeded",
+      "license": {
+        "status": "repository-license",
+        "identifier": "MIT",
+        "sourcePaths": [
+          "LICENSE"
+        ],
+        "localFiles": [
+          "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/attribution/style-LICENSE-c693279643b8.txt"
+        ],
+        "sourceUrls": [
+          "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/LICENSE"
+        ],
+        "attribution": [
+          "Copyright (c) 2026 VoltAgent",
+          "The above copyright notice and this permission notice shall be included in all",
+          "AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER"
+        ]
+      },
+      "contentHash": "8cd21b7d67e94c899843d517f4b426e4fee33d47354a433d6a63ebcf79d5a654",
+      "bytes": 31176,
+      "fetchedAt": "2026-10-13T09:43:13.949Z",
+      "markdownFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-cal-DESIGN-md-8a02978743a1.md",
+      "metadataFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-cal-DESIGN-md-8a02978743a1.json"
+    },
+    {
+      "repositoryPath": "design-md/claude/DESIGN.md",
+      "slug": "claude",
+      "title": "claude",
+      "titleSource": "repository-path",
+      "sourceUrl": "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/design-md/claude/DESIGN.md",
+      "gitBlob": "f92dc464d9bfdb6c6306f45a9ce406c6fca17432",
+      "status": "succeeded",
+      "license": {
+        "status": "repository-license",
+        "identifier": "MIT",
+        "sourcePaths": [
+          "LICENSE"
+        ],
+        "localFiles": [
+          "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/attribution/style-LICENSE-c693279643b8.txt"
+        ],
+        "sourceUrls": [
+          "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/LICENSE"
+        ],
+        "attribution": [
+          "Copyright (c) 2026 VoltAgent",
+          "The above copyright notice and this permission notice shall be included in all",
+          "AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER"
+        ]
+      },
+      "contentHash": "3d972f34f8d4f33b442fa28220cf3b7ca2f13c0a97c468e3988148f82521f9df",
+      "bytes": 33586,
+      "fetchedAt": "2026-10-13T09:43:13.949Z",
+      "markdownFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-claude-DESIGN-md-cc876d193534.md",
+      "metadataFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-claude-DESIGN-md-cc876d193534.json"
+    },
+    {
+      "repositoryPath": "design-md/clay/DESIGN.md",
+      "slug": "clay",
+      "title": "clay",
+      "titleSource": "repository-path",
+      "sourceUrl": "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/design-md/clay/DESIGN.md",
+      "gitBlob": "4934340cffe12633bc7dd7800fb19237c8768c3f",
+      "status": "succeeded",
+      "license": {
+        "status": "repository-license",
+        "identifier": "MIT",
+        "sourcePaths": [
+          "LICENSE"
+        ],
+        "localFiles": [
+          "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/attribution/style-LICENSE-c693279643b8.txt"
+        ],
+        "sourceUrls": [
+          "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/LICENSE"
+        ],
+        "attribution": [
+          "Copyright (c) 2026 VoltAgent",
+          "The above copyright notice and this permission notice shall be included in all",
+          "AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER"
+        ]
+      },
+      "contentHash": "1abd803a207fbe950a06e155adcd6013c2e149b13e7b88844f5069f9d3d99eb3",
+      "bytes": 25705,
+      "fetchedAt": "2026-10-13T09:43:13.949Z",
+      "markdownFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-clay-DESIGN-md-1bf412cbe4eb.md",
+      "metadataFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-clay-DESIGN-md-1bf412cbe4eb.json"
+    },
+    {
+      "repositoryPath": "design-md/clickhouse/DESIGN.md",
+      "slug": "clickhouse",
+      "title": "clickhouse",
+      "titleSource": "repository-path",
+      "sourceUrl": "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/design-md/clickhouse/DESIGN.md",
+      "gitBlob": "f9b61f0a2be93c3e0b396a9a1b4ae1df02791cf9",
+      "status": "succeeded",
+      "license": {
+        "status": "repository-license",
+        "identifier": "MIT",
+        "sourcePaths": [
+          "LICENSE"
+        ],
+        "localFiles": [
+          "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/attribution/style-LICENSE-c693279643b8.txt"
+        ],
+        "sourceUrls": [
+          "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/LICENSE"
+        ],
+        "attribution": [
+          "Copyright (c) 2026 VoltAgent",
+          "The above copyright notice and this permission notice shall be included in all",
+          "AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER"
+        ]
+      },
+      "contentHash": "50987e29b603cc7503ebe724af810fcf43845e96fdd4083e0fbe5fe00d2cdd2e",
+      "bytes": 25986,
+      "fetchedAt": "2026-10-13T09:43:13.949Z",
+      "markdownFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-clickhouse-DESIGN-md-241fd78d41d2.md",
+      "metadataFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-clickhouse-DESIGN-md-241fd78d41d2.json"
+    },
+    {
+      "repositoryPath": "design-md/cohere/DESIGN.md",
+      "slug": "cohere",
+      "title": "cohere",
+      "titleSource": "repository-path",
+      "sourceUrl": "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/design-md/cohere/DESIGN.md",
+      "gitBlob": "cc8bdf0482e7609c93a35d9b4526293d575dde8d",
+      "status": "succeeded",
+      "license": {
+        "status": "repository-license",
+        "identifier": "MIT",
+        "sourcePaths": [
+          "LICENSE"
+        ],
+        "localFiles": [
+          "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/attribution/style-LICENSE-c693279643b8.txt"
+        ],
+        "sourceUrls": [
+          "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/LICENSE"
+        ],
+        "attribution": [
+          "Copyright (c) 2026 VoltAgent",
+          "The above copyright notice and this permission notice shall be included in all",
+          "AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER"
+        ]
+      },
+      "contentHash": "1c49a5a5f88d43841d4f4afa33831328d47a5715048700a3b75086a822575883",
+      "bytes": 20020,
+      "fetchedAt": "2026-10-13T09:43:13.949Z",
+      "markdownFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-cohere-DESIGN-md-08b45c60f283.md",
+      "metadataFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-cohere-DESIGN-md-08b45c60f283.json"
+    },
+    {
+      "repositoryPath": "design-md/coinbase/DESIGN.md",
+      "slug": "coinbase",
+      "title": "coinbase",
+      "titleSource": "repository-path",
+      "sourceUrl": "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/design-md/coinbase/DESIGN.md",
+      "gitBlob": "02bd7262fcca3db250d109a69a641ce677a7d784",
+      "status": "succeeded",
+      "license": {
+        "status": "repository-license",
+        "identifier": "MIT",
+        "sourcePaths": [
+          "LICENSE"
+        ],
+        "localFiles": [
+          "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/attribution/style-LICENSE-c693279643b8.txt"
+        ],
+        "sourceUrls": [
+          "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/LICENSE"
+        ],
+        "attribution": [
+          "Copyright (c) 2026 VoltAgent",
+          "The above copyright notice and this permission notice shall be included in all",
+          "AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER"
+        ]
+      },
+      "contentHash": "c8c67800dd7f58fcc87ed7d267a3bba862e3419e499e8a66d67731a69d2de1d6",
+      "bytes": 25853,
+      "fetchedAt": "2026-10-13T09:43:13.949Z",
+      "markdownFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-coinbase-DESIGN-md-a021694a1450.md",
+      "metadataFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-coinbase-DESIGN-md-a021694a1450.json"
+    },
+    {
+      "repositoryPath": "design-md/composio/DESIGN.md",
+      "slug": "composio",
+      "title": "composio",
+      "titleSource": "repository-path",
+      "sourceUrl": "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/design-md/composio/DESIGN.md",
+      "gitBlob": "fe8d23a93af8c927b49c2bf7e4c05e9378c33a4c",
+      "status": "succeeded",
+      "license": {
+        "status": "repository-license",
+        "identifier": "MIT",
+        "sourcePaths": [
+          "LICENSE"
+        ],
+        "localFiles": [
+          "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/attribution/style-LICENSE-c693279643b8.txt"
+        ],
+        "sourceUrls": [
+          "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/LICENSE"
+        ],
+        "attribution": [
+          "Copyright (c) 2026 VoltAgent",
+          "The above copyright notice and this permission notice shall be included in all",
+          "AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER"
+        ]
+      },
+      "contentHash": "e7db886dabecca61f29b83e8f46d7a1e8a43889d30b81bc6e48162ccaafcbb2f",
+      "bytes": 20606,
+      "fetchedAt": "2026-10-13T09:43:13.949Z",
+      "markdownFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-composio-DESIGN-md-e0efa112d6c1.md",
+      "metadataFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-composio-DESIGN-md-e0efa112d6c1.json"
+    },
+    {
+      "repositoryPath": "design-md/cursor/DESIGN.md",
+      "slug": "cursor",
+      "title": "cursor",
+      "titleSource": "repository-path",
+      "sourceUrl": "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/design-md/cursor/DESIGN.md",
+      "gitBlob": "f457973ed6dfb504a2b42a02845734f52bc399a8",
+      "status": "succeeded",
+      "license": {
+        "status": "repository-license",
+        "identifier": "MIT",
+        "sourcePaths": [
+          "LICENSE"
+        ],
+        "localFiles": [
+          "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/attribution/style-LICENSE-c693279643b8.txt"
+        ],
+        "sourceUrls": [
+          "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/LICENSE"
+        ],
+        "attribution": [
+          "Copyright (c) 2026 VoltAgent",
+          "The above copyright notice and this permission notice shall be included in all",
+          "AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER"
+        ]
+      },
+      "contentHash": "a3db9b3019dc2f514fdee7cd0ca0a5232c0bd0119e23178e8eebaf6916258d9d",
+      "bytes": 21771,
+      "fetchedAt": "2026-10-13T09:43:13.949Z",
+      "markdownFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-cursor-DESIGN-md-52a4d038e42d.md",
+      "metadataFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-cursor-DESIGN-md-52a4d038e42d.json"
+    },
+    {
+      "repositoryPath": "design-md/dell-1996/DESIGN.md",
+      "slug": "dell-1996",
+      "title": "dell-1996",
+      "titleSource": "repository-path",
+      "sourceUrl": "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/design-md/dell-1996/DESIGN.md",
+      "gitBlob": "09285a8a2fcb13c2e452a01164682e84f6fafcba",
+      "status": "succeeded",
+      "license": {
+        "status": "repository-license",
+        "identifier": "MIT",
+        "sourcePaths": [
+          "LICENSE"
+        ],
+        "localFiles": [
+          "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/attribution/style-LICENSE-c693279643b8.txt"
+        ],
+        "sourceUrls": [
+          "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/LICENSE"
+        ],
+        "attribution": [
+          "Copyright (c) 2026 VoltAgent",
+          "The above copyright notice and this permission notice shall be included in all",
+          "AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER"
+        ]
+      },
+      "contentHash": "e186c614b1223fe7015670472ac6bc84b5b3fdd5de5325b3ce5bfb7fbe9c8d6e",
+      "bytes": 34592,
+      "fetchedAt": "2026-10-13T09:43:13.949Z",
+      "markdownFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-dell-1996-DESIGN-md-cf066d976004.md",
+      "metadataFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-dell-1996-DESIGN-md-cf066d976004.json"
+    },
+    {
+      "repositoryPath": "design-md/dji/DESIGN.md",
+      "slug": "dji",
+      "title": "dji",
+      "titleSource": "repository-path",
+      "sourceUrl": "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/design-md/dji/DESIGN.md",
+      "gitBlob": "8d0826603e57570579d0d95a367999667171dbc2",
+      "status": "succeeded",
+      "license": {
+        "status": "repository-license",
+        "identifier": "MIT",
+        "sourcePaths": [
+          "LICENSE"
+        ],
+        "localFiles": [
+          "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/attribution/style-LICENSE-c693279643b8.txt"
+        ],
+        "sourceUrls": [
+          "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/LICENSE"
+        ],
+        "attribution": [
+          "Copyright (c) 2026 VoltAgent",
+          "The above copyright notice and this permission notice shall be included in all",
+          "AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER"
+        ]
+      },
+      "contentHash": "c8a57520b87286869a88cdd2c07f21080ebda9fb3eee315b11d95c752582c1a9",
+      "bytes": 42268,
+      "fetchedAt": "2026-10-13T09:43:13.949Z",
+      "markdownFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-dji-DESIGN-md-21bb3b8ab916.md",
+      "metadataFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-dji-DESIGN-md-21bb3b8ab916.json"
+    },
+    {
+      "repositoryPath": "design-md/elevenlabs/DESIGN.md",
+      "slug": "elevenlabs",
+      "title": "elevenlabs",
+      "titleSource": "repository-path",
+      "sourceUrl": "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/design-md/elevenlabs/DESIGN.md",
+      "gitBlob": "4d13eb977b5fb8f596b69a1ecc8f6de42c1a54a9",
+      "status": "succeeded",
+      "license": {
+        "status": "repository-license",
+        "identifier": "MIT",
+        "sourcePaths": [
+          "LICENSE"
+        ],
+        "localFiles": [
+          "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/attribution/style-LICENSE-c693279643b8.txt"
+        ],
+        "sourceUrls": [
+          "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/LICENSE"
+        ],
+        "attribution": [
+          "Copyright (c) 2026 VoltAgent",
+          "The above copyright notice and this permission notice shall be included in all",
+          "AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER"
+        ]
+      },
+      "contentHash": "3b359acfaafadbb499c7ed3eebe813a76e0be497a7157b77de207fe275068a66",
+      "bytes": 20943,
+      "fetchedAt": "2026-10-13T09:43:13.949Z",
+      "markdownFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-elevenlabs-DESIGN-md-3b111bb743a0.md",
+      "metadataFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-elevenlabs-DESIGN-md-3b111bb743a0.json"
+    },
+    {
+      "repositoryPath": "design-md/expo/DESIGN.md",
+      "slug": "expo",
+      "title": "expo",
+      "titleSource": "repository-path",
+      "sourceUrl": "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/design-md/expo/DESIGN.md",
+      "gitBlob": "7d25b5dc1d502f008e7f61f55dbd644082c07b6d",
+      "status": "succeeded",
+      "license": {
+        "status": "repository-license",
+        "identifier": "MIT",
+        "sourcePaths": [
+          "LICENSE"
+        ],
+        "localFiles": [
+          "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/attribution/style-LICENSE-c693279643b8.txt"
+        ],
+        "sourceUrls": [
+          "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/LICENSE"
+        ],
+        "attribution": [
+          "Copyright (c) 2026 VoltAgent",
+          "The above copyright notice and this permission notice shall be included in all",
+          "AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER"
+        ]
+      },
+      "contentHash": "1be7e129b6f75afaa12318a7c51ab22f6f74a214dec22c4827cecc519f112363",
+      "bytes": 21660,
+      "fetchedAt": "2026-10-13T09:43:13.949Z",
+      "markdownFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-expo-DESIGN-md-ce058b6fb411.md",
+      "metadataFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-expo-DESIGN-md-ce058b6fb411.json"
+    },
+    {
+      "repositoryPath": "design-md/ferrari/DESIGN.md",
+      "slug": "ferrari",
+      "title": "ferrari",
+      "titleSource": "repository-path",
+      "sourceUrl": "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/design-md/ferrari/DESIGN.md",
+      "gitBlob": "3c6b43ab529cbddae51f09a2a659d123baf4a1f0",
+      "status": "succeeded",
+      "license": {
+        "status": "repository-license",
+        "identifier": "MIT",
+        "sourcePaths": [
+          "LICENSE"
+        ],
+        "localFiles": [
+          "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/attribution/style-LICENSE-c693279643b8.txt"
+        ],
+        "sourceUrls": [
+          "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/LICENSE"
+        ],
+        "attribution": [
+          "Copyright (c) 2026 VoltAgent",
+          "The above copyright notice and this permission notice shall be included in all",
+          "AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER"
+        ]
+      },
+      "contentHash": "1199e2832641cac7e384aaf3b1f3db87f992240cea5d3d1eee04d9dc00acb17c",
+      "bytes": 24365,
+      "fetchedAt": "2026-10-13T09:43:13.949Z",
+      "markdownFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-ferrari-DESIGN-md-c4e21b0bb8c1.md",
+      "metadataFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-ferrari-DESIGN-md-c4e21b0bb8c1.json"
+    },
+    {
+      "repositoryPath": "design-md/figma/DESIGN.md",
+      "slug": "figma",
+      "title": "figma",
+      "titleSource": "repository-path",
+      "sourceUrl": "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/design-md/figma/DESIGN.md",
+      "gitBlob": "75e79fea9aadc35d4c9a0c75db631be927525f08",
+      "status": "succeeded",
+      "license": {
+        "status": "repository-license",
+        "identifier": "MIT",
+        "sourcePaths": [
+          "LICENSE"
+        ],
+        "localFiles": [
+          "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/attribution/style-LICENSE-c693279643b8.txt"
+        ],
+        "sourceUrls": [
+          "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/LICENSE"
+        ],
+        "attribution": [
+          "Copyright (c) 2026 VoltAgent",
+          "The above copyright notice and this permission notice shall be included in all",
+          "AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER"
+        ]
+      },
+      "contentHash": "716ce8431f47eb8b8135552710e3c4d538bccccf1202e4ceac5428c9aada9972",
+      "bytes": 32316,
+      "fetchedAt": "2026-10-13T09:43:13.949Z",
+      "markdownFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-figma-DESIGN-md-0d66c63ee8a1.md",
+      "metadataFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-figma-DESIGN-md-0d66c63ee8a1.json"
+    },
+    {
+      "repositoryPath": "design-md/framer/DESIGN.md",
+      "slug": "framer",
+      "title": "framer",
+      "titleSource": "repository-path",
+      "sourceUrl": "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/design-md/framer/DESIGN.md",
+      "gitBlob": "8351555233ee9379c47bfb57c557e64f0b6c7488",
+      "status": "succeeded",
+      "license": {
+        "status": "repository-license",
+        "identifier": "MIT",
+        "sourcePaths": [
+          "LICENSE"
+        ],
+        "localFiles": [
+          "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/attribution/style-LICENSE-c693279643b8.txt"
+        ],
+        "sourceUrls": [
+          "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/LICENSE"
+        ],
+        "attribution": [
+          "Copyright (c) 2026 VoltAgent",
+          "The above copyright notice and this permission notice shall be included in all",
+          "AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER"
+        ]
+      },
+      "contentHash": "a5d47dddacf5a04577cec0be6fe0fc53b7402254c7686874af3e59bcc7588cb4",
+      "bytes": 29119,
+      "fetchedAt": "2026-10-13T09:43:13.949Z",
+      "markdownFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-framer-DESIGN-md-3eb33d484899.md",
+      "metadataFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-framer-DESIGN-md-3eb33d484899.json"
+    },
+    {
+      "repositoryPath": "design-md/hashicorp/DESIGN.md",
+      "slug": "hashicorp",
+      "title": "hashicorp",
+      "titleSource": "repository-path",
+      "sourceUrl": "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/design-md/hashicorp/DESIGN.md",
+      "gitBlob": "4c27877aad49803d04596d90fd7e42a9e05030cd",
+      "status": "succeeded",
+      "license": {
+        "status": "repository-license",
+        "identifier": "MIT",
+        "sourcePaths": [
+          "LICENSE"
+        ],
+        "localFiles": [
+          "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/attribution/style-LICENSE-c693279643b8.txt"
+        ],
+        "sourceUrls": [
+          "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/LICENSE"
+        ],
+        "attribution": [
+          "Copyright (c) 2026 VoltAgent",
+          "The above copyright notice and this permission notice shall be included in all",
+          "AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER"
+        ]
+      },
+      "contentHash": "d2df9be72d867e48d318fd18db04e60a78357c27e392ab921fc2ba7f46951442",
+      "bytes": 28023,
+      "fetchedAt": "2026-10-13T09:43:13.949Z",
+      "markdownFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-hashicorp-DESIGN-md-6d4ca323bcc4.md",
+      "metadataFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-hashicorp-DESIGN-md-6d4ca323bcc4.json"
+    },
+    {
+      "repositoryPath": "design-md/hp/DESIGN.md",
+      "slug": "hp",
+      "title": "hp",
+      "titleSource": "repository-path",
+      "sourceUrl": "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/design-md/hp/DESIGN.md",
+      "gitBlob": "fa0167583bb3df459128257a26c1794827196de6",
+      "status": "succeeded",
+      "license": {
+        "status": "repository-license",
+        "identifier": "MIT",
+        "sourcePaths": [
+          "LICENSE"
+        ],
+        "localFiles": [
+          "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/attribution/style-LICENSE-c693279643b8.txt"
+        ],
+        "sourceUrls": [
+          "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/LICENSE"
+        ],
+        "attribution": [
+          "Copyright (c) 2026 VoltAgent",
+          "The above copyright notice and this permission notice shall be included in all",
+          "AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER"
+        ]
+      },
+      "contentHash": "4c9a248046684bdde5311a0c9881814f50e2381c2b0f3c75b02a35fc64bc8bb8",
+      "bytes": 36335,
+      "fetchedAt": "2026-10-13T09:43:13.949Z",
+      "markdownFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-hp-DESIGN-md-cf11322128f8.md",
+      "metadataFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-hp-DESIGN-md-cf11322128f8.json"
+    },
+    {
+      "repositoryPath": "design-md/ibm/DESIGN.md",
+      "slug": "ibm",
+      "title": "ibm",
+      "titleSource": "repository-path",
+      "sourceUrl": "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/design-md/ibm/DESIGN.md",
+      "gitBlob": "dbef1c5b20357a8953e6832e5d383a866a66f11a",
+      "status": "succeeded",
+      "license": {
+        "status": "repository-license",
+        "identifier": "MIT",
+        "sourcePaths": [
+          "LICENSE"
+        ],
+        "localFiles": [
+          "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/attribution/style-LICENSE-c693279643b8.txt"
+        ],
+        "sourceUrls": [
+          "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/LICENSE"
+        ],
+        "attribution": [
+          "Copyright (c) 2026 VoltAgent",
+          "The above copyright notice and this permission notice shall be included in all",
+          "AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER"
+        ]
+      },
+      "contentHash": "46f6fd65b5e7524fed1133b9b3c0dd619f9a0f145fbb2b87f3675c701a88f3bd",
+      "bytes": 26481,
+      "fetchedAt": "2026-10-13T09:43:13.949Z",
+      "markdownFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-ibm-DESIGN-md-6e5a3464ae54.md",
+      "metadataFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-ibm-DESIGN-md-6e5a3464ae54.json"
+    },
+    {
+      "repositoryPath": "design-md/intercom/DESIGN.md",
+      "slug": "intercom",
+      "title": "intercom",
+      "titleSource": "repository-path",
+      "sourceUrl": "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/design-md/intercom/DESIGN.md",
+      "gitBlob": "dd01090d095d79cfec81100e3040678e2047531b",
+      "status": "succeeded",
+      "license": {
+        "status": "repository-license",
+        "identifier": "MIT",
+        "sourcePaths": [
+          "LICENSE"
+        ],
+        "localFiles": [
+          "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/attribution/style-LICENSE-c693279643b8.txt"
+        ],
+        "sourceUrls": [
+          "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/LICENSE"
+        ],
+        "attribution": [
+          "Copyright (c) 2026 VoltAgent",
+          "The above copyright notice and this permission notice shall be included in all",
+          "AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER"
+        ]
+      },
+      "contentHash": "962be23cd947e87a86b2ffbc0440e9d0808243a6ef3af2aa04e8e7cc04d48ba3",
+      "bytes": 23278,
+      "fetchedAt": "2026-10-13T09:43:13.949Z",
+      "markdownFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-intercom-DESIGN-md-a4338aae8922.md",
+      "metadataFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-intercom-DESIGN-md-a4338aae8922.json"
+    },
+    {
+      "repositoryPath": "design-md/jobright/DESIGN.md",
+      "slug": "jobright",
+      "title": "jobright",
+      "titleSource": "repository-path",
+      "sourceUrl": "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/design-md/jobright/DESIGN.md",
+      "gitBlob": "5fe28eb5e68e717071c26502b7fd1fd9490c3899",
+      "status": "succeeded",
+      "license": {
+        "status": "repository-license",
+        "identifier": "MIT",
+        "sourcePaths": [
+          "LICENSE"
+        ],
+        "localFiles": [
+          "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/attribution/style-LICENSE-c693279643b8.txt"
+        ],
+        "sourceUrls": [
+          "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/LICENSE"
+        ],
+        "attribution": [
+          "Copyright (c) 2026 VoltAgent",
+          "The above copyright notice and this permission notice shall be included in all",
+          "AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER"
+        ]
+      },
+      "contentHash": "9e682194e3f846915164189538741133ab1e2779730677e92d28f873f782999b",
+      "bytes": 26861,
+      "fetchedAt": "2026-10-13T09:43:13.949Z",
+      "markdownFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-jobright-DESIGN-md-9f10b7a9ac5c.md",
+      "metadataFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-jobright-DESIGN-md-9f10b7a9ac5c.json"
+    },
+    {
+      "repositoryPath": "design-md/kraken/DESIGN.md",
+      "slug": "kraken",
+      "title": "Design System Inspired by Kraken",
+      "titleSource": "markdown-heading",
+      "sourceUrl": "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/design-md/kraken/DESIGN.md",
+      "gitBlob": "972e541fcc56784ce6a69558652a47338adfafb7",
+      "status": "succeeded",
+      "license": {
+        "status": "repository-license",
+        "identifier": "MIT",
+        "sourcePaths": [
+          "LICENSE"
+        ],
+        "localFiles": [
+          "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/attribution/style-LICENSE-c693279643b8.txt"
+        ],
+        "sourceUrls": [
+          "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/LICENSE"
+        ],
+        "attribution": [
+          "Copyright (c) 2026 VoltAgent",
+          "The above copyright notice and this permission notice shall be included in all",
+          "AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER"
+        ]
+      },
+      "contentHash": "41bcbd5642c926a549f0d50f1151484c5776b4536233240c8415cfb79bcf1f38",
+      "bytes": 4350,
+      "fetchedAt": "2026-10-13T09:43:13.949Z",
+      "markdownFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-kraken-DESIGN-md-4f4d99e9ca83.md",
+      "metadataFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-kraken-DESIGN-md-4f4d99e9ca83.json"
+    },
+    {
+      "repositoryPath": "design-md/lamborghini/DESIGN.md",
+      "slug": "lamborghini",
+      "title": "Design System Inspired by Lamborghini",
+      "titleSource": "markdown-heading",
+      "sourceUrl": "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/design-md/lamborghini/DESIGN.md",
+      "gitBlob": "aa9b12f1bac4c041525d704d00e5abb059cdd8dd",
+      "status": "succeeded",
+      "license": {
+        "status": "repository-license",
+        "identifier": "MIT",
+        "sourcePaths": [
+          "LICENSE"
+        ],
+        "localFiles": [
+          "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/attribution/style-LICENSE-c693279643b8.txt"
+        ],
+        "sourceUrls": [
+          "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/LICENSE"
+        ],
+        "attribution": [
+          "Copyright (c) 2026 VoltAgent",
+          "The above copyright notice and this permission notice shall be included in all",
+          "AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER"
+        ]
+      },
+      "contentHash": "9aa68c53b481a0befdf72859db5625f85454122294509989aa58414aaee04b34",
+      "bytes": 21119,
+      "fetchedAt": "2026-10-13T09:43:13.949Z",
+      "markdownFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-lamborghini-DESIGN-md-f472177cb82d.md",
+      "metadataFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-lamborghini-DESIGN-md-f472177cb82d.json"
+    },
+    {
+      "repositoryPath": "design-md/linear.app/DESIGN.md",
+      "slug": "linear.app",
+      "title": "linear.app",
+      "titleSource": "repository-path",
+      "sourceUrl": "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/design-md/linear.app/DESIGN.md",
+      "gitBlob": "88bcd11faa4f050982c7e84ca70bdf43d660ed6a",
+      "status": "succeeded",
+      "license": {
+        "status": "repository-license",
+        "identifier": "MIT",
+        "sourcePaths": [
+          "LICENSE"
+        ],
+        "localFiles": [
+          "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/attribution/style-LICENSE-c693279643b8.txt"
+        ],
+        "sourceUrls": [
+          "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/LICENSE"
+        ],
+        "attribution": [
+          "Copyright (c) 2026 VoltAgent",
+          "The above copyright notice and this permission notice shall be included in all",
+          "AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER"
+        ]
+      },
+      "contentHash": "30bd30e72c48a16e4bdbd010f2d1c85fab657c6fae3cc85389399aab10f9cb5f",
+      "bytes": 24354,
+      "fetchedAt": "2026-10-13T09:43:13.949Z",
+      "markdownFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-linear-app-DESIGN-md-b1adf6a113ba.md",
+      "metadataFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-linear-app-DESIGN-md-b1adf6a113ba.json"
+    },
+    {
+      "repositoryPath": "design-md/lovable/DESIGN.md",
+      "slug": "lovable",
+      "title": "Design System Inspired by Lovable",
+      "titleSource": "markdown-heading",
+      "sourceUrl": "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/design-md/lovable/DESIGN.md",
+      "gitBlob": "5a2821c9c503e8e78c99609a44da7cb41b5bba53",
+      "status": "succeeded",
+      "license": {
+        "status": "repository-license",
+        "identifier": "MIT",
+        "sourcePaths": [
+          "LICENSE"
+        ],
+        "localFiles": [
+          "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/attribution/style-LICENSE-c693279643b8.txt"
+        ],
+        "sourceUrls": [
+          "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/LICENSE"
+        ],
+        "attribution": [
+          "Copyright (c) 2026 VoltAgent",
+          "The above copyright notice and this permission notice shall be included in all",
+          "AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER"
+        ]
+      },
+      "contentHash": "92790895c833104072643929ba56ebbf42c8f88ffb7bff1926462545d0ace6c7",
+      "bytes": 17384,
+      "fetchedAt": "2026-10-13T09:43:13.949Z",
+      "markdownFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-lovable-DESIGN-md-9cccc9859bbc.md",
+      "metadataFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-lovable-DESIGN-md-9cccc9859bbc.json"
+    },
+    {
+      "repositoryPath": "design-md/mastercard/DESIGN.md",
+      "slug": "mastercard",
+      "title": "Design System Inspired by Mastercard",
+      "titleSource": "markdown-heading",
+      "sourceUrl": "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/design-md/mastercard/DESIGN.md",
+      "gitBlob": "8087e66a902ea478f73cf9902a258a639b3311a2",
+      "status": "succeeded",
+      "license": {
+        "status": "repository-license",
+        "identifier": "MIT",
+        "sourcePaths": [
+          "LICENSE"
+        ],
+        "localFiles": [
+          "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/attribution/style-LICENSE-c693279643b8.txt"
+        ],
+        "sourceUrls": [
+          "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/LICENSE"
+        ],
+        "attribution": [
+          "Copyright (c) 2026 VoltAgent",
+          "The above copyright notice and this permission notice shall be included in all",
+          "AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER"
+        ]
+      },
+      "contentHash": "e76ceaa187f43bd24b8338d2b2314e71e9225b36492e40f32a55782281a10437",
+      "bytes": 26995,
+      "fetchedAt": "2026-10-13T09:43:13.949Z",
+      "markdownFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-mastercard-DESIGN-md-c111b881ccf7.md",
+      "metadataFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-mastercard-DESIGN-md-c111b881ccf7.json"
+    },
+    {
+      "repositoryPath": "design-md/mercury/DESIGN.md",
+      "slug": "mercury",
+      "title": "mercury",
+      "titleSource": "repository-path",
+      "sourceUrl": "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/design-md/mercury/DESIGN.md",
+      "gitBlob": "4e0c448f6594ab7a68dbff82ab360b66dfba96c9",
+      "status": "succeeded",
+      "license": {
+        "status": "repository-license",
+        "identifier": "MIT",
+        "sourcePaths": [
+          "LICENSE"
+        ],
+        "localFiles": [
+          "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/attribution/style-LICENSE-c693279643b8.txt"
+        ],
+        "sourceUrls": [
+          "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/LICENSE"
+        ],
+        "attribution": [
+          "Copyright (c) 2026 VoltAgent",
+          "The above copyright notice and this permission notice shall be included in all",
+          "AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER"
+        ]
+      },
+      "contentHash": "dabb3683422a9841369b0db53ff13ed375b0b6f019157a5c90e9fca165cc111f",
+      "bytes": 25065,
+      "fetchedAt": "2026-10-13T09:43:13.949Z",
+      "markdownFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-mercury-DESIGN-md-cc2ba9736a86.md",
+      "metadataFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-mercury-DESIGN-md-cc2ba9736a86.json"
+    },
+    {
+      "repositoryPath": "design-md/meta/DESIGN.md",
+      "slug": "meta",
+      "title": "meta",
+      "titleSource": "repository-path",
+      "sourceUrl": "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/design-md/meta/DESIGN.md",
+      "gitBlob": "61be6ca195040b5dab098c4aefaae6adedbee7e4",
+      "status": "succeeded",
+      "license": {
+        "status": "repository-license",
+        "identifier": "MIT",
+        "sourcePaths": [
+          "LICENSE"
+        ],
+        "localFiles": [
+          "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/attribution/style-LICENSE-c693279643b8.txt"
+        ],
+        "sourceUrls": [
+          "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/LICENSE"
+        ],
+        "attribution": [
+          "Copyright (c) 2026 VoltAgent",
+          "The above copyright notice and this permission notice shall be included in all",
+          "AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER"
+        ]
+      },
+      "contentHash": "306dfad97c006d47b134fb0dbd55ff68d3baa526844d6eb37346373c9ef35339",
+      "bytes": 37986,
+      "fetchedAt": "2026-10-13T09:43:13.949Z",
+      "markdownFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-meta-DESIGN-md-9f8377b6bdf2.md",
+      "metadataFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-meta-DESIGN-md-9f8377b6bdf2.json"
+    },
+    {
+      "repositoryPath": "design-md/minimax/DESIGN.md",
+      "slug": "minimax",
+      "title": "minimax",
+      "titleSource": "repository-path",
+      "sourceUrl": "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/design-md/minimax/DESIGN.md",
+      "gitBlob": "6f5a190cdcad424975a60944743e9a0f5f3adf2f",
+      "status": "succeeded",
+      "license": {
+        "status": "repository-license",
+        "identifier": "MIT",
+        "sourcePaths": [
+          "LICENSE"
+        ],
+        "localFiles": [
+          "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/attribution/style-LICENSE-c693279643b8.txt"
+        ],
+        "sourceUrls": [
+          "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/LICENSE"
+        ],
+        "attribution": [
+          "Copyright (c) 2026 VoltAgent",
+          "The above copyright notice and this permission notice shall be included in all",
+          "AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER"
+        ]
+      },
+      "contentHash": "2658b96488bb629749259b152c5ba2912a0e8feb6a03477e265879abd9264c50",
+      "bytes": 37920,
+      "fetchedAt": "2026-10-13T09:43:13.949Z",
+      "markdownFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-minimax-DESIGN-md-0bfb776c4b2c.md",
+      "metadataFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-minimax-DESIGN-md-0bfb776c4b2c.json"
+    },
+    {
+      "repositoryPath": "design-md/mintlify/DESIGN.md",
+      "slug": "mintlify",
+      "title": "mintlify",
+      "titleSource": "repository-path",
+      "sourceUrl": "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/design-md/mintlify/DESIGN.md",
+      "gitBlob": "dbe946bcb53adba92dbc75b995497c18189b6f41",
+      "status": "succeeded",
+      "license": {
+        "status": "repository-license",
+        "identifier": "MIT",
+        "sourcePaths": [
+          "LICENSE"
+        ],
+        "localFiles": [
+          "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/attribution/style-LICENSE-c693279643b8.txt"
+        ],
+        "sourceUrls": [
+          "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/LICENSE"
+        ],
+        "attribution": [
+          "Copyright (c) 2026 VoltAgent",
+          "The above copyright notice and this permission notice shall be included in all",
+          "AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER"
+        ]
+      },
+      "contentHash": "754ffcf35dcd39ef8aef450085ce936aaca5b872ff92caa66be99e91a5c3d5ec",
+      "bytes": 44083,
+      "fetchedAt": "2026-10-13T09:43:13.949Z",
+      "markdownFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-mintlify-DESIGN-md-d83008e259d4.md",
+      "metadataFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-mintlify-DESIGN-md-d83008e259d4.json"
+    },
+    {
+      "repositoryPath": "design-md/miro/DESIGN.md",
+      "slug": "miro",
+      "title": "miro",
+      "titleSource": "repository-path",
+      "sourceUrl": "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/design-md/miro/DESIGN.md",
+      "gitBlob": "98fd9a4423e4d58de0d4395f897c059d10e52740",
+      "status": "succeeded",
+      "license": {
+        "status": "repository-license",
+        "identifier": "MIT",
+        "sourcePaths": [
+          "LICENSE"
+        ],
+        "localFiles": [
+          "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/attribution/style-LICENSE-c693279643b8.txt"
+        ],
+        "sourceUrls": [
+          "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/LICENSE"
+        ],
+        "attribution": [
+          "Copyright (c) 2026 VoltAgent",
+          "The above copyright notice and this permission notice shall be included in all",
+          "AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER"
+        ]
+      },
+      "contentHash": "87c71f76297277d64f9679e015a50da88e72d86d7b41badf8733eae1e4cde335",
+      "bytes": 36542,
+      "fetchedAt": "2026-10-13T09:43:13.949Z",
+      "markdownFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-miro-DESIGN-md-ce051261633b.md",
+      "metadataFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-miro-DESIGN-md-ce051261633b.json"
+    },
+    {
+      "repositoryPath": "design-md/mistral.ai/DESIGN.md",
+      "slug": "mistral.ai",
+      "title": "mistral.ai",
+      "titleSource": "repository-path",
+      "sourceUrl": "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/design-md/mistral.ai/DESIGN.md",
+      "gitBlob": "76a451b97a263d1061f97f84d52a2c99ff6dc9b4",
+      "status": "succeeded",
+      "license": {
+        "status": "repository-license",
+        "identifier": "MIT",
+        "sourcePaths": [
+          "LICENSE"
+        ],
+        "localFiles": [
+          "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/attribution/style-LICENSE-c693279643b8.txt"
+        ],
+        "sourceUrls": [
+          "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/LICENSE"
+        ],
+        "attribution": [
+          "Copyright (c) 2026 VoltAgent",
+          "The above copyright notice and this permission notice shall be included in all",
+          "AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER"
+        ]
+      },
+      "contentHash": "40e2c692d72c54bae1e43446e2d059b71d773668d39d71ccb7ededa9fa07d145",
+      "bytes": 35508,
+      "fetchedAt": "2026-10-13T09:43:13.949Z",
+      "markdownFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-mistral-ai-DESIGN-md-6a562ef94cc8.md",
+      "metadataFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-mistral-ai-DESIGN-md-6a562ef94cc8.json"
+    },
+    {
+      "repositoryPath": "design-md/mongodb/DESIGN.md",
+      "slug": "mongodb",
+      "title": "mongodb",
+      "titleSource": "repository-path",
+      "sourceUrl": "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/design-md/mongodb/DESIGN.md",
+      "gitBlob": "609b0478a8f5dc05ee012bf8118179c63661816a",
+      "status": "succeeded",
+      "license": {
+        "status": "repository-license",
+        "identifier": "MIT",
+        "sourcePaths": [
+          "LICENSE"
+        ],
+        "localFiles": [
+          "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/attribution/style-LICENSE-c693279643b8.txt"
+        ],
+        "sourceUrls": [
+          "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/LICENSE"
+        ],
+        "attribution": [
+          "Copyright (c) 2026 VoltAgent",
+          "The above copyright notice and this permission notice shall be included in all",
+          "AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER"
+        ]
+      },
+      "contentHash": "4523f10efd5ccd46f9aeac3b98626e24bcf907bc0c1e46500cb0e3920f932e71",
+      "bytes": 32077,
+      "fetchedAt": "2026-10-13T09:43:13.949Z",
+      "markdownFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-mongodb-DESIGN-md-1e70dc71ddc1.md",
+      "metadataFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-mongodb-DESIGN-md-1e70dc71ddc1.json"
+    },
+    {
+      "repositoryPath": "design-md/mydealz/DESIGN.md",
+      "slug": "mydealz",
+      "title": "mydealz",
+      "titleSource": "repository-path",
+      "sourceUrl": "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/design-md/mydealz/DESIGN.md",
+      "gitBlob": "7bb89de157560f80081e50435f58c295bfe56418",
+      "status": "succeeded",
+      "license": {
+        "status": "repository-license",
+        "identifier": "MIT",
+        "sourcePaths": [
+          "LICENSE"
+        ],
+        "localFiles": [
+          "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/attribution/style-LICENSE-c693279643b8.txt"
+        ],
+        "sourceUrls": [
+          "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/LICENSE"
+        ],
+        "attribution": [
+          "Copyright (c) 2026 VoltAgent",
+          "The above copyright notice and this permission notice shall be included in all",
+          "AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER"
+        ]
+      },
+      "contentHash": "598698a1bd0824260d57eb21f728b79cd702916f918de2b6f39b3720ba727872",
+      "bytes": 25797,
+      "fetchedAt": "2026-10-13T09:43:13.949Z",
+      "markdownFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-mydealz-DESIGN-md-133b2005dbed.md",
+      "metadataFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-mydealz-DESIGN-md-133b2005dbed.json"
+    },
+    {
+      "repositoryPath": "design-md/nerdwallet/DESIGN.md",
+      "slug": "nerdwallet",
+      "title": "nerdwallet",
+      "titleSource": "repository-path",
+      "sourceUrl": "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/design-md/nerdwallet/DESIGN.md",
+      "gitBlob": "7378bc70b880786f83104606cd6ddaf673bb8c91",
+      "status": "succeeded",
+      "license": {
+        "status": "repository-license",
+        "identifier": "MIT",
+        "sourcePaths": [
+          "LICENSE"
+        ],
+        "localFiles": [
+          "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/attribution/style-LICENSE-c693279643b8.txt"
+        ],
+        "sourceUrls": [
+          "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/LICENSE"
+        ],
+        "attribution": [
+          "Copyright (c) 2026 VoltAgent",
+          "The above copyright notice and this permission notice shall be included in all",
+          "AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER"
+        ]
+      },
+      "contentHash": "478475273beb642f0661fb1aef7107bac5cde69250794bc148b28ee2c61960c7",
+      "bytes": 36240,
+      "fetchedAt": "2026-10-13T09:43:13.949Z",
+      "markdownFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-nerdwallet-DESIGN-md-951f9dacc1d6.md",
+      "metadataFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-nerdwallet-DESIGN-md-951f9dacc1d6.json"
+    },
+    {
+      "repositoryPath": "design-md/nike/DESIGN.md",
+      "slug": "nike",
+      "title": "nike",
+      "titleSource": "repository-path",
+      "sourceUrl": "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/design-md/nike/DESIGN.md",
+      "gitBlob": "c82517b67c20b9f1b8b189615c934899f28cd1f8",
+      "status": "succeeded",
+      "license": {
+        "status": "repository-license",
+        "identifier": "MIT",
+        "sourcePaths": [
+          "LICENSE"
+        ],
+        "localFiles": [
+          "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/attribution/style-LICENSE-c693279643b8.txt"
+        ],
+        "sourceUrls": [
+          "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/LICENSE"
+        ],
+        "attribution": [
+          "Copyright (c) 2026 VoltAgent",
+          "The above copyright notice and this permission notice shall be included in all",
+          "AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER"
+        ]
+      },
+      "contentHash": "d2a3d363665839e2ddc15c91b8a9f3e92b1962ff55a7ca5d964ab3bb88b8186c",
+      "bytes": 36697,
+      "fetchedAt": "2026-10-13T09:43:13.949Z",
+      "markdownFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-nike-DESIGN-md-807dd7dadb00.md",
+      "metadataFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-nike-DESIGN-md-807dd7dadb00.json"
+    },
+    {
+      "repositoryPath": "design-md/nintendo-2001/DESIGN.md",
+      "slug": "nintendo-2001",
+      "title": "nintendo-2001",
+      "titleSource": "repository-path",
+      "sourceUrl": "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/design-md/nintendo-2001/DESIGN.md",
+      "gitBlob": "3dbe9e8707e3c36b6643e0e23e16fa2c5b309cc3",
+      "status": "succeeded",
+      "license": {
+        "status": "repository-license",
+        "identifier": "MIT",
+        "sourcePaths": [
+          "LICENSE"
+        ],
+        "localFiles": [
+          "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/attribution/style-LICENSE-c693279643b8.txt"
+        ],
+        "sourceUrls": [
+          "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/LICENSE"
+        ],
+        "attribution": [
+          "Copyright (c) 2026 VoltAgent",
+          "The above copyright notice and this permission notice shall be included in all",
+          "AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER"
+        ]
+      },
+      "contentHash": "9630af17090d5c39ba9d8b5915a597a96c7552efe1422b3b8c3f31fb3e636716",
+      "bytes": 38977,
+      "fetchedAt": "2026-10-13T09:43:13.949Z",
+      "markdownFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-nintendo-2001-DESIGN-md-647ced83b942.md",
+      "metadataFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-nintendo-2001-DESIGN-md-647ced83b942.json"
+    },
+    {
+      "repositoryPath": "design-md/notion/DESIGN.md",
+      "slug": "notion",
+      "title": "notion",
+      "titleSource": "repository-path",
+      "sourceUrl": "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/design-md/notion/DESIGN.md",
+      "gitBlob": "7d306bd2713d24a35967310102d43e3585f0536a",
+      "status": "succeeded",
+      "license": {
+        "status": "repository-license",
+        "identifier": "MIT",
+        "sourcePaths": [
+          "LICENSE"
+        ],
+        "localFiles": [
+          "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/attribution/style-LICENSE-c693279643b8.txt"
+        ],
+        "sourceUrls": [
+          "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/LICENSE"
+        ],
+        "attribution": [
+          "Copyright (c) 2026 VoltAgent",
+          "The above copyright notice and this permission notice shall be included in all",
+          "AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER"
+        ]
+      },
+      "contentHash": "fa9d6e78216d8f3e5d3990709ca2de6bc2e268e945bb94f255fd1bfb15455266",
+      "bytes": 35176,
+      "fetchedAt": "2026-10-13T09:43:13.949Z",
+      "markdownFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-notion-DESIGN-md-92ffd368ca7f.md",
+      "metadataFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-notion-DESIGN-md-92ffd368ca7f.json"
+    },
+    {
+      "repositoryPath": "design-md/nvidia/DESIGN.md",
+      "slug": "nvidia",
+      "title": "nvidia",
+      "titleSource": "repository-path",
+      "sourceUrl": "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/design-md/nvidia/DESIGN.md",
+      "gitBlob": "318bbc3a204e2ea88b4c46d0791319f37f55d74a",
+      "status": "succeeded",
+      "license": {
+        "status": "repository-license",
+        "identifier": "MIT",
+        "sourcePaths": [
+          "LICENSE"
+        ],
+        "localFiles": [
+          "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/attribution/style-LICENSE-c693279643b8.txt"
+        ],
+        "sourceUrls": [
+          "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/LICENSE"
+        ],
+        "attribution": [
+          "Copyright (c) 2026 VoltAgent",
+          "The above copyright notice and this permission notice shall be included in all",
+          "AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER"
+        ]
+      },
+      "contentHash": "d649be85daf075c98a17071e707e3901c6e19150044a81716acd01ef1169cc83",
+      "bytes": 35591,
+      "fetchedAt": "2026-10-13T09:43:13.949Z",
+      "markdownFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-nvidia-DESIGN-md-f0827ffed72a.md",
+      "metadataFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-nvidia-DESIGN-md-f0827ffed72a.json"
+    },
+    {
+      "repositoryPath": "design-md/ollama/DESIGN.md",
+      "slug": "ollama",
+      "title": "ollama",
+      "titleSource": "repository-path",
+      "sourceUrl": "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/design-md/ollama/DESIGN.md",
+      "gitBlob": "c913335d19f76d53e26a46fccb8eb998517b60ed",
+      "status": "succeeded",
+      "license": {
+        "status": "repository-license",
+        "identifier": "MIT",
+        "sourcePaths": [
+          "LICENSE"
+        ],
+        "localFiles": [
+          "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/attribution/style-LICENSE-c693279643b8.txt"
+        ],
+        "sourceUrls": [
+          "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/LICENSE"
+        ],
+        "attribution": [
+          "Copyright (c) 2026 VoltAgent",
+          "The above copyright notice and this permission notice shall be included in all",
+          "AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER"
+        ]
+      },
+      "contentHash": "3f36f897e5aad870344dd97e282c8f125ad208dc99449bb08dd38b9259d2f451",
+      "bytes": 32747,
+      "fetchedAt": "2026-10-13T09:43:13.949Z",
+      "markdownFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-ollama-DESIGN-md-bfe630c6dea5.md",
+      "metadataFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-ollama-DESIGN-md-bfe630c6dea5.json"
+    },
+    {
+      "repositoryPath": "design-md/opencode.ai/DESIGN.md",
+      "slug": "opencode.ai",
+      "title": "opencode.ai",
+      "titleSource": "repository-path",
+      "sourceUrl": "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/design-md/opencode.ai/DESIGN.md",
+      "gitBlob": "47c1c5443f3c61c682c1908334047a4c8c2a3de2",
+      "status": "succeeded",
+      "license": {
+        "status": "repository-license",
+        "identifier": "MIT",
+        "sourcePaths": [
+          "LICENSE"
+        ],
+        "localFiles": [
+          "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/attribution/style-LICENSE-c693279643b8.txt"
+        ],
+        "sourceUrls": [
+          "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/LICENSE"
+        ],
+        "attribution": [
+          "Copyright (c) 2026 VoltAgent",
+          "The above copyright notice and this permission notice shall be included in all",
+          "AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER"
+        ]
+      },
+      "contentHash": "d1a8893c4b8ac90b1e86230eee2effa8bd15add3582853477920e32432336dda",
+      "bytes": 32647,
+      "fetchedAt": "2026-10-13T09:43:13.949Z",
+      "markdownFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-opencode-ai-DESIGN-md-7bf438b52695.md",
+      "metadataFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-opencode-ai-DESIGN-md-7bf438b52695.json"
+    },
+    {
+      "repositoryPath": "design-md/oracle/DESIGN.md",
+      "slug": "oracle",
+      "title": "oracle",
+      "titleSource": "repository-path",
+      "sourceUrl": "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/design-md/oracle/DESIGN.md",
+      "gitBlob": "33a8808f8a11b89f32115dee18b224b55bf510b2",
+      "status": "succeeded",
+      "license": {
+        "status": "repository-license",
+        "identifier": "MIT",
+        "sourcePaths": [
+          "LICENSE"
+        ],
+        "localFiles": [
+          "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/attribution/style-LICENSE-c693279643b8.txt"
+        ],
+        "sourceUrls": [
+          "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/LICENSE"
+        ],
+        "attribution": [
+          "Copyright (c) 2026 VoltAgent",
+          "The above copyright notice and this permission notice shall be included in all",
+          "AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER"
+        ]
+      },
+      "contentHash": "23f03014c1654ff72e9a2185f1c3d1f3b51eabc8124c14f6ddd51b17a36a85a6",
+      "bytes": 42525,
+      "fetchedAt": "2026-10-13T09:43:13.949Z",
+      "markdownFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-oracle-DESIGN-md-5e3124cae1a3.md",
+      "metadataFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-oracle-DESIGN-md-5e3124cae1a3.json"
+    },
+    {
+      "repositoryPath": "design-md/oura/DESIGN.md",
+      "slug": "oura",
+      "title": "oura",
+      "titleSource": "repository-path",
+      "sourceUrl": "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/design-md/oura/DESIGN.md",
+      "gitBlob": "73fddfabb4fe87d6d180a24f6a794b1fc743b568",
+      "status": "succeeded",
+      "license": {
+        "status": "repository-license",
+        "identifier": "MIT",
+        "sourcePaths": [
+          "LICENSE"
+        ],
+        "localFiles": [
+          "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/attribution/style-LICENSE-c693279643b8.txt"
+        ],
+        "sourceUrls": [
+          "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/LICENSE"
+        ],
+        "attribution": [
+          "Copyright (c) 2026 VoltAgent",
+          "The above copyright notice and this permission notice shall be included in all",
+          "AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER"
+        ]
+      },
+      "contentHash": "8674dbeb48bf7e3ff5271e79a6222084118ba1630db4a2199d1492568850fa08",
+      "bytes": 31798,
+      "fetchedAt": "2026-10-13T09:43:13.949Z",
+      "markdownFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-oura-DESIGN-md-5e3606241466.md",
+      "metadataFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-oura-DESIGN-md-5e3606241466.json"
+    },
+    {
+      "repositoryPath": "design-md/pinterest/DESIGN.md",
+      "slug": "pinterest",
+      "title": "pinterest",
+      "titleSource": "repository-path",
+      "sourceUrl": "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/design-md/pinterest/DESIGN.md",
+      "gitBlob": "0c8e3f1f300381182340d757dc74f6466ce9f581",
+      "status": "succeeded",
+      "license": {
+        "status": "repository-license",
+        "identifier": "MIT",
+        "sourcePaths": [
+          "LICENSE"
+        ],
+        "localFiles": [
+          "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/attribution/style-LICENSE-c693279643b8.txt"
+        ],
+        "sourceUrls": [
+          "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/LICENSE"
+        ],
+        "attribution": [
+          "Copyright (c) 2026 VoltAgent",
+          "The above copyright notice and this permission notice shall be included in all",
+          "AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER"
+        ]
+      },
+      "contentHash": "26a202fd244e9213d5e2475d81581828da1dd97e089e44639d9783d04f96e4a8",
+      "bytes": 36392,
+      "fetchedAt": "2026-10-13T09:43:13.949Z",
+      "markdownFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-pinterest-DESIGN-md-324440eb2061.md",
+      "metadataFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-pinterest-DESIGN-md-324440eb2061.json"
+    },
+    {
+      "repositoryPath": "design-md/playstation/DESIGN.md",
+      "slug": "playstation",
+      "title": "playstation",
+      "titleSource": "repository-path",
+      "sourceUrl": "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/design-md/playstation/DESIGN.md",
+      "gitBlob": "247ec9c13a37f137cfe606496211094a6b37f1ae",
+      "status": "succeeded",
+      "license": {
+        "status": "repository-license",
+        "identifier": "MIT",
+        "sourcePaths": [
+          "LICENSE"
+        ],
+        "localFiles": [
+          "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/attribution/style-LICENSE-c693279643b8.txt"
+        ],
+        "sourceUrls": [
+          "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/LICENSE"
+        ],
+        "attribution": [
+          "Copyright (c) 2026 VoltAgent",
+          "The above copyright notice and this permission notice shall be included in all",
+          "AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER"
+        ]
+      },
+      "contentHash": "2a56c109af6cb847fa091b768f719b498ac56b582d010860e73ea5fb72a1590d",
+      "bytes": 39766,
+      "fetchedAt": "2026-10-13T09:43:13.949Z",
+      "markdownFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-playstation-DESIGN-md-012ccfc980c4.md",
+      "metadataFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-playstation-DESIGN-md-012ccfc980c4.json"
+    },
+    {
+      "repositoryPath": "design-md/posthog/DESIGN.md",
+      "slug": "posthog",
+      "title": "posthog",
+      "titleSource": "repository-path",
+      "sourceUrl": "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/design-md/posthog/DESIGN.md",
+      "gitBlob": "4aac00897402ce1a79bfd209b79c9a0de078e485",
+      "status": "succeeded",
+      "license": {
+        "status": "repository-license",
+        "identifier": "MIT",
+        "sourcePaths": [
+          "LICENSE"
+        ],
+        "localFiles": [
+          "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/attribution/style-LICENSE-c693279643b8.txt"
+        ],
+        "sourceUrls": [
+          "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/LICENSE"
+        ],
+        "attribution": [
+          "Copyright (c) 2026 VoltAgent",
+          "The above copyright notice and this permission notice shall be included in all",
+          "AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER"
+        ]
+      },
+      "contentHash": "01f497f751d56296bfcd5eb8806325a4bb4786d364941ec6e65c65fa9ee6d362",
+      "bytes": 40498,
+      "fetchedAt": "2026-10-13T09:43:13.949Z",
+      "markdownFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-posthog-DESIGN-md-f862a45f939d.md",
+      "metadataFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-posthog-DESIGN-md-f862a45f939d.json"
+    },
+    {
+      "repositoryPath": "design-md/raycast/DESIGN.md",
+      "slug": "raycast",
+      "title": "raycast",
+      "titleSource": "repository-path",
+      "sourceUrl": "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/design-md/raycast/DESIGN.md",
+      "gitBlob": "fa7a74cf19918d7acfada8282a02619c8ff80829",
+      "status": "succeeded",
+      "license": {
+        "status": "repository-license",
+        "identifier": "MIT",
+        "sourcePaths": [
+          "LICENSE"
+        ],
+        "localFiles": [
+          "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/attribution/style-LICENSE-c693279643b8.txt"
+        ],
+        "sourceUrls": [
+          "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/LICENSE"
+        ],
+        "attribution": [
+          "Copyright (c) 2026 VoltAgent",
+          "The above copyright notice and this permission notice shall be included in all",
+          "AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER"
+        ]
+      },
+      "contentHash": "6e2c5137e4d914b70996d589688374a801b6f29a35c9c019c22abb5e0170bda3",
+      "bytes": 41275,
+      "fetchedAt": "2026-10-13T09:43:13.949Z",
+      "markdownFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-raycast-DESIGN-md-f948799eef75.md",
+      "metadataFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-raycast-DESIGN-md-f948799eef75.json"
+    },
+    {
+      "repositoryPath": "design-md/renault/DESIGN.md",
+      "slug": "renault",
+      "title": "renault",
+      "titleSource": "repository-path",
+      "sourceUrl": "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/design-md/renault/DESIGN.md",
+      "gitBlob": "19f105b1197f739da3c247235572aff7c3cab073",
+      "status": "succeeded",
+      "license": {
+        "status": "repository-license",
+        "identifier": "MIT",
+        "sourcePaths": [
+          "LICENSE"
+        ],
+        "localFiles": [
+          "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/attribution/style-LICENSE-c693279643b8.txt"
+        ],
+        "sourceUrls": [
+          "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/LICENSE"
+        ],
+        "attribution": [
+          "Copyright (c) 2026 VoltAgent",
+          "The above copyright notice and this permission notice shall be included in all",
+          "AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER"
+        ]
+      },
+      "contentHash": "b343df9a67e57f248e9eee704f52b17dff9cf6a46d1dc9f8d7ab36741940db59",
+      "bytes": 30076,
+      "fetchedAt": "2026-10-13T09:43:13.949Z",
+      "markdownFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-renault-DESIGN-md-815fd60d7d6d.md",
+      "metadataFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-renault-DESIGN-md-815fd60d7d6d.json"
+    },
+    {
+      "repositoryPath": "design-md/replicate/DESIGN.md",
+      "slug": "replicate",
+      "title": "replicate",
+      "titleSource": "repository-path",
+      "sourceUrl": "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/design-md/replicate/DESIGN.md",
+      "gitBlob": "affcf387b4763916e70b07bcaead8e4ad01719ef",
+      "status": "succeeded",
+      "license": {
+        "status": "repository-license",
+        "identifier": "MIT",
+        "sourcePaths": [
+          "LICENSE"
+        ],
+        "localFiles": [
+          "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/attribution/style-LICENSE-c693279643b8.txt"
+        ],
+        "sourceUrls": [
+          "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/LICENSE"
+        ],
+        "attribution": [
+          "Copyright (c) 2026 VoltAgent",
+          "The above copyright notice and this permission notice shall be included in all",
+          "AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER"
+        ]
+      },
+      "contentHash": "c22062d7b4174bf9ced7bc61c48389086cf6eed96a958e098ee70389893b0a15",
+      "bytes": 31495,
+      "fetchedAt": "2026-10-13T09:43:13.949Z",
+      "markdownFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-replicate-DESIGN-md-b41fd7e88c20.md",
+      "metadataFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-replicate-DESIGN-md-b41fd7e88c20.json"
+    },
+    {
+      "repositoryPath": "design-md/resend/DESIGN.md",
+      "slug": "resend",
+      "title": "resend",
+      "titleSource": "repository-path",
+      "sourceUrl": "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/design-md/resend/DESIGN.md",
+      "gitBlob": "de2feada60fb5a6c9c70cd218e9c74e1d5affea5",
+      "status": "succeeded",
+      "license": {
+        "status": "repository-license",
+        "identifier": "MIT",
+        "sourcePaths": [
+          "LICENSE"
+        ],
+        "localFiles": [
+          "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/attribution/style-LICENSE-c693279643b8.txt"
+        ],
+        "sourceUrls": [
+          "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/LICENSE"
+        ],
+        "attribution": [
+          "Copyright (c) 2026 VoltAgent",
+          "The above copyright notice and this permission notice shall be included in all",
+          "AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER"
+        ]
+      },
+      "contentHash": "99536f1b2380511a539f7f3466d46d351e4bf35a5af0c0df395bdc20af05c9be",
+      "bytes": 31461,
+      "fetchedAt": "2026-10-13T09:43:13.949Z",
+      "markdownFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-resend-DESIGN-md-0b2254cb0252.md",
+      "metadataFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-resend-DESIGN-md-0b2254cb0252.json"
+    },
+    {
+      "repositoryPath": "design-md/revolut/DESIGN.md",
+      "slug": "revolut",
+      "title": "revolut",
+      "titleSource": "repository-path",
+      "sourceUrl": "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/design-md/revolut/DESIGN.md",
+      "gitBlob": "23b014f45600f1d852dc1c8bbca5c144255ddde4",
+      "status": "succeeded",
+      "license": {
+        "status": "repository-license",
+        "identifier": "MIT",
+        "sourcePaths": [
+          "LICENSE"
+        ],
+        "localFiles": [
+          "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/attribution/style-LICENSE-c693279643b8.txt"
+        ],
+        "sourceUrls": [
+          "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/LICENSE"
+        ],
+        "attribution": [
+          "Copyright (c) 2026 VoltAgent",
+          "The above copyright notice and this permission notice shall be included in all",
+          "AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER"
+        ]
+      },
+      "contentHash": "b7fa8473315541f5d7e7d76f68a77105d255e6dae00d31d5eb34621d1d52de59",
+      "bytes": 32034,
+      "fetchedAt": "2026-10-13T09:43:13.949Z",
+      "markdownFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-revolut-DESIGN-md-8becd1cbd66d.md",
+      "metadataFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-revolut-DESIGN-md-8becd1cbd66d.json"
+    },
+    {
+      "repositoryPath": "design-md/runwayml/DESIGN.md",
+      "slug": "runwayml",
+      "title": "Design System Inspired by Runway",
+      "titleSource": "markdown-heading",
+      "sourceUrl": "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/design-md/runwayml/DESIGN.md",
+      "gitBlob": "7802bcb217b369fc5bd12fb1f6be35f24eadc871",
+      "status": "succeeded",
+      "license": {
+        "status": "repository-license",
+        "identifier": "MIT",
+        "sourcePaths": [
+          "LICENSE"
+        ],
+        "localFiles": [
+          "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/attribution/style-LICENSE-c693279643b8.txt"
+        ],
+        "sourceUrls": [
+          "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/LICENSE"
+        ],
+        "attribution": [
+          "Copyright (c) 2026 VoltAgent",
+          "The above copyright notice and this permission notice shall be included in all",
+          "AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER"
+        ]
+      },
+      "contentHash": "b0e69bf643f89bb57ac0b82a3bf025e59ff1478c244cb0528ad1e38b3f80dac9",
+      "bytes": 14353,
+      "fetchedAt": "2026-10-13T09:43:13.949Z",
+      "markdownFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-runwayml-DESIGN-md-50e907bc4694.md",
+      "metadataFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-runwayml-DESIGN-md-50e907bc4694.json"
+    },
+    {
+      "repositoryPath": "design-md/sanity/DESIGN.md",
+      "slug": "sanity",
+      "title": "Design System Inspired by Sanity",
+      "titleSource": "markdown-heading",
+      "sourceUrl": "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/design-md/sanity/DESIGN.md",
+      "gitBlob": "b38ba199d162acfecd2d16178828a21fea3c6583",
+      "status": "succeeded",
+      "license": {
+        "status": "repository-license",
+        "identifier": "MIT",
+        "sourcePaths": [
+          "LICENSE"
+        ],
+        "localFiles": [
+          "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/attribution/style-LICENSE-c693279643b8.txt"
+        ],
+        "sourceUrls": [
+          "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/LICENSE"
+        ],
+        "attribution": [
+          "Copyright (c) 2026 VoltAgent",
+          "The above copyright notice and this permission notice shall be included in all",
+          "AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER"
+        ]
+      },
+      "contentHash": "ea1c442de2b23443f79af46524a81f33951606c8ff043ea9c25ba886264fbdd8",
+      "bytes": 21231,
+      "fetchedAt": "2026-10-13T09:43:13.949Z",
+      "markdownFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-sanity-DESIGN-md-8f86c6625d1c.md",
+      "metadataFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-sanity-DESIGN-md-8f86c6625d1c.json"
+    },
+    {
+      "repositoryPath": "design-md/sap/DESIGN.md",
+      "slug": "sap",
+      "title": "sap",
+      "titleSource": "repository-path",
+      "sourceUrl": "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/design-md/sap/DESIGN.md",
+      "gitBlob": "551aaa764072663769b57f027797a318ae0694cb",
+      "status": "succeeded",
+      "license": {
+        "status": "repository-license",
+        "identifier": "MIT",
+        "sourcePaths": [
+          "LICENSE"
+        ],
+        "localFiles": [
+          "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/attribution/style-LICENSE-c693279643b8.txt"
+        ],
+        "sourceUrls": [
+          "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/LICENSE"
+        ],
+        "attribution": [
+          "Copyright (c) 2026 VoltAgent",
+          "The above copyright notice and this permission notice shall be included in all",
+          "AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER"
+        ]
+      },
+      "contentHash": "f14c951d6112efce488f56d189b9bcdf58f5b9f87ae1e2ee68f062e6a6967d97",
+      "bytes": 33615,
+      "fetchedAt": "2026-10-13T09:43:13.949Z",
+      "markdownFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-sap-DESIGN-md-33f8b70f616a.md",
+      "metadataFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-sap-DESIGN-md-33f8b70f616a.json"
+    },
+    {
+      "repositoryPath": "design-md/sentry/DESIGN.md",
+      "slug": "sentry",
+      "title": "sentry",
+      "titleSource": "repository-path",
+      "sourceUrl": "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/design-md/sentry/DESIGN.md",
+      "gitBlob": "8fb6eb8a48882679216860bb8a01879d7036bffe",
+      "status": "succeeded",
+      "license": {
+        "status": "repository-license",
+        "identifier": "MIT",
+        "sourcePaths": [
+          "LICENSE"
+        ],
+        "localFiles": [
+          "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/attribution/style-LICENSE-c693279643b8.txt"
+        ],
+        "sourceUrls": [
+          "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/LICENSE"
+        ],
+        "attribution": [
+          "Copyright (c) 2026 VoltAgent",
+          "The above copyright notice and this permission notice shall be included in all",
+          "AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER"
+        ]
+      },
+      "contentHash": "655c91d7d23b5e869a966b7f1b63ae650567ad5d69003cfc64b0ee62c8e02c1f",
+      "bytes": 35444,
+      "fetchedAt": "2026-10-13T09:43:13.949Z",
+      "markdownFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-sentry-DESIGN-md-e64c160516f7.md",
+      "metadataFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-sentry-DESIGN-md-e64c160516f7.json"
+    },
+    {
+      "repositoryPath": "design-md/shopify/DESIGN.md",
+      "slug": "shopify",
+      "title": "shopify",
+      "titleSource": "repository-path",
+      "sourceUrl": "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/design-md/shopify/DESIGN.md",
+      "gitBlob": "17f043981f6577a174237b219b9f6f2688139180",
+      "status": "succeeded",
+      "license": {
+        "status": "repository-license",
+        "identifier": "MIT",
+        "sourcePaths": [
+          "LICENSE"
+        ],
+        "localFiles": [
+          "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/attribution/style-LICENSE-c693279643b8.txt"
+        ],
+        "sourceUrls": [
+          "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/LICENSE"
+        ],
+        "attribution": [
+          "Copyright (c) 2026 VoltAgent",
+          "The above copyright notice and this permission notice shall be included in all",
+          "AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER"
+        ]
+      },
+      "contentHash": "495e89b8d0a1848ded013c040f7a2ae62077e9d87fc4385350e25dee02ccdb38",
+      "bytes": 27067,
+      "fetchedAt": "2026-10-13T09:43:13.949Z",
+      "markdownFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-shopify-DESIGN-md-cecb8c834b46.md",
+      "metadataFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-shopify-DESIGN-md-cecb8c834b46.json"
+    },
+    {
+      "repositoryPath": "design-md/slack/DESIGN.md",
+      "slug": "slack",
+      "title": "slack",
+      "titleSource": "repository-path",
+      "sourceUrl": "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/design-md/slack/DESIGN.md",
+      "gitBlob": "51f1850cbdd79baf8103cf9714be318becbaf11a",
+      "status": "succeeded",
+      "license": {
+        "status": "repository-license",
+        "identifier": "MIT",
+        "sourcePaths": [
+          "LICENSE"
+        ],
+        "localFiles": [
+          "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/attribution/style-LICENSE-c693279643b8.txt"
+        ],
+        "sourceUrls": [
+          "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/LICENSE"
+        ],
+        "attribution": [
+          "Copyright (c) 2026 VoltAgent",
+          "The above copyright notice and this permission notice shall be included in all",
+          "AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER"
+        ]
+      },
+      "contentHash": "03cb243015a2e11d0faf05caba7f3d0c7fda6839b1f5ce707a23e8d46d1a11bd",
+      "bytes": 24529,
+      "fetchedAt": "2026-10-13T09:43:13.949Z",
+      "markdownFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-slack-DESIGN-md-8c1c39ed9e09.md",
+      "metadataFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-slack-DESIGN-md-8c1c39ed9e09.json"
+    },
+    {
+      "repositoryPath": "design-md/spacex/DESIGN.md",
+      "slug": "spacex",
+      "title": "spacex",
+      "titleSource": "repository-path",
+      "sourceUrl": "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/design-md/spacex/DESIGN.md",
+      "gitBlob": "afdcba91076dde643b20c596a6fd790a180a3f1d",
+      "status": "succeeded",
+      "license": {
+        "status": "repository-license",
+        "identifier": "MIT",
+        "sourcePaths": [
+          "LICENSE"
+        ],
+        "localFiles": [
+          "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/attribution/style-LICENSE-c693279643b8.txt"
+        ],
+        "sourceUrls": [
+          "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/LICENSE"
+        ],
+        "attribution": [
+          "Copyright (c) 2026 VoltAgent",
+          "The above copyright notice and this permission notice shall be included in all",
+          "AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER"
+        ]
+      },
+      "contentHash": "495450c79faab54d12d677649ca0a2c30a60f64f536a802e945ad54185c5baad",
+      "bytes": 19679,
+      "fetchedAt": "2026-10-13T09:43:13.949Z",
+      "markdownFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-spacex-DESIGN-md-42df23ebcc72.md",
+      "metadataFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-spacex-DESIGN-md-42df23ebcc72.json"
+    },
+    {
+      "repositoryPath": "design-md/spotify/DESIGN.md",
+      "slug": "spotify",
+      "title": "Design System Inspired by Spotify",
+      "titleSource": "markdown-heading",
+      "sourceUrl": "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/design-md/spotify/DESIGN.md",
+      "gitBlob": "66bb4af6cbde6b631792de8712f2dd92a06e076e",
+      "status": "succeeded",
+      "license": {
+        "status": "repository-license",
+        "identifier": "MIT",
+        "sourcePaths": [
+          "LICENSE"
+        ],
+        "localFiles": [
+          "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/attribution/style-LICENSE-c693279643b8.txt"
+        ],
+        "sourceUrls": [
+          "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/LICENSE"
+        ],
+        "attribution": [
+          "Copyright (c) 2026 VoltAgent",
+          "The above copyright notice and this permission notice shall be included in all",
+          "AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER"
+        ]
+      },
+      "contentHash": "72e964a6cf551d0603f9854f2f42ee08e97ad4d9e17e037f50f6233508288295",
+      "bytes": 12955,
+      "fetchedAt": "2026-10-13T09:43:13.949Z",
+      "markdownFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-spotify-DESIGN-md-1f8d3cc1f83c.md",
+      "metadataFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-spotify-DESIGN-md-1f8d3cc1f83c.json"
+    },
+    {
+      "repositoryPath": "design-md/starbucks/DESIGN.md",
+      "slug": "starbucks",
+      "title": "Design System Inspired by Starbucks",
+      "titleSource": "markdown-heading",
+      "sourceUrl": "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/design-md/starbucks/DESIGN.md",
+      "gitBlob": "dcc5b5b9d57c84369a44dc2b19d3bc98ae329ad5",
+      "status": "succeeded",
+      "license": {
+        "status": "repository-license",
+        "identifier": "MIT",
+        "sourcePaths": [
+          "LICENSE"
+        ],
+        "localFiles": [
+          "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/attribution/style-LICENSE-c693279643b8.txt"
+        ],
+        "sourceUrls": [
+          "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/LICENSE"
+        ],
+        "attribution": [
+          "Copyright (c) 2026 VoltAgent",
+          "The above copyright notice and this permission notice shall be included in all",
+          "AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER"
+        ]
+      },
+      "contentHash": "e20338ee10226c63cf2588207288c08e12d60754a53f681657adaf364dfe8fa7",
+      "bytes": 37329,
+      "fetchedAt": "2026-10-13T09:43:13.949Z",
+      "markdownFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-starbucks-DESIGN-md-56f16f75aa82.md",
+      "metadataFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-starbucks-DESIGN-md-56f16f75aa82.json"
+    },
+    {
+      "repositoryPath": "design-md/stripe/DESIGN.md",
+      "slug": "stripe",
+      "title": "stripe",
+      "titleSource": "repository-path",
+      "sourceUrl": "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/design-md/stripe/DESIGN.md",
+      "gitBlob": "589bd23baeb1344444f087043c060afd6239371f",
+      "status": "succeeded",
+      "license": {
+        "status": "repository-license",
+        "identifier": "MIT",
+        "sourcePaths": [
+          "LICENSE"
+        ],
+        "localFiles": [
+          "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/attribution/style-LICENSE-c693279643b8.txt"
+        ],
+        "sourceUrls": [
+          "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/LICENSE"
+        ],
+        "attribution": [
+          "Copyright (c) 2026 VoltAgent",
+          "The above copyright notice and this permission notice shall be included in all",
+          "AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER"
+        ]
+      },
+      "contentHash": "5c8806b7dd3e0c2554ccba9d1e2a7c78e7c6e50e44fcf6ff5daea6026f8a9ed9",
+      "bytes": 24606,
+      "fetchedAt": "2026-10-13T09:43:13.949Z",
+      "markdownFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-stripe-DESIGN-md-4cbede7c668d.md",
+      "metadataFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-stripe-DESIGN-md-4cbede7c668d.json"
+    },
+    {
+      "repositoryPath": "design-md/supabase/DESIGN.md",
+      "slug": "supabase",
+      "title": "supabase",
+      "titleSource": "repository-path",
+      "sourceUrl": "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/design-md/supabase/DESIGN.md",
+      "gitBlob": "ef9f0a27f61aeff93f3a2fbe5430f3d33e37b4c1",
+      "status": "succeeded",
+      "license": {
+        "status": "repository-license",
+        "identifier": "MIT",
+        "sourcePaths": [
+          "LICENSE"
+        ],
+        "localFiles": [
+          "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/attribution/style-LICENSE-c693279643b8.txt"
+        ],
+        "sourceUrls": [
+          "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/LICENSE"
+        ],
+        "attribution": [
+          "Copyright (c) 2026 VoltAgent",
+          "The above copyright notice and this permission notice shall be included in all",
+          "AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER"
+        ]
+      },
+      "contentHash": "f57287d7f44d59e8169dc4b4304ff03c1a2efb37f5433b9c04460caae7710880",
+      "bytes": 21315,
+      "fetchedAt": "2026-10-13T09:43:13.949Z",
+      "markdownFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-supabase-DESIGN-md-32a22e89bce3.md",
+      "metadataFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-supabase-DESIGN-md-32a22e89bce3.json"
+    },
+    {
+      "repositoryPath": "design-md/superhuman/DESIGN.md",
+      "slug": "superhuman",
+      "title": "superhuman",
+      "titleSource": "repository-path",
+      "sourceUrl": "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/design-md/superhuman/DESIGN.md",
+      "gitBlob": "0d4433aaa8d59fbd97d01721d95392fb02d1ca82",
+      "status": "succeeded",
+      "license": {
+        "status": "repository-license",
+        "identifier": "MIT",
+        "sourcePaths": [
+          "LICENSE"
+        ],
+        "localFiles": [
+          "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/attribution/style-LICENSE-c693279643b8.txt"
+        ],
+        "sourceUrls": [
+          "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/LICENSE"
+        ],
+        "attribution": [
+          "Copyright (c) 2026 VoltAgent",
+          "The above copyright notice and this permission notice shall be included in all",
+          "AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER"
+        ]
+      },
+      "contentHash": "3640298bd2957aee80ce88eb465a7541ba835ec105cba364a6a621d885c7f34f",
+      "bytes": 21877,
+      "fetchedAt": "2026-10-13T09:43:13.949Z",
+      "markdownFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-superhuman-DESIGN-md-c41f84624260.md",
+      "metadataFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-superhuman-DESIGN-md-c41f84624260.json"
+    },
+    {
+      "repositoryPath": "design-md/tesla/DESIGN.md",
+      "slug": "tesla",
+      "title": "Design System Inspired by Tesla",
+      "titleSource": "markdown-heading",
+      "sourceUrl": "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/design-md/tesla/DESIGN.md",
+      "gitBlob": "6e8e8b63e49d4a2b2759f504b3f49e2905d3255e",
+      "status": "succeeded",
+      "license": {
+        "status": "repository-license",
+        "identifier": "MIT",
+        "sourcePaths": [
+          "LICENSE"
+        ],
+        "localFiles": [
+          "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/attribution/style-LICENSE-c693279643b8.txt"
+        ],
+        "sourceUrls": [
+          "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/LICENSE"
+        ],
+        "attribution": [
+          "Copyright (c) 2026 VoltAgent",
+          "The above copyright notice and this permission notice shall be included in all",
+          "AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER"
+        ]
+      },
+      "contentHash": "19f2f7e6073d708f46d2512e6bab3c7c417cf2b4d9f57ff6ec6f2e056ea942b0",
+      "bytes": 22212,
+      "fetchedAt": "2026-10-13T09:43:13.949Z",
+      "markdownFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-tesla-DESIGN-md-fb59a3994ab6.md",
+      "metadataFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-tesla-DESIGN-md-fb59a3994ab6.json"
+    },
+    {
+      "repositoryPath": "design-md/theverge/DESIGN.md",
+      "slug": "theverge",
+      "title": "Design System Inspired by The Verge",
+      "titleSource": "markdown-heading",
+      "sourceUrl": "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/design-md/theverge/DESIGN.md",
+      "gitBlob": "545551c00fe92f89507287e3ec89c2b5c49c4015",
+      "status": "succeeded",
+      "license": {
+        "status": "repository-license",
+        "identifier": "MIT",
+        "sourcePaths": [
+          "LICENSE"
+        ],
+        "localFiles": [
+          "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/attribution/style-LICENSE-c693279643b8.txt"
+        ],
+        "sourceUrls": [
+          "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/LICENSE"
+        ],
+        "attribution": [
+          "Copyright (c) 2026 VoltAgent",
+          "The above copyright notice and this permission notice shall be included in all",
+          "AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER"
+        ]
+      },
+      "contentHash": "5da2c3116e6845826b043ac115a80896a399efda2cebc0188981fba2ef9bb526",
+      "bytes": 28368,
+      "fetchedAt": "2026-10-13T09:43:13.949Z",
+      "markdownFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-theverge-DESIGN-md-6a389f939dac.md",
+      "metadataFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-theverge-DESIGN-md-6a389f939dac.json"
+    },
+    {
+      "repositoryPath": "design-md/together.ai/DESIGN.md",
+      "slug": "together.ai",
+      "title": "together.ai",
+      "titleSource": "repository-path",
+      "sourceUrl": "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/design-md/together.ai/DESIGN.md",
+      "gitBlob": "33d8b717bcdad344f7f7a804128c748a1d1374e0",
+      "status": "succeeded",
+      "license": {
+        "status": "repository-license",
+        "identifier": "MIT",
+        "sourcePaths": [
+          "LICENSE"
+        ],
+        "localFiles": [
+          "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/attribution/style-LICENSE-c693279643b8.txt"
+        ],
+        "sourceUrls": [
+          "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/LICENSE"
+        ],
+        "attribution": [
+          "Copyright (c) 2026 VoltAgent",
+          "The above copyright notice and this permission notice shall be included in all",
+          "AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER"
+        ]
+      },
+      "contentHash": "aee472c583f55a2f2c7ee1c403a96dddadb3ff6dc518335451f431e313bf43cf",
+      "bytes": 38343,
+      "fetchedAt": "2026-10-13T09:43:13.949Z",
+      "markdownFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-together-ai-DESIGN-md-56e0b27414c4.md",
+      "metadataFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-together-ai-DESIGN-md-56e0b27414c4.json"
+    },
+    {
+      "repositoryPath": "design-md/uber/DESIGN.md",
+      "slug": "uber",
+      "title": "uber",
+      "titleSource": "repository-path",
+      "sourceUrl": "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/design-md/uber/DESIGN.md",
+      "gitBlob": "212aa14e4b0fe9612557098d7cee81d2b48bfd67",
+      "status": "succeeded",
+      "license": {
+        "status": "repository-license",
+        "identifier": "MIT",
+        "sourcePaths": [
+          "LICENSE"
+        ],
+        "localFiles": [
+          "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/attribution/style-LICENSE-c693279643b8.txt"
+        ],
+        "sourceUrls": [
+          "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/LICENSE"
+        ],
+        "attribution": [
+          "Copyright (c) 2026 VoltAgent",
+          "The above copyright notice and this permission notice shall be included in all",
+          "AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER"
+        ]
+      },
+      "contentHash": "f30d2257d2d090790332d00ccb16cd2516c3c6008be61ad2ce83c4e991bcc803",
+      "bytes": 34760,
+      "fetchedAt": "2026-10-13T09:43:13.949Z",
+      "markdownFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-uber-DESIGN-md-697997bcb4d2.md",
+      "metadataFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-uber-DESIGN-md-697997bcb4d2.json"
+    },
+    {
+      "repositoryPath": "design-md/vercel/DESIGN.md",
+      "slug": "vercel",
+      "title": "vercel",
+      "titleSource": "repository-path",
+      "sourceUrl": "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/design-md/vercel/DESIGN.md",
+      "gitBlob": "987140b5394c2a4ada4ef324f2d19ef66caf4338",
+      "status": "succeeded",
+      "license": {
+        "status": "repository-license",
+        "identifier": "MIT",
+        "sourcePaths": [
+          "LICENSE"
+        ],
+        "localFiles": [
+          "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/attribution/style-LICENSE-c693279643b8.txt"
+        ],
+        "sourceUrls": [
+          "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/LICENSE"
+        ],
+        "attribution": [
+          "Copyright (c) 2026 VoltAgent",
+          "The above copyright notice and this permission notice shall be included in all",
+          "AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER"
+        ]
+      },
+      "contentHash": "d0951b93c2b4ce9840c715c9f9b3e58a386c6c58ae5cc0f804dec3b116b95bd8",
+      "bytes": 41405,
+      "fetchedAt": "2026-10-13T09:43:13.949Z",
+      "markdownFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-vercel-DESIGN-md-3c474011edfa.md",
+      "metadataFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-vercel-DESIGN-md-3c474011edfa.json"
+    },
+    {
+      "repositoryPath": "design-md/vodafone/DESIGN.md",
+      "slug": "vodafone",
+      "title": "vodafone",
+      "titleSource": "repository-path",
+      "sourceUrl": "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/design-md/vodafone/DESIGN.md",
+      "gitBlob": "f64dbd3297a9b6a97e8f8aa5fb69874ff23e9bd0",
+      "status": "succeeded",
+      "license": {
+        "status": "repository-license",
+        "identifier": "MIT",
+        "sourcePaths": [
+          "LICENSE"
+        ],
+        "localFiles": [
+          "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/attribution/style-LICENSE-c693279643b8.txt"
+        ],
+        "sourceUrls": [
+          "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/LICENSE"
+        ],
+        "attribution": [
+          "Copyright (c) 2026 VoltAgent",
+          "The above copyright notice and this permission notice shall be included in all",
+          "AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER"
+        ]
+      },
+      "contentHash": "293a40951e654283978fa744b24177a159d8f2a60f402bc735bf081618af0ef6",
+      "bytes": 28106,
+      "fetchedAt": "2026-10-13T09:43:13.949Z",
+      "markdownFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-vodafone-DESIGN-md-f33ceb9e5a55.md",
+      "metadataFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-vodafone-DESIGN-md-f33ceb9e5a55.json"
+    },
+    {
+      "repositoryPath": "design-md/voltagent/DESIGN.md",
+      "slug": "voltagent",
+      "title": "voltagent",
+      "titleSource": "repository-path",
+      "sourceUrl": "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/design-md/voltagent/DESIGN.md",
+      "gitBlob": "7d08c78cd976f99697ba30d33eb8fd5aa089fed0",
+      "status": "succeeded",
+      "license": {
+        "status": "repository-license",
+        "identifier": "MIT",
+        "sourcePaths": [
+          "LICENSE"
+        ],
+        "localFiles": [
+          "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/attribution/style-LICENSE-c693279643b8.txt"
+        ],
+        "sourceUrls": [
+          "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/LICENSE"
+        ],
+        "attribution": [
+          "Copyright (c) 2026 VoltAgent",
+          "The above copyright notice and this permission notice shall be included in all",
+          "AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER"
+        ]
+      },
+      "contentHash": "4457887741ae5e965e205282b03c4bff83e47dd7a03cd7f38c64623a17569fcd",
+      "bytes": 25915,
+      "fetchedAt": "2026-10-13T09:43:13.949Z",
+      "markdownFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-voltagent-DESIGN-md-5137d2f2668f.md",
+      "metadataFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-voltagent-DESIGN-md-5137d2f2668f.json"
+    },
+    {
+      "repositoryPath": "design-md/warp/DESIGN.md",
+      "slug": "warp",
+      "title": "warp",
+      "titleSource": "repository-path",
+      "sourceUrl": "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/design-md/warp/DESIGN.md",
+      "gitBlob": "e32923ec08b746463d033342a33252b866f35319",
+      "status": "succeeded",
+      "license": {
+        "status": "repository-license",
+        "identifier": "MIT",
+        "sourcePaths": [
+          "LICENSE"
+        ],
+        "localFiles": [
+          "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/attribution/style-LICENSE-c693279643b8.txt"
+        ],
+        "sourceUrls": [
+          "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/LICENSE"
+        ],
+        "attribution": [
+          "Copyright (c) 2026 VoltAgent",
+          "The above copyright notice and this permission notice shall be included in all",
+          "AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER"
+        ]
+      },
+      "contentHash": "5b1201f7b1b4e72570d148d1f980fd1cb35e6e4122d48dd271787aa3538a25ad",
+      "bytes": 24438,
+      "fetchedAt": "2026-10-13T09:43:13.949Z",
+      "markdownFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-warp-DESIGN-md-e703198f2f9f.md",
+      "metadataFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-warp-DESIGN-md-e703198f2f9f.json"
+    },
+    {
+      "repositoryPath": "design-md/webflow/DESIGN.md",
+      "slug": "webflow",
+      "title": "webflow",
+      "titleSource": "repository-path",
+      "sourceUrl": "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/design-md/webflow/DESIGN.md",
+      "gitBlob": "d42e91702260443e7771dd3ad86badecc68ba487",
+      "status": "succeeded",
+      "license": {
+        "status": "repository-license",
+        "identifier": "MIT",
+        "sourcePaths": [
+          "LICENSE"
+        ],
+        "localFiles": [
+          "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/attribution/style-LICENSE-c693279643b8.txt"
+        ],
+        "sourceUrls": [
+          "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/LICENSE"
+        ],
+        "attribution": [
+          "Copyright (c) 2026 VoltAgent",
+          "The above copyright notice and this permission notice shall be included in all",
+          "AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER"
+        ]
+      },
+      "contentHash": "9230c7b3951371fc2edc04958962e32bb7ec9a9b703aa6b72eaf5c7991b7c984",
+      "bytes": 28179,
+      "fetchedAt": "2026-10-13T09:43:13.949Z",
+      "markdownFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-webflow-DESIGN-md-e910bb7cc191.md",
+      "metadataFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-webflow-DESIGN-md-e910bb7cc191.json"
+    },
+    {
+      "repositoryPath": "design-md/wired/DESIGN.md",
+      "slug": "wired",
+      "title": "wired",
+      "titleSource": "repository-path",
+      "sourceUrl": "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/design-md/wired/DESIGN.md",
+      "gitBlob": "913d4399fafc6c3b9d681fbeeb44dfeee444d405",
+      "status": "succeeded",
+      "license": {
+        "status": "repository-license",
+        "identifier": "MIT",
+        "sourcePaths": [
+          "LICENSE"
+        ],
+        "localFiles": [
+          "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/attribution/style-LICENSE-c693279643b8.txt"
+        ],
+        "sourceUrls": [
+          "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/LICENSE"
+        ],
+        "attribution": [
+          "Copyright (c) 2026 VoltAgent",
+          "The above copyright notice and this permission notice shall be included in all",
+          "AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER"
+        ]
+      },
+      "contentHash": "eb439dcc573401dc30583f40e7eef8a60b769232da59e524de6dce56d5c3593e",
+      "bytes": 23661,
+      "fetchedAt": "2026-10-13T09:43:13.949Z",
+      "markdownFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-wired-DESIGN-md-e54014b0d491.md",
+      "metadataFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-wired-DESIGN-md-e54014b0d491.json"
+    },
+    {
+      "repositoryPath": "design-md/wise/DESIGN.md",
+      "slug": "wise",
+      "title": "wise",
+      "titleSource": "repository-path",
+      "sourceUrl": "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/design-md/wise/DESIGN.md",
+      "gitBlob": "79b01b7a6311bb9fdfc0b013b8b3020e72e3eb6f",
+      "status": "succeeded",
+      "license": {
+        "status": "repository-license",
+        "identifier": "MIT",
+        "sourcePaths": [
+          "LICENSE"
+        ],
+        "localFiles": [
+          "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/attribution/style-LICENSE-c693279643b8.txt"
+        ],
+        "sourceUrls": [
+          "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/LICENSE"
+        ],
+        "attribution": [
+          "Copyright (c) 2026 VoltAgent",
+          "The above copyright notice and this permission notice shall be included in all",
+          "AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER"
+        ]
+      },
+      "contentHash": "442df0ad7380efd8712f5574bdca34a73cfb41a2a43454ff459863a6258af547",
+      "bytes": 24586,
+      "fetchedAt": "2026-10-13T09:43:13.949Z",
+      "markdownFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-wise-DESIGN-md-d650805d3ace.md",
+      "metadataFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-wise-DESIGN-md-d650805d3ace.json"
+    },
+    {
+      "repositoryPath": "design-md/x.ai/DESIGN.md",
+      "slug": "x.ai",
+      "title": "x.ai",
+      "titleSource": "repository-path",
+      "sourceUrl": "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/design-md/x.ai/DESIGN.md",
+      "gitBlob": "5e0eb5ef304728e3f402e2519c18d5d8fd4c1d8c",
+      "status": "succeeded",
+      "license": {
+        "status": "repository-license",
+        "identifier": "MIT",
+        "sourcePaths": [
+          "LICENSE"
+        ],
+        "localFiles": [
+          "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/attribution/style-LICENSE-c693279643b8.txt"
+        ],
+        "sourceUrls": [
+          "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/LICENSE"
+        ],
+        "attribution": [
+          "Copyright (c) 2026 VoltAgent",
+          "The above copyright notice and this permission notice shall be included in all",
+          "AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER"
+        ]
+      },
+      "contentHash": "9c9ef45d8c0c3b9a7622833cdff8bd125ed6bf296a82cc7274215276706e52eb",
+      "bytes": 21781,
+      "fetchedAt": "2026-10-13T09:43:13.949Z",
+      "markdownFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-x-ai-DESIGN-md-98ae88e13107.md",
+      "metadataFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-x-ai-DESIGN-md-98ae88e13107.json"
+    },
+    {
+      "repositoryPath": "design-md/zapier/DESIGN.md",
+      "slug": "zapier",
+      "title": "zapier",
+      "titleSource": "repository-path",
+      "sourceUrl": "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/design-md/zapier/DESIGN.md",
+      "gitBlob": "7a2b82bfec8bad3efa49200762879f497d224054",
+      "status": "succeeded",
+      "license": {
+        "status": "repository-license",
+        "identifier": "MIT",
+        "sourcePaths": [
+          "LICENSE"
+        ],
+        "localFiles": [
+          "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/attribution/style-LICENSE-c693279643b8.txt"
+        ],
+        "sourceUrls": [
+          "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/LICENSE"
+        ],
+        "attribution": [
+          "Copyright (c) 2026 VoltAgent",
+          "The above copyright notice and this permission notice shall be included in all",
+          "AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER"
+        ]
+      },
+      "contentHash": "9aee43ba8ece1b4fd0753b4cad0a29f3497331882fa376f0dd4fea8a018c32fc",
+      "bytes": 22995,
+      "fetchedAt": "2026-10-13T09:43:13.949Z",
+      "markdownFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-zapier-DESIGN-md-1946b849c47f.md",
+      "metadataFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-zapier-DESIGN-md-1946b849c47f.json"
+    }
+  ]
+}

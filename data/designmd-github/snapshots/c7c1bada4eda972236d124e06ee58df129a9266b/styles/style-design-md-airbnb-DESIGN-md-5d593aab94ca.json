@@ -1,0 +1,37 @@
+{
+  "repositoryPath": "design-md/airbnb/DESIGN.md",
+  "slug": "airbnb",
+  "title": "airbnb",
+  "titleSource": "repository-path",
+  "sourceUrl": "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/design-md/airbnb/DESIGN.md",
+  "gitBlob": "088254920b745ed12c9ad14429f3cd96128ab9b2",
+  "status": "succeeded",
+  "license": {
+    "status": "repository-license",
+    "identifier": "MIT",
+    "sourcePaths": [
+      "LICENSE"
+    ],
+    "localFiles": [
+      "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/attribution/style-LICENSE-c693279643b8.txt"
+    ],
+    "sourceUrls": [
+      "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/LICENSE"
+    ],
+    "attribution": [
+      "Copyright (c) 2026 VoltAgent",
+      "The above copyright notice and this permission notice shall be included in all",
+      "AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER"
+    ]
+  },
+  "contentHash": "add34130d67209ad105346d60fe2b290728b9711683969db4b7760e29477a5fe",
+  "bytes": 30517,
+  "fetchedAt": "2026-10-13T09:49:08.857Z",
+  "markdownFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-airbnb-DESIGN-md-5d593aab94ca.md",
+  "metadataFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-airbnb-DESIGN-md-5d593aab94ca.json",
+  "repository": "https://github.com/VoltAgent/awesome-design-md",
+  "commit": "c7c1bada4eda972236d124e06ee58df129a9266b",
+  "attributionReadme": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/attribution/style-README-md-b33563055168.txt",
+  "styleReadme": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/attribution/style-design-md-airbnb-README-md-48d71ab5b86e.txt",
+  "styleReadmeSourceUrl": "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/design-md/airbnb/README.md"
+}

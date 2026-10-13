@@ -1,0 +1,37 @@
+{
+  "repositoryPath": "design-md/mercury/DESIGN.md",
+  "slug": "mercury",
+  "title": "mercury",
+  "titleSource": "repository-path",
+  "sourceUrl": "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/design-md/mercury/DESIGN.md",
+  "gitBlob": "4e0c448f6594ab7a68dbff82ab360b66dfba96c9",
+  "status": "succeeded",
+  "license": {
+    "status": "repository-license",
+    "identifier": "MIT",
+    "sourcePaths": [
+      "LICENSE"
+    ],
+    "localFiles": [
+      "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/attribution/style-LICENSE-c693279643b8.txt"
+    ],
+    "sourceUrls": [
+      "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/LICENSE"
+    ],
+    "attribution": [
+      "Copyright (c) 2026 VoltAgent",
+      "The above copyright notice and this permission notice shall be included in all",
+      "AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER"
+    ]
+  },
+  "contentHash": "dabb3683422a9841369b0db53ff13ed375b0b6f019157a5c90e9fca165cc111f",
+  "bytes": 25065,
+  "fetchedAt": "2026-10-13T09:49:08.857Z",
+  "markdownFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-mercury-DESIGN-md-cc2ba9736a86.md",
+  "metadataFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-mercury-DESIGN-md-cc2ba9736a86.json",
+  "repository": "https://github.com/VoltAgent/awesome-design-md",
+  "commit": "c7c1bada4eda972236d124e06ee58df129a9266b",
+  "attributionReadme": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/attribution/style-README-md-b33563055168.txt",
+  "styleReadme": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/attribution/style-design-md-mercury-README-md-fe58cd368150.txt",
+  "styleReadmeSourceUrl": "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/design-md/mercury/README.md"
+}

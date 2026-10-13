@@ -1,0 +1,37 @@
+{
+  "repositoryPath": "design-md/tesla/DESIGN.md",
+  "slug": "tesla",
+  "title": "Design System Inspired by Tesla",
+  "titleSource": "markdown-heading",
+  "sourceUrl": "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/design-md/tesla/DESIGN.md",
+  "gitBlob": "6e8e8b63e49d4a2b2759f504b3f49e2905d3255e",
+  "status": "succeeded",
+  "license": {
+    "status": "repository-license",
+    "identifier": "MIT",
+    "sourcePaths": [
+      "LICENSE"
+    ],
+    "localFiles": [
+      "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/attribution/style-LICENSE-c693279643b8.txt"
+    ],
+    "sourceUrls": [
+      "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/LICENSE"
+    ],
+    "attribution": [
+      "Copyright (c) 2026 VoltAgent",
+      "The above copyright notice and this permission notice shall be included in all",
+      "AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER"
+    ]
+  },
+  "contentHash": "19f2f7e6073d708f46d2512e6bab3c7c417cf2b4d9f57ff6ec6f2e056ea942b0",
+  "bytes": 22212,
+  "fetchedAt": "2026-10-13T09:49:08.857Z",
+  "markdownFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-tesla-DESIGN-md-fb59a3994ab6.md",
+  "metadataFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-tesla-DESIGN-md-fb59a3994ab6.json",
+  "repository": "https://github.com/VoltAgent/awesome-design-md",
+  "commit": "c7c1bada4eda972236d124e06ee58df129a9266b",
+  "attributionReadme": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/attribution/style-README-md-b33563055168.txt",
+  "styleReadme": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/attribution/style-design-md-tesla-README-md-4980781d1436.txt",
+  "styleReadmeSourceUrl": "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/design-md/tesla/README.md"
+}

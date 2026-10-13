@@ -1,0 +1,37 @@
+{
+  "repositoryPath": "design-md/clickhouse/DESIGN.md",
+  "slug": "clickhouse",
+  "title": "clickhouse",
+  "titleSource": "repository-path",
+  "sourceUrl": "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/design-md/clickhouse/DESIGN.md",
+  "gitBlob": "f9b61f0a2be93c3e0b396a9a1b4ae1df02791cf9",
+  "status": "succeeded",
+  "license": {
+    "status": "repository-license",
+    "identifier": "MIT",
+    "sourcePaths": [
+      "LICENSE"
+    ],
+    "localFiles": [
+      "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/attribution/style-LICENSE-c693279643b8.txt"
+    ],
+    "sourceUrls": [
+      "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/LICENSE"
+    ],
+    "attribution": [
+      "Copyright (c) 2026 VoltAgent",
+      "The above copyright notice and this permission notice shall be included in all",
+      "AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER"
+    ]
+  },
+  "contentHash": "50987e29b603cc7503ebe724af810fcf43845e96fdd4083e0fbe5fe00d2cdd2e",
+  "bytes": 25986,
+  "fetchedAt": "2026-10-13T09:49:08.857Z",
+  "markdownFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-clickhouse-DESIGN-md-241fd78d41d2.md",
+  "metadataFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-clickhouse-DESIGN-md-241fd78d41d2.json",
+  "repository": "https://github.com/VoltAgent/awesome-design-md",
+  "commit": "c7c1bada4eda972236d124e06ee58df129a9266b",
+  "attributionReadme": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/attribution/style-README-md-b33563055168.txt",
+  "styleReadme": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/attribution/style-design-md-clickhouse-README-md-5758d018ac4b.txt",
+  "styleReadmeSourceUrl": "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/design-md/clickhouse/README.md"
+}

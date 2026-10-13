@@ -91,6 +91,18 @@ service cloud.firestore {
         }
       }
     }
+    match /designReferenceCatalog/{slug} {
+      allow read: if request.auth != null;
+      allow write: if false;
+      match /markdownChunks/{chunkId} {
+        allow read: if request.auth != null;
+        allow write: if false;
+      }
+    }
+    match /designReferenceCatalogIndex/{slug} {
+      allow read: if request.auth != null;
+      allow write: if false;
+    }
     match /{document=**} { allow read, write: if false; }
   }
 }

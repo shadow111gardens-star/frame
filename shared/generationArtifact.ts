@@ -16,6 +16,7 @@ export const generationArtifactSchema=z.object({
     tokens:z.literal('valid'),render:z.enum(['pending','measured']),measuredScreenIds:z.array(z.string()).max(20)}),
   cost:generationCostSchema.optional(),
   approvedPlan:z.unknown().optional(),
+  styleReference:z.object({slug:z.string().max(200),sourceUrl:z.string().max(500),contentHash:z.string().regex(/^[a-f0-9]{64}$/),referenceInputBytes:z.number().int().max(2400),estimatedInputTokens:z.number().int().nonnegative(),measuredAddedInputTokens:z.null(),specificationInputTokens:z.number().int().nonnegative().nullable()}).optional(),
   attemptCounts:z.record(z.string(),z.number().int().min(0).max(3)),
 });
 export type GenerationArtifact=z.infer<typeof generationArtifactSchema>;

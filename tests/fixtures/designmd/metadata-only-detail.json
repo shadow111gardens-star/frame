@@ -1,0 +1,20 @@
+{
+  "id": 1,
+  "slug": "minimalism-swiss-style",
+  "title": "Minimalism & Swiss Style",
+  "description": "Design minimalista com grid, tipografia clara e espaço em branco. Ideal para SaaS B2B, apps enterprise e projetos profissionais. Prompt pronto para IA.",
+  "type": "Minimalismo & Swiss",
+  "cover": "/images/library/1.png",
+  "use_case": "SaaS B2B, Apps enterprise, SaaS de design, Ferramentas profissionais",
+  "era": "1950s Swiss",
+  "style_type": "Clean, Geometric, Functional, Grid-Based",
+  "keywords": "[\"Clean\",\"simple\",\"spacious\",\"functional\",\"white space\",\"high contrast\",\"geometric\",\"sans-serif\",\"grid-based\",\"essential\"]",
+  "historical_context": "Originário dos Alpes suíços (1950s), o Swiss Style revolucionou design com grid systems e tipografia sem serifa. Ainda é padrão em design profissional moderno.",
+  "related_style_ids": "[240,236,47,17,56]",
+  "cores_primarias": "Monochromatic, Black #000000, White #FFFFFF",
+  "cores_secundarias": "Neutral (Beige #F5F1E8, Grey #808080, Taupe #B38B6D), Primary accent",
+  "efeitos": "Subtle hover (200-250ms), smooth transitions, sharp shadows if any, clear type hierarchy, fast loading",
+  "light_dark": "✓ Full / ✓ Full",
+  "video_description": null,
+  "synced_at": "2026-04-01T23:50:59.911Z"
+}

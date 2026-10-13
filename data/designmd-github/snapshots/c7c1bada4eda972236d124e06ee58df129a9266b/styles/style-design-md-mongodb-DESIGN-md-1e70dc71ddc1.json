@@ -1,0 +1,37 @@
+{
+  "repositoryPath": "design-md/mongodb/DESIGN.md",
+  "slug": "mongodb",
+  "title": "mongodb",
+  "titleSource": "repository-path",
+  "sourceUrl": "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/design-md/mongodb/DESIGN.md",
+  "gitBlob": "609b0478a8f5dc05ee012bf8118179c63661816a",
+  "status": "succeeded",
+  "license": {
+    "status": "repository-license",
+    "identifier": "MIT",
+    "sourcePaths": [
+      "LICENSE"
+    ],
+    "localFiles": [
+      "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/attribution/style-LICENSE-c693279643b8.txt"
+    ],
+    "sourceUrls": [
+      "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/LICENSE"
+    ],
+    "attribution": [
+      "Copyright (c) 2026 VoltAgent",
+      "The above copyright notice and this permission notice shall be included in all",
+      "AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER"
+    ]
+  },
+  "contentHash": "4523f10efd5ccd46f9aeac3b98626e24bcf907bc0c1e46500cb0e3920f932e71",
+  "bytes": 32077,
+  "fetchedAt": "2026-10-13T09:49:08.857Z",
+  "markdownFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-mongodb-DESIGN-md-1e70dc71ddc1.md",
+  "metadataFile": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/styles/style-design-md-mongodb-DESIGN-md-1e70dc71ddc1.json",
+  "repository": "https://github.com/VoltAgent/awesome-design-md",
+  "commit": "c7c1bada4eda972236d124e06ee58df129a9266b",
+  "attributionReadme": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/attribution/style-README-md-b33563055168.txt",
+  "styleReadme": "snapshots/c7c1bada4eda972236d124e06ee58df129a9266b/attribution/style-design-md-mongodb-README-md-1c30282386c1.txt",
+  "styleReadmeSourceUrl": "https://github.com/VoltAgent/awesome-design-md/blob/c7c1bada4eda972236d124e06ee58df129a9266b/design-md/mongodb/README.md"
+}

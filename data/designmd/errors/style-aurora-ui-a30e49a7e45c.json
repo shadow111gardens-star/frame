@@ -1,0 +1,20 @@
+{
+  "id": 10,
+  "slug": "aurora-ui",
+  "title": "Aurora UI",
+  "description": "Gradientes fluxo animado, efeito Northern Lights, cores complementares. Interface luminosa e atmosférica. Prompt para gradientes dinâmicos.",
+  "type": "Futurista & Tech",
+  "cover": "/images/library/10.png",
+  "use_case": "SaaS premium, Creative tools, Agência moderna, Brand exclusiva",
+  "era": "2020s Modern",
+  "style_type": "Ethereal, Gradient, Premium, Animated",
+  "keywords": "[\"Vibrant gradients\",\"smooth blend\",\"Northern Lights effect\",\"mesh gradient\",\"luminous\",\"atmospheric\",\"abstract\"]",
+  "historical_context": "Mesh gradients (2021+) e CSS Houdini trazem animações fluidas tipo Northern Lights. Popular em SaaS premium e creative tools.",
+  "related_style_ids": "[104,108,44,1,2]",
+  "cores_primarias": "Complementary: Blue-Orange, Purple-Yellow, Electric Blue #0080FF, Magenta #FF1493, Cyan #00FFFF",
+  "cores_secundarias": "Smooth transitions (Blue→Purple→Pink→Teal), iridescent effects, blend modes (screen, multiply)",
+  "efeitos": "Large flowing CSS/SVG gradients, subtle 8-12s animations, depth via color layering, smooth morph",
+  "light_dark": "✓ Full / ✓ Full",
+  "video_description": null,
+  "synced_at": "2026-04-01T23:50:59.911Z"
+}

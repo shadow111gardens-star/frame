@@ -1,0 +1,20 @@
+{
+  "id": 4,
+  "slug": "brutalism-4",
+  "title": "Brutalism",
+  "description": "Design raw, alto contraste, cores primárias e zero suavidade. Para projetos antidesign e portfolio criativo. Prompt estruturado pronto.",
+  "type": "Brutalismo",
+  "cover": "/images/library/4.png",
+  "use_case": "Portfolio criativo, Agência de design, Blog experimental, Arte digital",
+  "era": "1950s Brutalist",
+  "style_type": "Raw, Unpolished, High-Contrast, Anti-Design",
+  "keywords": "[\"Raw\",\"unpolished\",\"stark\",\"high contrast\",\"plain text\",\"default fonts\",\"visible borders\",\"asymmetric\",\"anti-design\"]",
+  "historical_context": "Raízes na arquitetura brutalista dos anos 1950 (brutus = bruto). Web Brutalism rejeita ornamentação, celebrando crua funcionalidade e anti-design.",
+  "related_style_ids": "[115,47,17,50,56]",
+  "cores_primarias": "Primary: Red #FF0000, Blue #0000FF, Yellow #FFFF00, Black #000000, White #FFFFFF",
+  "cores_secundarias": "Limited: Neon Green #00FF00, Hot Pink #FF00FF, minimal secondary",
+  "efeitos": "No smooth transitions (instant), sharp corners (0px), bold typography (700+), visible grid, large blocks",
+  "light_dark": "✓ Full / ✓ Full",
+  "video_description": null,
+  "synced_at": "2026-04-01T23:50:59.911Z"
+}

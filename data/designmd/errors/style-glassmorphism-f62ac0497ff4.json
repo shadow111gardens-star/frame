@@ -1,0 +1,20 @@
+{
+  "id": 3,
+  "slug": "glassmorphism",
+  "title": "Glassmorphism",
+  "description": "Efeito glass frosted com blur, translucência e vibração. Ideal para overlays modernos, dark mode e interfaces premium. Pronto para IA generativa.",
+  "type": "Flat & Soft UI",
+  "cover": "/images/library/3.png",
+  "use_case": "Overlays, Modal dialogs, Card components, Interfaces premium",
+  "era": "2020s Modern",
+  "style_type": "Translucent, Layered, Vibrant, Blurred",
+  "keywords": "[\"Frosted glass\",\"transparent\",\"blurred background\",\"layered\",\"vibrant background\",\"light source\",\"depth\",\"multi-layer\"]",
+  "historical_context": "Popularizado por Apple iOS, Microsoft Windows 11 e Figma (2020). Usa backdrop-filter CSS para efeito frosted glass realqueda.",
+  "related_style_ids": "[2,55,13,1,4]",
+  "cores_primarias": "Translucent white: rgba(255,255,255,0.1-0.3)",
+  "cores_secundarias": "Vibrant: Electric Blue #0080FF, Neon Purple #8B00FF, Vivid Pink #FF1493, Teal #20B2AA",
+  "efeitos": "Backdrop blur (10-20px), subtle border (1px solid rgba white 0.2), light reflection, Z-depth",
+  "light_dark": "✓ Full / ✓ Full",
+  "video_description": null,
+  "synced_at": "2026-04-01T23:50:59.911Z"
+}

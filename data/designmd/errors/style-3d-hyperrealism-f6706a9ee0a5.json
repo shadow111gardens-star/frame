@@ -1,0 +1,20 @@
+{
+  "id": 5,
+  "slug": "3d-hyperrealism",
+  "title": "3D & Hyperrealism",
+  "description": "Interface 3D imersiva com texturas realistas, parallax e lighting. WebGL/Three.js integrado. Template para experiências imersivas.",
+  "type": "Futurista & Tech",
+  "cover": "/images/library/5.png",
+  "use_case": "Ecommerce premium, Imóveis, Automotivo, Educação imersiva",
+  "era": "2020s Modern",
+  "style_type": "Immersive, Realistic, Tactile, Spatial",
+  "keywords": "[\"Depth\",\"realistic textures\",\"3D models\",\"spatial navigation\",\"tactile\",\"skeuomorphic elements\",\"rich detail\",\"immersive\"]",
+  "historical_context": "Evolução de Skeuomorphism, potenciada por WebGL e Three.js (2010s). Imersão tátil com texturas realistas e lighting physics-based.",
+  "related_style_ids": "[49,13,46,105,242]",
+  "cores_primarias": "Deep Navy #001F3F, Forest Green #228B22, Burgundy #800020, Gold #FFD700, Silver #C0C0C0",
+  "cores_secundarias": "Complex gradients (5-10 stops), realistic lighting, shadow variations (20-40% darker)",
+  "efeitos": "WebGL/Three.js 3D, realistic shadows (layers), physics lighting, parallax (3-5 layers), smooth 3D (300-400ms)",
+  "light_dark": "◐ Partial / ◐ Partial",
+  "video_description": null,
+  "synced_at": "2026-04-01T23:50:59.911Z"
+}

@@ -22,8 +22,21 @@ import {planFixture} from './planFixture';
 import {fixture} from './fixture';
 import {hashArtifact} from '../server/designDocument';
 import type {GenerationArtifact} from '../shared/generationArtifact';
+import {getDocs,collection} from 'firebase/firestore';
 import {pricingConfig,requestCost} from '../server/generationCost';
 import {summarizeCost} from '../shared/generationCost';
+
+test('shared catalog and compact index are authenticated read-only, including selected Markdown chunks',{skip:!process.env.FIRESTORE_EMULATOR_HOST},async()=>{
+ const [host,port]=process.env.FIRESTORE_EMULATOR_HOST!.split(':'),env=await initializeTestEnvironment({projectId:'demo-frame',firestore:{host,port:Number(port),rules:await readFile('firestore.rules','utf8')}});
+ try{
+  const paths=[['designReferenceCatalog','style'],['designReferenceCatalogIndex','style'],['designReferenceCatalog','style','markdownChunks','part']];
+  await env.withSecurityRulesDisabled(async context=>{for(const p of paths)await setDoc(doc(context.firestore() as unknown as Firestore,p.join('/')),{slug:'style',text:'Source'});});
+  const auth=env.authenticatedContext('catalog-user').firestore() as unknown as Firestore,anonymous=env.unauthenticatedContext().firestore() as unknown as Firestore;
+  for(const p of paths){await assertSucceeds(getDoc(doc(auth,p.join('/'))));await assertFails(getDoc(doc(anonymous,p.join('/'))));await assertFails(setDoc(doc(auth,p.join('/')),{slug:'changed'}));await assertFails(updateDoc(doc(auth,p.join('/')),{text:'Changed'}));await assertFails(deleteDoc(doc(auth,p.join('/'))));}
+  await assertSucceeds(getDocs(collection(auth,'designReferenceCatalogIndex')));await assertFails(getDocs(collection(anonymous,'designReferenceCatalogIndex')));
+  await assertFails(setDoc(doc(auth,'designReferenceCatalog','new-style'),{slug:'new-style'}));await assertFails(setDoc(doc(auth,'designReferenceCatalogIndex','new-style'),{slug:'new-style'}));
+ }finally{await env.cleanup();}
+});
 
 test(
   "Firestore emulator enforces ownership, field validation, atomic revisions, and repository lifecycle",
@@ -189,7 +202,7 @@ test('fixed-flow run, Markdown and matching immutable revision survive reopen wi
   try{
     await env.clearFirestore();
     const a=env.authenticatedContext('UID-A').firestore() as unknown as Firestore,b=env.authenticatedContext('UID-B').firestore() as unknown as Firestore;
-    const repo=new FirestoreProjects(a,()=>({uid:'UID-A'})),snapshot=projectFixture(),path=['users','UID-A','projects',snapshot.projectId];
+    const repo=new FirestoreProjects(a,()=>({uid:'UID-A'})),snapshot=projectFixture(),path=['users','UID-A','projects',snapshot.projectId] as const;
     await repo.save({snapshot,initialPrompt:'Original',favorite:false,expectedRevision:0,writeId:'legacy-revision'});
     const run={projectId:snapshot.projectId,generationRunId:'run-one',idempotencyKey:'run-one',originalPrompt:'Generate exactly two screens.'};
     await repo.startGeneration(run);await assert.rejects(repo.startGeneration(run),/already exists/);
@@ -200,6 +213,7 @@ test('fixed-flow run, Markdown and matching immutable revision survive reopen wi
     const pricing=pricingConfig({},'gemini-3.1-flash-lite'),cost=summarizeCost([requestCost({}, {usageMetadata:{promptTokenCount:1000,candidatesTokenCount:500,totalTokenCount:1500}},'specification','gemini-3.1-flash-lite',200,10,pricing)],pricing);
     const artifact:GenerationArtifact={version:1,...run,designMd:md,designMdHash:hashArtifact(md),status:'complete',warnings:[],attemptCounts:{'design-md':1},validationSummary:{schema:'valid',screens:'valid',navigation:'valid',tokens:'valid',render:'measured',measuredScreenIds:['home','profile']}};
     snapshot.generationArtifact=artifact;
+    artifact.styleReference={slug:'linear.app',sourceUrl:'https://github.com/VoltAgent/awesome-design-md/blob/'+ 'a'.repeat(40)+'/design-md/linear.app/DESIGN.md',contentHash:'b'.repeat(64),referenceInputBytes:1200,estimatedInputTokens:300,measuredAddedInputTokens:null,specificationInputTokens:1000};
     artifact.cost=cost;await repo.updateGeneration(run,'design-json',cost);
     assert.deepEqual((await getDoc(doc(a,...path,'generationRuns','run-one'))).data()?.cost,cost);
     const write={snapshot,initialPrompt:'Original',favorite:false,expectedRevision:1,writeId:'generation-run-one'};
@@ -217,7 +231,7 @@ test('fixed-flow run, Markdown and matching immutable revision survive reopen wi
     const racing=await Promise.allSettled(['race-a','race-b'].map(id=>repo.startGeneration({...run,generationRunId:id,idempotencyKey:id})));
     assert.equal(racing.filter(result=>result.status==='fulfilled').length,1,'Only one simultaneous submission reserves the project');
     const winner=racing[0].status==='fulfilled'?'race-a':'race-b';await repo.failGeneration({...run,generationRunId:winner,idempotencyKey:winner},{code:'CANCELLED',message:'Cancelled without changing saved output.'});
-    await env.withSecurityRulesDisabled(async context=>{await updateDoc(doc(context.firestore(),...path,'revisions','generation-run-one','chunks','design-md-0'),{data:JSON.stringify(md+' corrupted')});});
+    await env.withSecurityRulesDisabled(async context=>{await updateDoc(doc(context.firestore() as unknown as Firestore,...path,'revisions','generation-run-one','chunks','design-md-0'),{data:JSON.stringify(md+' corrupted')});});
     await assert.rejects(repo.load(snapshot.projectId),/checksum/);
     await repo.remove(snapshot.projectId,2);assert.equal((await getDoc(doc(a,...path,'generationRuns','run-one'))).exists(),false);
   }finally{await env.cleanup();}

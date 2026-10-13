@@ -1,0 +1,20 @@
+{
+  "id": 9,
+  "slug": "claymorphism",
+  "title": "Claymorphism",
+  "description": "Design brinquedo, bubbly, pastéis suaves e bordas chunky. Ideal para apps infantis e creative tools. Prompt playful.",
+  "type": "Flat & Soft UI",
+  "cover": "/images/library/9.png",
+  "use_case": "Apps infantis, Creative tools, Educação, Jogos interativos",
+  "era": "2020s Modern",
+  "style_type": "Soft, Playful, Rounded, Colorful",
+  "keywords": "[\"Soft 3D\",\"chunky\",\"playful\",\"toy-like\",\"bubbly\",\"thick borders (3-4px)\",\"double shadows\",\"rounded (16-24px)\"]",
+  "historical_context": "2021+ movimento ludic design, inspirado em Clay.io e Adobe XD. Rejeita corporate severity — celebra diversão, bubbly, toy-like.",
+  "related_style_ids": "[6,38,86,74,106]",
+  "cores_primarias": "Pastel: Soft Peach #FDBCB4, Baby Blue #ADD8E6, Mint #98FF98, Lilac #E6E6FA, light BG",
+  "cores_secundarias": "Soft gradients (pastel-to-pastel), light/dark variations (20-30%), gradient subtle",
+  "efeitos": "Inner+outer shadows (subtle, no hard lines), soft press (200ms ease-out), fluffy elements, smooth transitions",
+  "light_dark": "✓ Full / ◐ Partial",
+  "video_description": null,
+  "synced_at": "2026-04-01T23:50:59.911Z"
+}

@@ -2,6 +2,8 @@ import {generationCostSchema,type GenerationCost} from '../../shared/generationC
 import {generationArtifactSchema,type GenerationArtifact} from '../../shared/generationArtifact';
 import {getAuth} from 'firebase/auth';
 import {initializeFrameFirebase} from '../auth/firebase';
+import {generationReference} from './referenceCatalog';
+import type {StyleReference} from '../../shared/designReference';
 import {DEFAULT_CLIENT_TIMEOUT_MS,timeoutSetting} from '../../shared/generationTiming';
 import { responseSchema, validateApp, type DesignApp } from '../../shared/design';
 import type {ProductType} from '../../shared/product';
@@ -12,7 +14,7 @@ export function takePrompt() {const request=pendingPrompt?{prompt:pendingPrompt,
 export class DesignRequestError extends Error {
   constructor(message:string,public retryable:boolean,public code?:string,public cost?:GenerationCost){super(message);this.name='DesignRequestError';}
 }
-export async function requestDesign(prompt:string,app?:DesignApp,activeScreen?:string,productType?:ProductType,qualityReview?:import('../workspace/components/RenderedDesignReview').RenderReview,signal?:AbortSignal,options:{timeoutMs?:number;fetch?:typeof fetch;editScope?:import('../../shared/editScope').EditScope;projectId?:string;generationRunId?:string;idempotencyKey?:string;generationArtifact?:GenerationArtifact;idToken?:string;onStage?:(stage:import('../../shared/generationProgress').GenerationStage)=>void|Promise<void>;onCost?:(cost:GenerationCost)=>void|Promise<void>}={}) {
+export async function requestDesign(prompt:string,app?:DesignApp,activeScreen?:string,productType?:ProductType,qualityReview?:import('../workspace/components/RenderedDesignReview').RenderReview,signal?:AbortSignal,options:{timeoutMs?:number;fetch?:typeof fetch;referenceLoader?:(prompt:string,signal?:AbortSignal)=>Promise<StyleReference|undefined>;editScope?:import('../../shared/editScope').EditScope;projectId?:string;generationRunId?:string;idempotencyKey?:string;generationArtifact?:GenerationArtifact;idToken?:string;onStage?:(stage:import('../../shared/generationProgress').GenerationStage)=>void|Promise<void>;onCost?:(cost:GenerationCost)=>void|Promise<void>}={}) {
   const timeoutMs=options.timeoutMs??timeoutSetting(import.meta.env?.VITE_UI_GENERATION_TIMEOUT_MS,DEFAULT_CLIENT_TIMEOUT_MS);
   const timerController=new AbortController();
   const timer=setTimeout(()=>timerController.abort(new DOMException('UI generation timed out.','TimeoutError')),timeoutMs);
@@ -20,7 +22,9 @@ export async function requestDesign(prompt:string,app?:DesignApp,activeScreen?:s
   let response:Response|undefined,seenCost:GenerationCost|undefined,streamReader:ReadableStreamDefaultReader<Uint8Array>|undefined;
   try {
     const idToken=options.idToken??await getAuth(initializeFrameFirebase()).currentUser?.getIdToken();
-    response=await (options.fetch??fetch)('/api/design',{method:'POST',headers:{'Content-Type':'application/json',...(options.onStage?{Accept:'application/x-ndjson'}:{}),...(idToken?{Authorization:'Bearer '+idToken}:{})},body:JSON.stringify({mode:app?'modify':'generate',prompt,app,activeScreen,productType,qualityReview,timeoutMs,editScope:options.editScope,projectId:options.projectId,generationRunId:options.generationRunId,idempotencyKey:options.idempotencyKey,generationArtifact:options.generationArtifact}),signal:requestSignal});
+    let styleReference:StyleReference|undefined;
+    if(!app&&!qualityReview)try{styleReference=await (options.referenceLoader??generationReference)(prompt,requestSignal);}catch{/* Optional catalog failure preserves the existing flow. */}
+    response=await (options.fetch??fetch)('/api/design',{method:'POST',headers:{'Content-Type':'application/json',...(options.onStage?{Accept:'application/x-ndjson'}:{}),...(idToken?{Authorization:'Bearer '+idToken}:{})},body:JSON.stringify({mode:app?'modify':'generate',prompt,app,activeScreen,productType,qualityReview,timeoutMs,editScope:options.editScope,projectId:options.projectId,generationRunId:options.generationRunId,idempotencyKey:options.idempotencyKey,generationArtifact:options.generationArtifact,styleReference}),signal:requestSignal});
     let data:any;
     let effectiveStatus=response.status;
     try{

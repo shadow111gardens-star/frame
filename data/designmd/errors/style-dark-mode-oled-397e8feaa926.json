@@ -1,0 +1,20 @@
+{
+  "id": 7,
+  "slug": "dark-mode-oled",
+  "title": "Dark Mode (OLED)",
+  "description": "Tema escuro otimizado OLED, preto profundo e neons vibrantes. Economia de bateria garantida. Prompt para dark mode perfeito.",
+  "type": "Temas & Verticais",
+  "cover": "/images/library/7.png",
+  "use_case": "Dashboards financeiros, Apps criativas, Mobile-first, Gaming",
+  "era": "2020s Modern",
+  "style_type": "Dark, High-Contrast, Eye-Friendly, Power-Efficient",
+  "keywords": "[\"Dark theme\",\"low light\",\"high contrast\",\"deep black\",\"midnight blue\",\"eye-friendly\",\"OLED\",\"night mode\",\"power efficient\"]",
+  "historical_context": "Otimização OLED (2010s+). Pixels pretos consomem 0% bateria em telas OLED. GitHub, Twitter, Discord popularizaram dark-first design.",
+  "related_style_ids": "[47,17,56,4,1]",
+  "cores_primarias": "Deep Black #000000, Dark Grey #121212, Midnight Blue #0A0E27",
+  "cores_secundarias": "Vibrant accents: Neon Green #39FF14, Electric Blue #0080FF, Gold #FFD700, Plasma Purple #BF00FF",
+  "efeitos": "Minimal glow (text-shadow: 0 0 10px), dark-to-light transitions, low white emission, high readability, visible focus",
+  "light_dark": "✗ No / ✓ Only",
+  "video_description": null,
+  "synced_at": "2026-04-01T23:50:59.911Z"
+}

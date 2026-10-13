@@ -10,7 +10,11 @@
     "start": "tsx server/index.ts",
     "typecheck": "tsc --noEmit",
     "test": "tsx --test tests/*.test.ts*",
-    "test:rules": "tsx --test tests/firestore.rules.test.ts"
+    "test:rules": "tsx --test tests/firestore.rules.test.ts",
+    "designmd:fetch": "tsx scripts/fetch-designmd.ts",
+    "designmd:fetch:github": "tsx scripts/fetch-designmd-github.ts",
+    "designmd:import:firestore": "tsx scripts/import-designmd-firestore.ts",
+    "designmd:import:reference-index": "tsx scripts/import-designmd-reference-index.ts"
   },
   "dependencies": {
     "clsx": "2.1.1",
@@ -30,11 +34,13 @@
     "@types/react": "19.2.7",
     "@types/react-dom": "19.2.3",
     "@vitejs/plugin-react": "5.1.1",
+    "firebase-admin": "^14.5.0",
     "jsdom": "^29.1.1",
     "tailwindcss": "4.1.17",
     "tsx": "^4.23.15",
     "typescript": "5.9.3",
     "vite": "7.3.2",
-    "vite-plugin-singlefile": "2.3.0"
+    "vite-plugin-singlefile": "2.3.0",
+    "yaml": "^2.9.1"
   }
 }

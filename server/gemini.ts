@@ -27,6 +27,7 @@ import {randomUUID} from 'node:crypto';
 import {DesignValidationError,safeIssuePath,validationDiagnostic,validationForRepair} from './designDiagnostics';
 import {targetedRepair} from './designRepair';
 import {screenNameKey} from './screenRequirements';
+import {acceptedReference} from '../shared/designReference';
 
 function parseDesignOutput(text:string,stage:'design draft'|'design',productType:string,protectedApp?:import('../shared/design').DesignApp,affected?:Set<string>,existing?:import('../shared/design').DesignApp,plan?:DesignPlan,onRestored?:(fields:string[])=>void) {
   const parsed=responseSchema.safeParse(parseGeminiJson(text,stage));
@@ -139,7 +140,8 @@ export function designRoute(env: Record<string,string|undefined>,identity=verify
         if(!Number.isInteger(limit)||limit<1024||limit>65536)throw new GeminiError('Invalid output token budget.','CONFIGURATION',false,503);
         request.generationConfig={...request.generationConfig,maxOutputTokens:limit,responseJsonSchema:compactSchema(request.generationConfig.responseJsonSchema)};
 currentStage=name;attemptCounts[name]=(attemptCounts[name]??0)+1;if(streaming&&!res.destroyed&&!res.writableEnded)res.write(JSON.stringify({event:'stage',stage:generationStage(name)})+'\n');try{return await generateGeminiText(body,{key,model,deadline,attemptTimeoutMs,signal:controller.signal,stage:name,pricing,maxAttempts:repair?Math.max(1,maxRepairs-cost().repairRequestCount):3,onUsage:request=>{usage.push(request);if(streaming&&!res.destroyed&&!res.writableEnded)res.write(JSON.stringify({event:'cost',cost:cost()})+'\n');}});}catch(error){if(error instanceof GeminiError&&!error.stage)error.stage=name;throw error;}};
-      const specification=!current?await createSpecification(input.prompt,input.productType,generateAt):undefined;
+      const styleReference=!current?acceptedReference(input.styleReference):undefined;
+      const specification=!current?await createSpecification(input.prompt,input.productType,generateAt,styleReference):undefined;
       const promptAnalysis=specification?.analysis??editAnalysis(input.prompt,current!);
       const productType=promptAnalysis.productType;
       const config=previewConfig(productType);
@@ -188,7 +190,7 @@ currentStage=name;attemptCounts[name]=(attemptCounts[name]??0)+1;if(streaming&&!
         if(result.app.screens.some(s=>!current.screens.some(original=>original.id===s.id)))return send(422,{error:'Adding screens requires Entire project scope in the AI Designer. Select it and resend. Your prompt and existing design are preserved.',code:'EDIT_SCOPE',retryable:false});
         try{result.app=mergeScreenEdit(current,result.app,[activeScreen!]);}catch{return send(502,{error:'The redesign violated the selected screen boundary or navigation relationships. Your existing design is unchanged.',code:'EDIT_SCOPE',retryable:false});}
       }
-      if(artifact){artifact.attemptCounts={...artifact.attemptCounts,...attemptCounts};artifact.cost=cost();}
+      if(artifact){artifact.attemptCounts={...artifact.attemptCounts,...attemptCounts};artifact.cost=cost();if(specification&&styleReference){const bytes=Buffer.byteLength(JSON.stringify(styleReference));artifact.styleReference={slug:styleReference.slug,sourceUrl:styleReference.sourceUrl,contentHash:styleReference.contentHash,referenceInputBytes:bytes,estimatedInputTokens:Math.ceil(bytes/4),measuredAddedInputTokens:null,specificationInputTokens:usage.find(row=>row.stage==='specification')?.inputTokens??null};}}
       send(200,{...result,status:artifact?.status??'complete',projectId,generationRunId,revisionId:null,designMd:designMd??null,designMdDownloadName:designMd?'DESIGN.md':null,designJson:result.app,generationArtifact:artifact,cost:cost(),validation:artifact?.validationSummary,warnings:artifact?.warnings??[],error:null});
     } catch(e) {
       diagnostic('request_failed',e);

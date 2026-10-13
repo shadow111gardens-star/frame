@@ -1,0 +1,20 @@
+{
+  "id": 6,
+  "slug": "vibrant-block-based",
+  "title": "Vibrant & Block-based",
+  "description": "Layout blocos gigantes, cores vibrantes, tipografia 32px+. Para startups, apps de energia e ecommerce conversível. Prompt pronto para customizar.",
+  "type": "Temas & Verticais",
+  "cover": "/images/library/6.png",
+  "use_case": "Startups, Ecommerce fashion, Apps gaming, Marketing conversível",
+  "era": "2020s Modern",
+  "style_type": "Bold, Energetic, Playful, Geometric",
+  "keywords": "[\"Bold\",\"energetic\",\"playful\",\"block layout\",\"geometric shapes\",\"high color contrast\",\"duotone\",\"modern\",\"energetic\"]",
+  "historical_context": "Y2K revivals (2020s) + Memphis Design (1980s). Cores altas, gaps gigantes, tipografia gigante dominam startups modernas.",
+  "related_style_ids": "[9,12,38,86,74]",
+  "cores_primarias": "Neon Green #39FF14, Electric Purple #BF00FF, Vivid Pink #FF1493, Bright Cyan #00FFFF, Sunburst #FFAA00",
+  "cores_secundarias": "Complementary: Orange #FF7F00, Shocking Pink #FF006E, Lime #CCFF00, triadic schemes",
+  "efeitos": "Large sections (48px+ gaps), animated patterns, bold hover (color shift), scroll-snap, large type (32px+), 200-300ms",
+  "light_dark": "✓ Full / ✓ Full",
+  "video_description": null,
+  "synced_at": "2026-04-01T23:50:59.911Z"
+}
