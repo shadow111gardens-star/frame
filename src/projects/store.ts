@@ -237,8 +237,8 @@ export class ProjectsStore {
     await this.flush();
     this.checkEpoch(epoch);await repo.startGeneration?.(run);this.checkEpoch(epoch);
   }
-  async updateGeneration(run:import('./artifacts').GenerationRunStart,stage:import('../../shared/generationProgress').GenerationStage){const epoch=this.generationEpochs.get(run.generationRunId);if(epoch===undefined)throw new ProjectCancelledError();this.checkEpoch(epoch);await this.owned().updateGeneration?.(run,stage);this.checkEpoch(epoch);}
-  async failGeneration(run:import('./artifacts').GenerationRunStart,error:{code:string;message:string}){
+  async updateGeneration(run:import('./artifacts').GenerationRunStart,stage:import('../../shared/generationProgress').GenerationStage,cost?:import('../../shared/generationCost').GenerationCost){const epoch=this.generationEpochs.get(run.generationRunId);if(epoch===undefined)throw new ProjectCancelledError();this.checkEpoch(epoch);await this.owned().updateGeneration?.(run,stage,cost);this.checkEpoch(epoch);}
+  async failGeneration(run:import('./artifacts').GenerationRunStart,error:{code:string;message:string;cost?:import('../../shared/generationCost').GenerationCost}){
     const epoch=this.generationEpochs.get(run.generationRunId);if(epoch===undefined)throw new ProjectCancelledError();this.checkEpoch(epoch);
     try{await this.owned().failGeneration?.(run,error);this.checkEpoch(epoch);}finally{this.generationEpochs.delete(run.generationRunId);}
   }

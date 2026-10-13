@@ -22,6 +22,8 @@ import {planFixture} from './planFixture';
 import {fixture} from './fixture';
 import {hashArtifact} from '../server/designDocument';
 import type {GenerationArtifact} from '../shared/generationArtifact';
+import {pricingConfig,requestCost} from '../server/generationCost';
+import {summarizeCost} from '../shared/generationCost';
 
 test(
   "Firestore emulator enforces ownership, field validation, atomic revisions, and repository lifecycle",
@@ -195,8 +197,11 @@ test('fixed-flow run, Markdown and matching immutable revision survive reopen wi
     await repo.updateGeneration(run,'design-md');
     assert.equal((await getDoc(doc(a,...path,'generationRuns','run-one'))).data()?.currentStage,'design-md');
     const md=designMdFixture(planFixture(fixture()),run.originalPrompt).designMd;
+    const pricing=pricingConfig({},'gemini-3.1-flash-lite'),cost=summarizeCost([requestCost({}, {usageMetadata:{promptTokenCount:1000,candidatesTokenCount:500,totalTokenCount:1500}},'specification','gemini-3.1-flash-lite',200,10,pricing)],pricing);
     const artifact:GenerationArtifact={version:1,...run,designMd:md,designMdHash:hashArtifact(md),status:'complete',warnings:[],attemptCounts:{'design-md':1},validationSummary:{schema:'valid',screens:'valid',navigation:'valid',tokens:'valid',render:'measured',measuredScreenIds:['home','profile']}};
     snapshot.generationArtifact=artifact;
+    artifact.cost=cost;await repo.updateGeneration(run,'design-json',cost);
+    assert.deepEqual((await getDoc(doc(a,...path,'generationRuns','run-one'))).data()?.cost,cost);
     const write={snapshot,initialPrompt:'Original',favorite:false,expectedRevision:1,writeId:'generation-run-one'};
     const saved=await repo.save(write);assert.equal(saved.revision,2);assert.equal((await repo.save(write)).revision,2);
     assert.deepEqual((await new FirestoreProjects(a,()=>({uid:'UID-A'})).load(snapshot.projectId)).snapshot,snapshot);
@@ -205,7 +210,8 @@ test('fixed-flow run, Markdown and matching immutable revision survive reopen wi
       await assertFails(getDoc(doc(b,...path,...tail)));await assertFails(updateDoc(doc(b,...path,...tail),{userId:'UID-B'}));
     }
     await assertFails(updateDoc(doc(a,...path,'revisions','generation-run-one'),{designMdHash:'0'.repeat(64)}));
-    const failed={...run,generationRunId:'run-failed',idempotencyKey:'run-failed'};await repo.startGeneration(failed);await repo.failGeneration(failed,{code:'RENDER_QUALITY',message:'Unsafe candidate preserved.'});
+    const failed={...run,generationRunId:'run-failed',idempotencyKey:'run-failed'};await repo.startGeneration(failed);await repo.failGeneration(failed,{code:'RENDER_QUALITY',message:'Unsafe candidate preserved.',cost});
+    assert.deepEqual((await getDoc(doc(a,...path,'generationRuns','run-failed'))).data()?.cost,cost);
     assert.equal((await getDoc(doc(a,...path))).data()?.snapshotId,'generation-run-one');assert.deepEqual((await repo.load(snapshot.projectId)).snapshot,snapshot);
     await assertFails(updateDoc(doc(a,...path),{userId:'UID-B',updatedAt:serverTimestamp()}));
     const racing=await Promise.allSettled(['race-a','race-b'].map(id=>repo.startGeneration({...run,generationRunId:id,idempotencyKey:id})));

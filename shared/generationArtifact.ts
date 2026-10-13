@@ -1,3 +1,4 @@
+import {generationCostSchema} from './generationCost';
 import {z} from 'zod';
 
 export const designMdSections = [
@@ -13,6 +14,7 @@ export const generationArtifactSchema=z.object({
   status:z.enum(['complete','partial']),warnings:z.array(z.string().max(1000)).max(100),
   validationSummary:z.object({schema:z.literal('valid'),screens:z.literal('valid'),navigation:z.literal('valid'),
     tokens:z.literal('valid'),render:z.enum(['pending','measured']),measuredScreenIds:z.array(z.string()).max(20)}),
+  cost:generationCostSchema.optional(),
   approvedPlan:z.unknown().optional(),
   attemptCounts:z.record(z.string(),z.number().int().min(0).max(3)),
 });

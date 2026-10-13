@@ -1,5 +1,23 @@
 import type {DesignComponent,ComponentPosition} from '../workspace/types';
 
+/** scrollHeight excludes borders; DOM outer height already includes them. */
+export function flowOuterHeight(scrollHeight:number,outerHeight:number,border:number,margin:number){
+  return Math.ceil(Math.max(scrollHeight+border,outerHeight)+2*margin);
+}
+
+/** Native flow owns placement, but fixed-height text children still need enough
+ * allocated height. Grow only leaf text, never shift CSS-flow coordinates. */
+export function flowTextGrowth(nodes:DesignComponent[],measured:Record<string,number>){
+  const parents=new Map(nodes.flatMap(c=>(c.children??[]).map(id=>[id,c] as const)));
+  const positions:Record<string,ComponentPosition>={};
+  for(const c of nodes){const parent=parents.get(c.id);
+    if(!parent||!['flex','grid'].includes(parent.styles.layout??'')||!c.text?.trim()||c.children?.length||['hug','fill'].includes(c.styles.height??''))continue;
+    const original={x:0,y:0,width:100,height:40,...c.position};
+    const height=measured[c.id];if(Number.isFinite(height)&&height>original.height+.5)positions[c.id]={...original,height};
+  }
+  return positions;
+}
+
 /** Expand wrapped text and its containing groups; preserve columns and intentional layers. */
 export function reflowText(nodes:DesignComponent[],measured:Record<string,number>,screenHeight:number,reservedBottom=0) {
   const byId=new Map(nodes.map(c=>[c.id,c])),children=new Set(nodes.flatMap(c=>c.children??[]));

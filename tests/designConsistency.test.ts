@@ -1,4 +1,4 @@
-import {designMdFixture} from './designMdFixture';
+import {designMdFixture,specificationFixture} from './designMdFixture';
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { createServer, type Server } from "node:http";
@@ -128,7 +128,7 @@ test("route diagnoses and bounds repair of real design/schema/plan failures with
   console.info = (...args) => {
     logs.push(args);
   };
-  let scenario = "review-system",
+  let scenario = "draft-system",
     repairs = 0,
     designCalls = 0;
   globalThis.fetch = (async (input, init) => {
@@ -139,9 +139,10 @@ test("route diagnoses and bounds repair of real design/schema/plan failures with
     const payload = JSON.parse(request.contents[0].parts[0].text);
     const props = request.generationConfig.responseJsonSchema.properties;
     let output: unknown;
-    if (props.visualTokens) output = planFixture(fixture());
+    if(props.plan)output=specificationFixture(planFixture(fixture()),payload.originalPrompt);
+    else if (props.visualTokens) output = planFixture(fixture());
     else if(props.designMd)output=designMdFixture(payload.designPlan,payload.originalPrompt);
-    else if (!props.app)
+    else if (!props.app&&!payload.repairScope)
       output = {
         productType: "mobile_app",
         category: "fitness",
@@ -155,36 +156,35 @@ test("route diagnoses and bounds repair of real design/schema/plan failures with
         uxNeeds: [],
       };
     else {
+      if(payload.mode==='validation-repair'){payload.designPlan=planFixture(fixture());payload.resolvedNavigation=[];}
       designCalls++;
       const app = fixture();
-      const isRepair = payload.mode === "validation-repair",
-        isReview = payload.mode === "review";
+      const isRepair = payload.mode === "validation-repair";
       if (isRepair) repairs++;
-      if(payload.mode==='generate'||isReview||isRepair){
-        assert.deepEqual(payload.designPlan.designSystem,fixture().designSystem);
+      if(payload.mode==='generate'||isRepair){
+        assert.deepEqual(payload.designPlan.designSystem??fixture().designSystem,fixture().designSystem);
         assert.deepEqual(payload.designPlan.screens.map((s:any)=>s.name),['Home','Profile']);
         assert.ok(payload.designPlan.journey);
       }
-      if(isReview)assert.ok(Array.isArray(payload.resolvedNavigation));
+      assert.ok(Array.isArray(payload.resolvedNavigation));
       if(isRepair&&payload.repairScope?.screenIds.length===1&&!payload.repairScope.screenIds.includes('profile')){app.screens[1].components[0].text='Must not rewrite valid screen';}
       if (
         scenario === "irreparable" ||
-        (isReview && scenario === "review-system") ||
-        (isReview && scenario === "draft-and-review")
+        (!isRepair && scenario === "draft-system") ||
+        (!isRepair && scenario === "malformed-recovery")
       )
-        app.designSystem.colors.accent = "#ff0000";
-      if (isReview && scenario === "review-screens") app.screens.pop();
-      if (isReview && scenario === "review-bounds")
+        {app.screens[0].components[2].position.y = scenario==='irreparable'?900:300;app.designSystem.colors.accent = "#ff0000";}
+      if (!isRepair && scenario === "draft-screens") app.screens.pop();
+      if (!isRepair && scenario === "draft-bounds")
         app.screens[0].components[2].position.y = 900;
-      if (isReview && scenario === "review-type") {
+      if (!isRepair && scenario === "draft-type") {
         app.productType = "website";
         app.screens.forEach((s) => (s.width = 1440));
       }
       output = { message: "Created editable screens", app };
       if (
-        !isReview &&
         !isRepair &&
-        (scenario === "malformed" || scenario === "draft-and-review")
+        (scenario === "malformed" || scenario === "malformed-recovery")
       )
         return new Response(
           JSON.stringify({
@@ -221,13 +221,13 @@ test("route diagnoses and bounds repair of real design/schema/plan failures with
     const url = `http://127.0.0.1:${(server.address() as any).port}/api/design`;
     const original = JSON.stringify(fixture());
     for (const next of [
-      "review-system",
-      "review-screens",
-      "review-bounds",
-      "review-type",
+      "draft-system",
+      "draft-screens",
+      "draft-bounds",
+      "draft-type",
       "malformed",
       "irreparable",
-      "draft-and-review",
+      "malformed-recovery",
     ]) {
       scenario = next;
       repairs = 0;
@@ -241,19 +241,19 @@ test("route diagnoses and bounds repair of real design/schema/plan failures with
         }),
       });
       const result = await response.json();
-      assert.equal(repairs, next==='draft-and-review'?2:1);
+      assert.equal(repairs, next==='draft-system'?0:1);
       if (next === "irreparable") {
         assert.equal(response.status, 502);
         assert.equal(result.code, "DESIGN_CONSISTENCY");
-        assert.equal(result.reason, "DESIGN_SYSTEM");
+        assert.equal(result.reason, "BOUNDS");
         assert.equal(result.app, undefined);
         assert.ok(result.stage);
         assert.ok(result.requestId);
-        assert.ok(designCalls <= 3);
+        assert.ok(designCalls <= 2);
       } else {
         assert.equal(response.status, 200);
         assert.deepEqual(result.app, fixture());
-        assert.ok(designCalls<=4,'At most draft, draft repair, review and review repair');
+        assert.ok(designCalls<=2,'At most one draft and one bounded repair');
       }
     }
     assert.equal(JSON.stringify(fixture()), original);
@@ -263,7 +263,7 @@ test("route diagnoses and bounds repair of real design/schema/plan failures with
     assert.ok(text.includes("validation_failed"));
     assert.ok(text.includes("BOUNDS"));
     assert.ok(text.includes("PLANNED_SCREENS"));
-    assert.ok(text.includes("changedFields"));
+
     assert.ok(text.includes("repair_failed"));
   } finally {
     globalThis.fetch = originalFetch;

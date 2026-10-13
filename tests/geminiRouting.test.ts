@@ -1,4 +1,4 @@
-import {designMdFixture} from './designMdFixture';
+import {designMdFixture,specificationFixture} from './designMdFixture';
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {createServer} from 'node:http';
@@ -14,7 +14,7 @@ test('the default model is Gemini 3.1 Flash-Lite',()=>{
 
 test('every stage uses official Gemini despite obsolete provider overrides',async()=>{
  const original=globalThis.fetch,app=fixture(),calls:any[]=[],stages:string[]=[];
- const outputs=[{productType:'mobile_app',screens:[]},planFixture(app),{message:'Draft',app},{message:'Reviewed',app},{message:'Modified',app},{message:'Rendered review',app}];
+ const outputs=[specificationFixture(planFixture(app),'Create exactly 2 mobile screens.'),{message:'Draft',app},{message:'Modified',app}];
  const warn=console.warn;
  console.warn=(...args:unknown[])=>{if(args[0]==='[FRAME Gemini request]'&&typeof args[1]==='string'){const event=JSON.parse(args[1]);if(event.event==='http_success')stages.push(event.stage);}else warn(...args);};
  globalThis.fetch=(async(url,init)=>{
@@ -23,7 +23,7 @@ test('every stage uses official Gemini despite obsolete provider overrides',asyn
   assert.equal((init?.headers as Record<string,string>)['x-goog-api-key'],'synthetic-gemini-key');
   assert.equal((init?.headers as Record<string,string>).Authorization,undefined);
   const request=JSON.parse(String(init?.body));assert.equal(request.generationConfig.responseMimeType,'application/json');assert.ok(request.generationConfig.responseJsonSchema);calls.push(request);
-  if(request.generationConfig.responseJsonSchema.properties.designMd){const payload=JSON.parse(request.contents[0].parts[0].text);return Response.json({candidates:[{finishReason:"STOP",content:{parts:[{text:JSON.stringify(designMdFixture(payload.designPlan,payload.originalPrompt))}]}}]});}
+
   assert.ok(outputs.length,'No unexpected upstream calls');
   return Response.json({candidates:[{finishReason:'STOP',content:{parts:[{text:JSON.stringify(outputs.shift())}]}}]});
  }) as typeof fetch;
@@ -38,8 +38,8 @@ test('every stage uses official Gemini despite obsolete provider overrides',asyn
    const result=await response.json();assert.equal(response.status,200,JSON.stringify(result));assert.equal(result.app.screens.length,2);
    if(input.mode==='modify')assert.deepEqual(result.app.screens[1],app.screens[1]);
   }
-  assert.equal(calls.length,7);assert.equal(outputs.length,0);
-  assert.deepEqual(stages,['analysis','planning','design-md','draft','review','modification','rendered-review']);
+  assert.equal(calls.length,3);assert.equal(outputs.length,0);
+  assert.deepEqual(stages,['specification','draft','modification']);
  }finally{globalThis.fetch=original;console.warn=warn;server.closeAllConnections();await new Promise<void>(r=>server.close(()=>r()));}
 });
 

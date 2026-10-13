@@ -1,9 +1,11 @@
+import {compositionEvidence,plannedRegionEvidence} from './compositionQuality';
+import {previewConfig} from '../../shared/product';
 import type {DesignApp} from '../../shared/design';
 import {inspectStructure,type QualityIssue} from '../../shared/designQuality';
 import {fontMetadata} from './designProperties';
 import {colorHex} from './designProperties';
 import {resolveStyles} from './designProperties';
-import {reflowText,dockedSpace} from './textLayout';
+import {reflowText,dockedSpace,flowOuterHeight,flowTextGrowth} from './textLayout';
 /** Sample measured defects first, then a composition unlike the first capture.
  * All screens remain measured even when the existing two-image budget is reached. */
 export function representativeScreenIds(app:DesignApp,issues:QualityIssue[],limit:number):string[]{
@@ -23,8 +25,9 @@ export function measureRenderedReflow(root:HTMLElement,screen:DesignApp['screens
   const exclude=(id:string)=>{if(excluded.has(id))return;excluded.add(id);byId.get(id)?.children?.forEach(exclude);};
   screen.components.filter(c=>c.styles.dock||['flex','grid'].includes(c.styles.layout??'')).forEach(c=>c.children?.forEach(exclude));
   root.querySelectorAll<HTMLElement>('[data-text-content]').forEach(e=>{const c=byId.get(e.dataset.textContent!);if(c){const s=resolveStyles(c.styles,app.designSystem,root.offsetWidth);measured[c.id]=Math.ceil(e.getBoundingClientRect().height/scale+2*(s.paddingY??0)+(s.border?2:0)+2*(s.margin??0));}});
-  root.querySelectorAll<HTMLElement>('[data-component-id]').forEach(e=>{const c=byId.get(e.dataset.componentId!);if(c&&['flex','grid'].includes(c.styles.layout??'')){const s=resolveStyles(c.styles,app.designSystem,root.offsetWidth);measured[c.id]=Math.ceil(Math.max(e.scrollHeight,e.getBoundingClientRect().height/scale)+(s.border?2:0)+2*(s.margin??0));}});
-  return reflowText(screen.components.filter(c=>!excluded.has(c.id)&&!c.styles.dock),measured,screen.height,dockedSpace(screen.components,measured));
+  root.querySelectorAll<HTMLElement>('[data-component-id]').forEach(e=>{const c=byId.get(e.dataset.componentId!);if(c&&['flex','grid'].includes(c.styles.layout??'')){const s=resolveStyles(c.styles,app.designSystem,root.offsetWidth);measured[c.id]=flowOuterHeight(e.scrollHeight,e.getBoundingClientRect().height/scale,s.border?2:0,s.margin??0);}});
+  const layout=reflowText(screen.components.filter(c=>!excluded.has(c.id)&&!c.styles.dock),measured,screen.height,dockedSpace(screen.components,measured));
+  return {...layout,positions:{...layout.positions,...flowTextGrowth(screen.components,measured)}};
 }
 export function contrastRatio(a:string,b:string):number|undefined {
   const parse=(s:string)=>{const h=colorHex(s);if(!h||h.length!==7)return;const v=[1,3,5].map(i=>parseInt(h.slice(i,i+2),16)/255).map(n=>n<=.04045?n/12.92:((n+.055)/1.055)**2.4);return .2126*v[0]+.7152*v[1]+.0722*v[2];};
@@ -38,7 +41,7 @@ export function paintedTextBounds(box:{left:number;right:number;top:number;botto
   return {left:box.left-metrics.actualBoundingBoxLeft*scale,right:Math.max(box.right,box.left+metrics.actualBoundingBoxRight*scale),top:baseline-metrics.actualBoundingBoxAscent*scale,bottom:baseline+metrics.actualBoundingBoxDescent*scale};
 }
 /** Browser geometry, normalized to source pixels. Intentional image/text layers are excluded. */
-export function inspectRenderedScreen(root:HTMLElement,screen:DesignApp['screens'][number],app:DesignApp):QualityIssue[] {
+export function inspectRenderedScreen(root:HTMLElement,screen:DesignApp['screens'][number],app:DesignApp,approvedPlan?:unknown):QualityIssue[] {
   const issues=inspectStructure({...app,screens:[screen]}),nodes=new Map(screen.components.map(c=>[c.id,c]));
   const origin=root.getBoundingClientRect(),scale=origin.width/root.offsetWidth;
   if(!scale||!origin.height)return issues;
@@ -97,10 +100,31 @@ export function inspectRenderedScreen(root:HTMLElement,screen:DesignApp['screens
   // Only sibling leaf text/control collisions, not parent backgrounds or intentional layered images.
   const leaves=elements.filter(e=>{const c=nodes.get(e.dataset.componentId!)!;return c&&!c.children?.length&&['Text','Button','Input','Search'].includes(c.type);});
   for(let i=0;i<leaves.length;i++)for(let j=i+1;j<leaves.length;j++){const a=leaves[i],b=leaves[j];if(a.parentElement!==b.parentElement)continue;const x=rect(a),y=rect(b),w=Math.min(x.x+x.width,y.x+y.width)-Math.max(x.x,y.x),h=Math.min(x.y+x.height,y.y+y.height)-Math.max(x.y,y.y);if(w>4&&h>4)add('overlap',[a.dataset.componentId!,b.dataset.componentId!],`Sibling text/controls overlap by ${Math.round(w)} x ${Math.round(h)} source pixels. Confirm whether this is intentional before changing composition.`);}
-  // Report large interior gaps only on populated screens, never reject whitespace or unknown-user empty states.
-  const meaningful=elements.filter(e=>{const c=nodes.get(e.dataset.componentId!)!;return c&&!c.children?.length&&!!(c.text||c.source)&&c.type!=='Icon';}).map(rect);
-  const intervals=meaningful.map(r=>[r.y,r.y+r.height]).sort((a,b)=>a[0]-b[0]);let end=intervals[0]?.[1]??0;
-  if(meaningful.length>=6&&!screen.components.some(c=>/no .*yet|nothing .*yet|empty|sign.in|no saved/i.test(c.text??'')))for(const [top,bottom] of intervals.slice(1)){if(top-end>Math.max(160,root.offsetHeight*.2))add('empty-area',[],`Interior empty band from ${Math.round(end)} to ${Math.round(top)}px. Review against the intended hierarchy; retain deliberate editorial whitespace and safe areas.`);end=Math.max(end,bottom);}
+  // A later opaque sibling can erase text without changing its DOM bounds.
+  // Limit this to the renderer's normal stacking order and solid backgrounds.
+  for(const leaf of leaves){const text=leaf.querySelector<HTMLElement>('[data-text-content]');if(!text)continue;
+    const range=document.createRange();range.selectNodeContents(text);const ink=range.getBoundingClientRect();
+    const a={x:(ink.left-origin.left)/scale,y:(ink.top-origin.top)/scale,width:ink.width/scale,height:ink.height/scale};
+    for(const cover of elements){if(cover.parentElement!==leaf.parentElement||!(leaf.compareDocumentPosition(cover)&Node.DOCUMENT_POSITION_FOLLOWING))continue;
+      const css=getComputedStyle(cover);if(css.opacity!=='1'||css.backgroundImage!=='none'||!/^rgb\(/.test(css.backgroundColor)||css.zIndex!=='auto')continue;
+      const b=rect(cover),w=Math.max(0,Math.min(a.x+a.width,b.x+b.width)-Math.max(a.x,b.x)),h=Math.max(0,Math.min(a.y+a.height,b.y+b.height)-Math.max(a.y,b.y));
+      if(a.width*a.height>0&&w>2&&h>2&&w*h/(a.width*a.height)>.1)add('overlap',[leaf.dataset.componentId!,cover.dataset.componentId!],'Text is covered by a later opaque sibling surface in the renderer stacking order. Correct the parent/child membership or local coordinates; preserve valid content.','error');
+    }
+  }
+  // Evaluate visible content, not background area or a universal fill quota.
+  const meaningful=elements.filter(e=>{const c=nodes.get(e.dataset.componentId!)!;return c&&!c.children?.length&&!!(c.text||c.source)&&!['Icon','Image','Avatar'].includes(c.type);});
+  const content=elements.filter(e=>{const c=nodes.get(e.dataset.componentId!)!;return c&&(!!c.source||!!c.values?.length||meaningful.includes(e));}).map(e=>({id:e.dataset.componentId!,...rect(e)}));
+  if(root.offsetWidth===screen.width)issues.push(...plannedRegionEvidence(screen.id,content,approvedPlan));
+  issues.push(...compositionEvidence(screen.id,content,Math.min(root.offsetHeight,previewConfig(app.productType).viewportHeight)));
+  // Empty named content surfaces are demonstrable omissions, but safe to display
+  // with a warning. Never manufacture records or trigger paid aesthetic repair.
+  for(const e of elements){const c=nodes.get(e.dataset.componentId!)!;
+    if(!c||!['List','Navigation','Card'].includes(c.type)||c.text?.trim())continue;
+    const descendants=elements.filter(n=>n!==e&&e.contains(n));
+    const hasContent=descendants.some(n=>{const node=nodes.get(n.dataset.componentId!);return !!(node?.text?.trim()||node?.source||node?.type==='Icon'||node?.values?.length);});
+    const box=rect(e);
+    if(!hasContent&&box.width>24&&box.height>24)add(c.type==='Navigation'?'hierarchy':'empty-area',[c.id],`Visible ${c.type} "${c.name}" has no rendered labels, rows, assets or empty-state explanation. Populate the approved content or explain its empty state; preserve valid navigation and do not invent user records.`);
+  }
   const controlRows=new Map<string,HTMLElement[]>();
   const textElements=elements.filter(e=>nodes.get(e.dataset.componentId!)?.type==='Text');
   if(textElements.length>=8){const sizes=textElements.map(e=>parseFloat(getComputedStyle(e).fontSize)),weights=textElements.map(e=>Number(getComputedStyle(e).fontWeight));if(Math.max(...sizes)/Math.min(...sizes)<1.25&&Math.max(...weights)-Math.min(...weights)<100)add('hierarchy',[],'Many text elements have almost identical size and weight. Review purpose, reading order and primary/secondary emphasis against the plan; do not force oversized headings into dense tools.');}

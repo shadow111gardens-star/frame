@@ -49,7 +49,8 @@ service cloud.firestore {
         match /generationRuns/{runId} {
           function validRun(d) {
             return d.keys().hasAll(['userId','projectId','idempotencyKey','originalPrompt','status','currentStage','revisionId','attemptCounts','warnings','error','startedAt','updatedAt','completedAt']) &&
-              d.keys().hasOnly(['userId','projectId','idempotencyKey','originalPrompt','status','currentStage','revisionId','attemptCounts','warnings','error','startedAt','updatedAt','completedAt']) &&
+              d.keys().hasOnly(['userId','projectId','idempotencyKey','originalPrompt','status','currentStage','revisionId','attemptCounts','warnings','error','startedAt','updatedAt','completedAt','cost']) &&
+              (!('cost' in d) || (d.cost is map && d.cost.requests is list && d.cost.requests.size() <= 40)) &&
               d.userId == uid && d.projectId == projectId && d.idempotencyKey == runId &&
               d.originalPrompt is string && d.originalPrompt.size() <= 20000 &&
               d.status in ['generating','complete','partial','failed'] &&

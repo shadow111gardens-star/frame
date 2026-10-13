@@ -30,8 +30,8 @@ export interface ProjectRepository {
   save(write: ProjectWrite): Promise<ProjectSummary>;
   remove(id: string, revision: number): Promise<void>;
   startGeneration?(run:import('./artifacts').GenerationRunStart):Promise<void>;
-  updateGeneration?(run:import('./artifacts').GenerationRunStart,stage:import('../../shared/generationProgress').GenerationStage):Promise<void>;
-  failGeneration?(run:import('./artifacts').GenerationRunStart,error:{code:string;message:string}):Promise<void>;
+  updateGeneration?(run:import('./artifacts').GenerationRunStart,stage:import('../../shared/generationProgress').GenerationStage,cost?:import('../../shared/generationCost').GenerationCost):Promise<void>;
+  failGeneration?(run:import('./artifacts').GenerationRunStart,error:{code:string;message:string;cost?:import('../../shared/generationCost').GenerationCost}):Promise<void>;
 }
 export function projectError(error: unknown): string {
   switch ((error as { code?: string })?.code) {

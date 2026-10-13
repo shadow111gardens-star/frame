@@ -6,6 +6,8 @@ if(!process.argv.includes('--live'))throw new Error('Pass --live to exercise the
 try{process.loadEnvFile('.env');}catch{}
 const kind=process.argv.find(v=>v.startsWith('--kind='))?.split('=')[1]??'fitness';
 const prompts:Record<string,{prompt:string;productType:'website'|'mobile_app'}>={
+  ecommerce:{productType:'website',prompt:'Create exactly one screen named Shop for a refined outdoor equipment e-commerce website named Ridgeline. Include editable catalog rows or grid with six realistic sample products labeled sample catalog, prices, search and category filters, meaningful product actions, and a clear navigation header. Use forest green, warm neutrals and practical readable typography. Do not invent checkout functionality or a completed purchase; avoid decorative filler.'},
+  analytics:{productType:'website',prompt:'Create exactly one screen named Analytics for a data-heavy subscription analytics web application named Signal. Include clearly labeled demo data, key revenue and retention metrics, a readable editable cohort table, a supported bar chart with labeled periods, date filters, and sidebar navigation. Use compact purposeful density, restrained ink and blue colors and strong numeric hierarchy. Do not claim live data or unsupported chart types.'},
   saas:{productType:'website',prompt:'Build a premium SaaS project management dashboard named Flowspace. Create exactly one screen named Dashboard, with project overview, recent activity, useful sample projects clearly labeled as sample data, and a polished sidebar. Use restrained neutral colors, a violet accent and editable meaningful components.'},
   landing:{productType:'website',prompt:'Create an editorial landing page for a sustainable architecture studio named Fieldwork. Create exactly one page named Studio. Include a striking typographic hero, projects section, approach, and contact call to action with working same-page anchors. Use warm off-white, dark ink, and purposeful spacious composition; keep all text editable.'},
   fitness:{productType:'mobile_app',prompt:'Create a polished fitness app named Form. Create exactly two screens: Dashboard and Workout Details, with calories on the Dashboard and a Start Workout button on Workout Details. Include working navigation from Dashboard to Workout Details. No personal exercise records are supplied: use useful empty states, editable workout templates and an unrecorded calorie summary. Use restrained sage colors, strong typography and clear safe spacing.'},
@@ -13,15 +15,20 @@ const prompts:Record<string,{prompt:string;productType:'website'|'mobile_app'}>=
 if(!prompts[kind])throw new Error('Unknown fixture');
 // Local CLI harness only: Firebase authentication is separately tested with signed tokens.
 // This bypass is never enabled by environment variables or production route configuration.
+const label=process.argv.find(arg=>arg.startsWith('--label='))?.slice(8)??'optimized';
+const usage:unknown[]=[];
 const nativeFetch=globalThis.fetch,mdResponses:unknown[]=[];
-globalThis.fetch=(async(url,init)=>{const response=await nativeFetch(url,init);if(String(url).startsWith('https://generativelanguage.googleapis.com')&&JSON.parse(String(init?.body)).generationConfig?.responseJsonSchema?.properties?.designMd&&response.ok){mdResponses.push(parseGeminiJson(extractGeminiText(await response.clone().json()),'design-md'));}return response;}) as typeof fetch;
-const route=designRoute(process.env,async()=> 'local-verification-owner');
+globalThis.fetch=(async(url,init)=>{const start=Date.now();const response=await nativeFetch(url,init);if(String(url).startsWith('https://generativelanguage.googleapis.com')){const body=JSON.parse(String(init?.body));const data=await response.clone().json();usage.push({latencyMs:Date.now()-start,status:response.status,requestChars:JSON.stringify(body).length,schemaProperties:Object.keys(body.generationConfig.responseJsonSchema.properties),usageMetadata:data.usageMetadata??null,finishReason:data.candidates?.[0]?.finishReason});}if(String(url).startsWith('https://generativelanguage.googleapis.com')&&JSON.parse(String(init?.body)).generationConfig?.responseJsonSchema?.properties?.designMd&&response.ok){mdResponses.push(parseGeminiJson(extractGeminiText(await response.clone().json()),'design-md'));}return response;}) as typeof fetch;
+const baselineSource='../artifacts/cost-benchmark/baselineRoute.ts';
+const factory=label==='baseline'?(await import(baselineSource)).designRoute:designRoute;
+const route=factory(process.env,async()=> 'local-verification-owner');
 const server=createServer((req,res)=>void route(req,res,()=>res.end()));
 try{
   await new Promise<void>(resolve=>server.listen(0,'127.0.0.1',resolve));
   const response=await fetch(`http://127.0.0.1:${(server.address() as any).port}/api/design`,{method:'POST',body:JSON.stringify({mode:'generate',...prompts[kind]}),signal:AbortSignal.timeout(geminiConfig(process.env).timeoutMs+30000)});
   const result=await response.json();await mkdir('artifacts/fixed-flow',{recursive:true});await writeFile(`artifacts/fixed-flow/${kind}.json`,JSON.stringify(result,null,2));
   await writeFile(`artifacts/fixed-flow/${kind}-md-responses.json`,JSON.stringify(mdResponses,null,2));
+  await mkdir('artifacts/cost-benchmark',{recursive:true});await writeFile(`artifacts/cost-benchmark/${label}-${kind}.json`,JSON.stringify({model:response.headers.get('X-FRAME-Model'),result,usage},null,2));
   if(result.designMd)await writeFile(`artifacts/fixed-flow/${kind}-DESIGN.md`,result.designMd);
   console.info(JSON.stringify({fixture:kind,status:response.status,resultStatus:result.status,code:result.code,stage:result.stage,screens:result.app?.screens?.map((s:any)=>({id:s.id,name:s.name})),warnings:result.warnings,mdHash:result.generationArtifact?.designMdHash,authentication:'Local harness injected identity; live Firebase sign-in not tested'}));
   if(!response.ok)process.exitCode=1;

@@ -2,6 +2,14 @@ import {createHash} from 'node:crypto';
 export interface ScreenRequirement {id:string;key:string;expectedName:string;requiredContent:string}
 export const screenNameKey=(name:string)=>name.trim().replace(/\s+/gu,' ').toLowerCase();
 const displayName=(name:string)=>name.trim().replace(/\s+/gu,' ');
+function titleClause(value:string):string {
+  let quote='';
+  for(let i=0;i<value.length;i++){
+    if(value[i]==='"'||value[i]==="'"){if(!quote)quote=value[i];else if(quote===value[i])quote='';}
+    if(!quote&&/^\s+(?:with|for a|for an|for the)\s+/i.test(value.slice(i)))return value.slice(0,i);
+  }
+  return value;
+}
 function splitTitles(list:string):string[]{
   const result:string[]=[];let part='',quote='';
   for(let i=0;i<list.length;i++){
@@ -23,7 +31,7 @@ export function requestedScreenDetails(prompt:string,analyzedNames:string[]):Scr
   const positive=(offset:number)=>! /\b(?:do not|don't|never|without|exclude|avoid|omit|for example|such as|optional|perhaps|maybe)\b/i.test(prompt.slice(0,offset).split(/[.!?;\n]/).pop()??'');
   const lists=/\b(?:screens?|pages?)\s*(?:named|called|titled|:)\s*([^.!?;\n]+)/gi;
   for(const match of prompt.matchAll(lists))if(positive(match.index!)){
-    for(const title of splitTitles(match[1].split(/\s+with\s+/i)[0])){
+    for(const title of splitTitles(titleClause(match[1]))){
       const name=title.trim().replace(/^["'“”]+|["'“”]+$/g,'');
       if(name&&name.length<=150&&!/\b(?:with|include|excluding|without)\b/i.test(name))explicit.push({name,content:`The original request explicitly names ${name}.`,literal:true,offset:match.index!});
     }
@@ -31,7 +39,7 @@ export function requestedScreenDetails(prompt:string,analyzedNames:string[]):Scr
   const phrases=/\b(?:include|create|design|build|provide|with|and)\s+(?:a\s+|an\s+|the\s+)?([\p{L}\p{N}][\p{L}\p{N} _-]{0,100}?)\s+(page|screen)\b|,\s+(?:a\s+|an\s+|the\s+)([\p{L}\p{N}][\p{L}\p{N} _-]{0,100}?)\s+(page|screen)\b/giu;
   for(const match of prompt.matchAll(phrases))if(positive(match.index!)){
     const name=displayName(match[1]??match[3]);
-    if(/^(?:(?:exactly|only|at least|at most)\s+)?(?:one|two|three|four|five|six|seven|eight|nine|ten|\d+)$/i.test(name))continue;
+    if(/^(?:(?:exactly|only|at least|at most)\s+)?(?:a|an|the|one|two|three|four|five|six|seven|eight|nine|ten|\d+)$/i.test(name))continue;
     if(/\b(?:single|multi|responsive|landing|web|website|mobile|app|application|separate|additional|new|every|each|modern|premium|beautiful|complete|professional|polished|simple|dedicated|public|private|marketing|informational)\b/i.test(name)||/^\d+$/.test(name))continue;
     const tail=prompt.slice(match.index!+match[0].length).split(/[.!?;,]/)[0];
     explicit.push({name,content:displayName((name+' '+(match[2]??match[4])+tail).slice(0,1000)),offset:match.index!,role:match[2]??match[4]});

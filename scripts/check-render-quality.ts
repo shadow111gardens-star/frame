@@ -4,11 +4,12 @@ import {mkdtemp,readFile,mkdir,writeFile} from 'node:fs/promises';
 import {tmpdir} from 'node:os';
 import path from 'node:path';
 import {createServer} from 'vite';
-const artifactFile=process.argv.find(arg=>arg.startsWith('--artifact='))?.slice('--artifact='.length),repairArtifact=process.argv.includes('--repair-artifact');let artifactResult:any=artifactFile?JSON.parse(await readFile(artifactFile,'utf8')):undefined;
+const correctionFile=process.argv.find(arg=>arg.startsWith('--correction-file='))?.slice('--correction-file='.length);const correctionReplay=correctionFile?JSON.parse(await readFile(correctionFile,'utf8')):undefined;
+const artifactFile=process.argv.find(arg=>arg.startsWith('--artifact='))?.slice('--artifact='.length),repairArtifact=process.argv.includes('--repair-artifact');let artifactResult:any=artifactFile?JSON.parse(await readFile(artifactFile,'utf8')):undefined;artifactResult=artifactResult?.result??artifactResult;
 let candidate:any=artifactResult?.app;const requests:any[]=[];const savedMode=process.argv.includes('--live-saved');if(savedMode){const saved=JSON.parse(await readFile('artifacts/render-quality/live-gemini.json','utf8'));candidate={productType:'mobile_app',name:'Saved live Gemini generation',designSystem:saved.designSystem,screens:saved.screens.map((s:any)=>({...s,components:s.components.map((id:string)=>saved.components[id])}))};}
 const server=await createServer({server:{host:'127.0.0.1',port:0},plugins:[{name:'quality-acceptance',enforce:'pre',configureServer(vite){
   vite.middlewares.use('/__quality-test',async(_req,res)=>{res.setHeader('Content-Type','text/html');res.end(await vite.transformIndexHtml('/__quality-test','<!doctype html><html><head>'+((await readFile('index.html','utf8')).match(/<link[^>]*fonts.googleapis.com\/css[^>]*>/)?.[0]??'')+'</head><body><div id="root"></div><script type="module" src="/tests/qualityHarness.tsx"></script></body></html>'));});
-  if(!process.argv.includes('--live'))vite.middlewares.use('/api/design',async(req,res,next)=>{let body='';for await(const chunk of req)body+=chunk;const input=JSON.parse(body);if((savedMode||repairArtifact)&&input.mode!=='generate'){req.url='/api/design';const end=res.end.bind(res);res.end=((chunk:any,...args:any[])=>{try{const parsed=JSON.parse(String(chunk));const data=parsed.event==='result'?parsed.data:parsed;if(artifactFile)void writeFile('artifacts/fixed-flow/'+path.basename(artifactFile,'.json')+'-correction.json',JSON.stringify(data,null,2));}catch{}return (end as any)(chunk,...args);}) as typeof res.end;const result=await import('../server/gemini');const {loadEnv}=await import('vite');await result.designRoute({...loadEnv(vite.config.mode,process.cwd(),''),...process.env},async()=> 'local-verification-owner')(Object.assign(req,{[Symbol.asyncIterator]:async function*(){yield body;}}),res,next);return;}requests.push(input);res.setHeader('Content-Type','application/json');if(input.mode==='generate'){res.end(JSON.stringify({message:'Generated candidate',app:candidate,generationArtifact:artifactResult?.generationArtifact}));return;}
+  if(!process.argv.includes('--live'))vite.middlewares.use('/api/design',async(req,res,next)=>{let body='';for await(const chunk of req)body+=chunk;const input=JSON.parse(body);if((savedMode||repairArtifact)&&input.mode!=='generate'){if(correctionReplay){requests.push(input);res.setHeader('Content-Type','application/json');res.end(JSON.stringify(correctionReplay));return;}req.url='/api/design';const end=res.end.bind(res);res.end=((chunk:any,...args:any[])=>{try{const parsed=JSON.parse(String(chunk));const data=parsed.event==='result'?parsed.data:parsed;if(artifactFile)void writeFile('artifacts/fixed-flow/'+path.basename(artifactFile,'.json')+'-correction.json',JSON.stringify(data,null,2));}catch{}return (end as any)(chunk,...args);}) as typeof res.end;const result=await import('../server/gemini');const {loadEnv}=await import('vite');await result.designRoute({...loadEnv(vite.config.mode,process.cwd(),''),...process.env},async()=> 'local-verification-owner')(Object.assign(req,{[Symbol.asyncIterator]:async function*(){yield body;}}),res,next);return;}requests.push(input);res.setHeader('Content-Type','application/json');if(input.mode==='generate'){res.end(JSON.stringify({message:'Generated candidate',app:candidate,generationArtifact:artifactResult?.generationArtifact}));return;}
     const corrected=structuredClone(input.app);const c=corrected.screens[0].components.find((n:any)=>n.id==='copy');c.position.height=80;c.styles.color='#27352f';res.end(JSON.stringify({message:'Corrected measured copy',app:corrected}));
   });
 }}]});await server.listen();
@@ -16,7 +17,7 @@ if((process.argv.includes('--live')||savedMode)){try{await mkdir('artifacts/rend
 const profile=await mkdtemp(path.join(tmpdir(),'frame-export-'));
 const chrome=spawn(process.env.CHROME_PATH??'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',['--headless=new','--disable-gpu','--no-first-run','--remote-debugging-port=0',`--user-data-dir=${profile}`,'about:blank'],{windowsHide:true,stdio:'ignore'});
 const pause=(ms:number)=>new Promise(r=>setTimeout(r,ms));
-let socket:WebSocket|undefined;
+let socket:WebSocket|undefined;const browserErrors:string[]=[];
 try {
   let port='';
   for(let i=0;i<100&&!port;i++){try{port=(await readFile(path.join(profile,'DevToolsActivePort'),'utf8')).split('\n')[0];}catch{await pause(100);}}
@@ -25,9 +26,10 @@ try {
   socket=new WebSocket(targets.find((t:any)=>t.type==='page').webSocketDebuggerUrl);
   await new Promise<void>((resolve,reject)=>{socket!.onopen=()=>resolve();socket!.onerror=reject;});
   let next=0;const pending=new Map<number,{resolve:(x:any)=>void,reject:(e:any)=>void}>();
-  socket.onmessage=e=>{const msg=JSON.parse(String(e.data));const p=pending.get(msg.id);if(p){pending.delete(msg.id);msg.error?p.reject(msg.error):p.resolve(msg.result);}};
+  socket.onmessage=e=>{const msg=JSON.parse(String(e.data));if(msg.method==='Runtime.exceptionThrown')browserErrors.push(String(msg.params.exceptionDetails.exception?.description??msg.params.exceptionDetails.text).slice(0,1500));if(msg.method==='Runtime.consoleAPICalled'&&msg.params.type==='error')browserErrors.push(msg.params.args.map((arg:any)=>arg.description??arg.value??arg.type).join(' ').slice(0,1500));const p=pending.get(msg.id);if(p){pending.delete(msg.id);msg.error?p.reject(msg.error):p.resolve(msg.result);}};
   const send=(method:string,params:any={})=>new Promise<any>((resolve,reject)=>{const id=++next;pending.set(id,{resolve,reject});socket!.send(JSON.stringify({id,method,params}));});
   const evaluate=async(expression:string)=>{const result=await send('Runtime.evaluate',{expression,returnByValue:true,awaitPromise:true});if(result.exceptionDetails)throw new Error(JSON.stringify(result.exceptionDetails));return result.result.value;};
+  await send('Runtime.enable');
   await send('Emulation.setDeviceMetricsOverride',{width:1600,height:900,deviceScaleFactor:1,mobile:false});
   await mkdir('artifacts/render-quality',{recursive:true});
   await send('Page.navigate',{url:`${server.resolvedUrls!.local[0]}__quality-test`});
@@ -36,17 +38,21 @@ try {
   assert.ok(ready,'Actual fixture components mounted before browser measurements');await pause(500);
   const artifactArg=process.argv.find(arg=>arg.startsWith('--artifact='));
   if(artifactArg){
-    const file=artifactArg.slice('--artifact='.length),result=JSON.parse(await readFile(file,'utf8'));
+    const file=artifactArg.slice('--artifact='.length),envelope=JSON.parse(await readFile(file,'utf8')),result=envelope.result??envelope;
     assert.ok(result.app,'Saved API response contains a valid candidate');
     await send('Emulation.setDeviceMetricsOverride',{width:1800,height:1000,deviceScaleFactor:1,mobile:false});
-    if(repairArtifact){await evaluate('window.qualityTest.generateDesign('+JSON.stringify(result.generationArtifact.originalPrompt)+',false,'+JSON.stringify(result.app.productType)+')');}
+    if(repairArtifact){await evaluate('window.qualityTest.generateDesign('+JSON.stringify(result.generationArtifact.originalPrompt)+',false,'+JSON.stringify(result.app.productType)+')');
+      let finished=false;for(let i=0;i<450;i++){if(await evaluate('!window.qualityTest.state.generating')){finished=true;break;}await pause(1000);}assert.ok(finished,'Browser generation and bounded correction finished before inspecting the result');}
     else await evaluate('window.qualityTest.dispatch('+JSON.stringify({type:'APPLY_DESIGN',app:result.app,generationArtifact:result.generationArtifact})+')');await pause(600);
     await evaluate(`Promise.race([Promise.all([...document.querySelectorAll('img')].map(img=>img.decode().catch(()=>{}))),new Promise(resolve=>setTimeout(resolve,10000))])`);
     const issues=await evaluate('window.qualityTest.inspect()');
-    const layoutEvidence=await evaluate(`Array.from(document.querySelectorAll('[data-component-id]')).filter(element=>element.querySelector('[data-text-content]')).map(element=>{const text=element.querySelector('[data-text-content]'),range=document.createRange();range.selectNodeContents(text);const style=getComputedStyle(element);return {id:element.dataset.componentId,box:element.getBoundingClientRect().toJSON(),textBox:text.getBoundingClientRect().toJSON(),glyphBox:range.getBoundingClientRect().toJSON(),scrollHeight:text.scrollHeight,clientHeight:text.clientHeight,fontSize:style.fontSize,lineHeight:style.lineHeight,padding:style.padding,margin:style.margin};})`);
-    await writeFile('artifacts/fixed-flow/'+path.basename(file,'.json')+'-layout-evidence.json',JSON.stringify(layoutEvidence,null,2));
     const state=await evaluate('({generationArtifact:window.qualityTest.state.generationArtifact,messages:window.qualityTest.state.messages,screens:window.qualityTest.state.screens,components:window.qualityTest.state.components})');
     if(repairArtifact)await writeFile('artifacts/fixed-flow/'+path.basename(file,'.json')+'-browser-result.json',JSON.stringify(state,null,2));
+    if(repairArtifact&&state.messages.at(-1)?.retryPrompt)throw new Error('Browser rejected candidate and preserved existing design: '+state.messages.at(-1).content);
+    assert.equal(await evaluate(`document.querySelectorAll('[data-generated-screen]').length`),result.app.screens.length,'Every candidate screen is actually mounted');
+    assert.deepEqual(browserErrors,[],'Candidate renders without React/runtime exceptions');
+    const layoutEvidence=await evaluate(`Array.from(document.querySelectorAll('[data-component-id]')).filter(element=>element.querySelector('[data-text-content]')).map(element=>{const text=element.querySelector('[data-text-content]'),range=document.createRange();range.selectNodeContents(text);const style=getComputedStyle(element);return {id:element.dataset.componentId,box:element.getBoundingClientRect().toJSON(),textBox:text.getBoundingClientRect().toJSON(),glyphBox:range.getBoundingClientRect().toJSON(),scrollHeight:text.scrollHeight,clientHeight:text.clientHeight,fontSize:style.fontSize,lineHeight:style.lineHeight,padding:style.padding,margin:style.margin};})`);
+    await writeFile('artifacts/fixed-flow/'+path.basename(file,'.json')+'-layout-evidence.json',JSON.stringify(layoutEvidence,null,2));
     const stem=path.basename(file,'.json');await mkdir('artifacts/fixed-flow',{recursive:true});
     const metrics=await send('Page.getLayoutMetrics');
     await writeFile('artifacts/fixed-flow/'+stem+'-render.png',Buffer.from((await send('Page.captureScreenshot',{format:'png',captureBeyondViewport:true,clip:{x:0,y:0,width:Math.min(3200,metrics.cssContentSize.width),height:Math.min(4000,metrics.cssContentSize.height),scale:1}})).data,'base64'));
@@ -99,6 +105,11 @@ try {
   await evaluate(`(()=>{const app=window.qualityTest.fixture();app.productType='website';app.screens.forEach(s=>{s.width=1200;s.height=1200});window.qualityTest.dispatch({type:'APPLY_DESIGN',app})})()`);await pause(300);
   assert.equal(await evaluate(`document.querySelector('[data-generated-screen]').offsetWidth`),1200);assert.equal(await evaluate(`document.querySelector('[data-component-id="right"]').offsetWidth`),165);
   report.push({websiteFlow:true,navigation:true});
+  await evaluate(`(()=>{const app=window.qualityTest.fixture();app.screens[0].components.push({id:'opaque-cover',type:'Card',name:'Accidental root surface',position:{x:24,y:382,width:342,height:80},styles:{background:'#ffffff'}});app.screens[0].components.push({id:'empty-list',type:'List',name:'Requested activity',position:{x:24,y:500,width:342,height:100},styles:{}});window.qualityTest.dispatch({type:'APPLY_DESIGN',app});})()`);await pause(300);
+  const compositionIssues=await evaluate('window.qualityTest.inspect()');
+  assert.ok(compositionIssues.some((i:any)=>i.code==='overlap'&&i.severity==='error'&&i.componentIds.includes('opaque-cover')),'Opaque root surface must not silently cover text');
+  assert.ok(compositionIssues.some((i:any)=>i.code==='empty-area'&&i.severity==='warning'&&i.componentIds.includes('empty-list')),'Unpopulated content surface receives a safe incomplete-content warning');
+  report.push({opaqueOcclusionDetected:true,emptyContentWarned:true});
   candidate=await evaluate('window.qualityTest.fixture()');candidate.screens[0].components.find((c:any)=>c.id==='copy').position.height=10;candidate.screens[0].components.find((c:any)=>c.id==='copy').styles.color='#eeeeee';
   await evaluate(`window.qualityTest.dispatch({type:'APPLY_DESIGN',app:window.qualityTest.fixture()});window.qualityTest.dispatch({type:'SET_CENTER_TAB',tab:'home'})`);await pause(300);
   const other=JSON.stringify(candidate.screens[1]);
@@ -121,18 +132,15 @@ try {
   const previous=await evaluate(`JSON.stringify({screen:window.qualityTest.state.screens[1],component:window.qualityTest.state.components.empty,system:window.qualityTest.state.designSystem})`);
   const priorRequests=requests.length;
   await evaluate(`window.qualityTest.generateDesign('Improve the selected screen composition',true,'mobile_app','screen')`);
-  assert.equal(requests.length-priorRequests,2,'Modification receives one bounded actual-render correction');
-  assert.deepEqual(requests[priorRequests+1].qualityReview.screenIds,['flow']);
-  assert.equal(requests[priorRequests+1].qualityReview.visualReview,true);assert.ok(requests[priorRequests+1].qualityReview.screenshots.length>0);
+  assert.equal(requests.length-priorRequests,1,'Advisory captures never trigger an unconditional Gemini correction');
   assert.deepEqual(JSON.parse(await evaluate(`JSON.stringify({screen:window.qualityTest.state.screens[1],component:window.qualityTest.state.components.empty,system:window.qualityTest.state.designSystem})`)),JSON.parse(previous));
-  await writeFile('artifacts/render-quality/render-review.jpg',Buffer.from(requests[priorRequests+1].qualityReview.screenshots[0].data,'base64'));
   await evaluate(`(()=>{const ws=window.qualityTest;ws.dispatch({type:'UPDATE_COMPONENT_STYLES',id:'row',styles:{responsive:{maxWidth:400,direction:'column',gap:8},height:'hug'}});})()`);await pause(150);
   assert.equal(await evaluate(`getComputedStyle(document.querySelector('[data-component-id="row"]')).flexDirection`),'column');
   assert.equal(await evaluate(`getComputedStyle(document.querySelector('[data-component-id="row"]')).gap`),'8px');
   assert.ok(await evaluate(`(()=>{const v=document.querySelector('[data-component-id="copy"]').getBoundingClientRect(),n=document.querySelector('[data-component-id="nav"]').getBoundingClientRect();return v.bottom<=n.top;})()`),'Docked navigation stays below reflowed content');
   const fullPage=await send('Page.getLayoutMetrics');
   await writeFile('artifacts/render-quality/responsive-layout.png',Buffer.from((await send('Page.captureScreenshot',{format:'png',captureBeyondViewport:true,clip:{x:0,y:0,width:fullPage.cssContentSize.width,height:fullPage.cssContentSize.height,scale:1}})).data,'base64'));
-  report.push({redesign:{boundedRequests:2,scope:['flow'],unrelatedStatePreserved:true},responsive:{direction:'column',gap:8},verification:'Actual browser renders of controlled structured fixtures; Gemini inference mocked.'});
+  report.push({redesign:{boundedRequests:1,scope:['flow'],unrelatedStatePreserved:true},responsive:{direction:'column',gap:8},verification:'Actual browser renders of controlled structured fixtures; Gemini inference mocked.'});
   await writeFile('artifacts/render-quality/results.json',JSON.stringify(report,null,2));console.log(JSON.stringify(report,null,2));
   }
-} finally {socket?.close();chrome.kill();await server.close();}
+} finally {if(artifactFile)await writeFile('artifacts/fixed-flow/'+path.basename(artifactFile,'.json')+'-browser-errors.json',JSON.stringify(browserErrors,null,2));socket?.close();chrome.kill();await server.close();}

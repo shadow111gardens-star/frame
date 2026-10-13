@@ -133,7 +133,7 @@ function canonicalPlanNames(plan:DesignPlan,requiredNames:string[]):DesignPlan {
   if(result.journey){result.journey.entryScreens=result.journey.entryScreens.map(canonical);result.journey.edges=result.journey.edges.map(edge=>({...edge,from:canonical(edge.from),to:canonical(edge.to)}));}
   return result;
 }
-function restoreMissingPlanScreens(original:DesignPlan,corrected:DesignPlan,missing:ScreenRequirement[]):DesignPlan {
+export function restoreMissingPlanScreens(original:DesignPlan,corrected:DesignPlan,missing:ScreenRequirement[]):DesignPlan {
   const result=structuredClone(original),keys=new Set(missing.map(s=>s.key));
   result.screens.push(...corrected.screens.filter(s=>keys.has(screenNameKey(s.name))&&!original.screens.some(o=>screenNameKey(o.name)===screenNameKey(s.name))).map(s=>({...s,id:missing.find(m=>m.key===screenNameKey(s.name))!.id})));
   if(result.journey&&corrected.journey){

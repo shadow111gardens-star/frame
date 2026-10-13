@@ -1,5 +1,7 @@
 # FRAME fixed generation workflow
 
+Cost optimization now combines requirement analysis, planning and DESIGN.md into one provider request, followed by one editable JSON request. Logical validation order and the attached contract format remain unchanged. The five-call description and verification samples below describe the earlier baseline; see [the current cost report](gemini-cost-optimization.md) for current request budgets and verification.
+
 The supplied `FRAME-fixed-generation-flow.json` is unchanged. The editable app JSON schema in `shared/design.ts` is unchanged. This implementation extends the existing React/Node/Gemini/Firebase client architecture; no admin SDK, worker, generation queue, rate-limit service, new model or paid service was added.
 
 New design generation follows: authenticate → reserve generation run under the existing project → analyze original prompt → approve screen IDs, requirements, tokens and navigation → generate/validate project-specific DESIGN.md → generate editable JSON → structural review and bounded targeted repair → actual browser measurement/capture and one correction → revalidate → apply safe result → existing authenticated Firestore autosave. The original prompt is preserved. Unsafe JSON, broken required screens/navigation/tokens, or remaining fatal browser clipping preserves the last valid design.

@@ -4,7 +4,7 @@ import { useWorkspace,getDevice } from '../store';
 import type { DesignComponent, ScreenFile } from '../types';
 import {screenDimensions} from '../../../shared/product';
 import {flowSizing} from '../../design/layoutStyle';
-import {reflowText,dockedSpace} from '../../design/textLayout';
+import {reflowText,dockedSpace,flowOuterHeight,flowTextGrowth} from '../../design/textLayout';
 import {resolveStyles,SHADOWS,fontMetadata,SYSTEM_FONTS} from '../../design/designProperties';
 
 export function GeneratedSurface({screen,interactive=false,exporting=false,snapshot}:{screen:ScreenFile;interactive?:boolean;exporting?:boolean;snapshot?:ReturnType<typeof useWorkspace>['state']}) {
@@ -28,9 +28,10 @@ export function GeneratedSurface({screen,interactive=false,exporting=false,snaps
         const id=el.dataset.textContent!,c=state.components[id];
         if(c&&system&&!(interactive&&c.styles.responsive&&viewportWidth<=c.styles.responsive.maxWidth)){const s=resolveStyles(c.styles,system,viewportWidth);measured[id]=Math.ceil(el.getBoundingClientRect().height/scale+2*(s.paddingY??0)+(s.border?2:0)+2*(s.margin??0));}
       });
-      root.querySelectorAll<HTMLElement>('[data-component-id]').forEach(el=>{const c=state.components[el.dataset.componentId!];if(c&&(c.styles.layout==='flex'||c.styles.layout==='grid')){const s=system?resolveStyles(c.styles,system,viewportWidth):c.styles;measured[c.id]=Math.ceil(Math.max(el.scrollHeight,el.getBoundingClientRect().height/scale)+(s.border?2:0)+2*(s.margin??0));}});
+      root.querySelectorAll<HTMLElement>('[data-component-id]').forEach(el=>{const c=state.components[el.dataset.componentId!];if(c&&(c.styles.layout==='flex'||c.styles.layout==='grid')){const s=system?resolveStyles(c.styles,system,viewportWidth):c.styles;measured[c.id]=flowOuterHeight(el.scrollHeight,el.getBoundingClientRect().height/scale,s.border?2:0,s.margin??0);}});
       const flowChildren=new Set<string>();const exclude=(id:string)=>{if(flowChildren.has(id))return;flowChildren.add(id);state.components[id]?.children?.forEach(exclude);};nodes.filter(c=>c.styles.dock||c.styles.layout==='flex'||c.styles.layout==='grid').forEach(c=>c.children?.forEach(exclude));
       const layout=reflowText(nodes.filter(c=>!flowChildren.has(c.id)&&!c.styles.dock),measured,screenDimensions(screen,state.productType).height,dockedSpace(nodes,measured));
+      Object.assign(layout.positions,flowTextGrowth(nodes,measured));
       if(Object.keys(layout.positions).length||layout.height!==screen.height)dispatch({type:'REFLOW_TEXT',screenId:screen.id,expectedComponents:state.components,positions:layout.positions,height:layout.height});
     };
     measure();void document.fonts?.ready.then(measure);document.fonts?.addEventListener('loadingdone',measure);

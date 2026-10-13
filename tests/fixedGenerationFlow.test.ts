@@ -9,7 +9,7 @@ import {requestedScreenDetails} from '../server/screenRequirements';
 import {contentRequirements,missingContent,restoreContentRepair} from '../server/contentRequirements';
 import {fixture} from './fixture';
 import {planFixture} from './planFixture';
-import {designMdFixture} from './designMdFixture';
+import {designMdFixture,specificationFixture} from './designMdFixture';
 import {verifyArtifact} from '../src/projects/artifacts';
 import type {GenerationArtifact} from '../shared/generationArtifact';
 
@@ -47,7 +47,7 @@ test('authenticated fixed flow validates Markdown before JSON and reuses it in b
   globalThis.fetch=(async(url,init)=>{
     if(!String(url).startsWith('https://generativelanguage.googleapis.com'))return native(url,init);
     const body=JSON.parse(String(init?.body)),payload=JSON.parse(body.contents[0].parts[0].text),props=body.generationConfig.responseJsonSchema.properties;seen.push({props,payload});
-    const output=invalidContentRepair&&payload.missingRequirements?{}:props.visualTokens?planFixture(app):props.designMd?invalidMd?{designMd:'invalid'}:designMdFixture(payload.designPlan,payload.originalPrompt):props.app?{message:'Editable design',app}:{productType:'mobile_app',screens:[]};
+    const output=invalidContentRepair&&payload.missingRequirements?{}:props.plan?invalidMd?{analysis:{productType:'mobile_app',screens:[]},plan:planFixture(app),designMd:'invalid'}:specificationFixture(planFixture(app),payload.originalPrompt,{productType:'mobile_app',screens:[]}):props.visualTokens?planFixture(app):props.designMd?invalidMd?{designMd:'invalid'}:designMdFixture(payload.designPlan,payload.originalPrompt):props.app?{message:'Editable design',app}:{productType:'mobile_app',screens:[]};
     return Response.json({candidates:[{finishReason:'STOP',content:{parts:[{text:JSON.stringify(output)}]}}]});
   }) as typeof fetch;
   const server=createServer((req,res)=>void designRoute({GEMINI_API_KEY:'test-key'},async()=> 'owner')(req,res,()=>res.end()));
@@ -57,8 +57,8 @@ test('authenticated fixed flow validates Markdown before JSON and reuses it in b
   try{
     const response=await post({mode:'generate',prompt:'Create exactly two mobile screens.',generationRunId:'run-1',idempotencyKey:'run-1',projectId:'project-1'}),data=await response.json();
     assert.equal(response.status,200);assert.equal(data.revisionId,null);assert.equal(data.generationRunId,'run-1');
-    assert.deepEqual(seen.map(s=>s.props.visualTokens?'planning':s.props.designMd?'design-md':s.props.app?s.payload.mode:'analysis'),['analysis','planning','design-md','generate','review']);
-    assert.equal(seen[3].payload.designMd,data.designMd);assert.equal(seen[4].payload.designMd,data.designMd);
+    assert.deepEqual(seen.map(s=>s.props.plan?'specification':s.props.visualTokens?'planning':s.props.designMd?'design-md':s.props.app?s.payload.mode:'analysis'),['specification','generate']);
+    assert.equal(seen[1].payload.designMd,data.designMd);assert.equal(seen[1].payload.designMd,data.designMd);
     await verifyArtifact(data.generationArtifact);
     const correction=await post({mode:'modify',prompt:'Original intent',app:data.app,generationArtifact:data.generationArtifact,qualityReview:{issues:[],screenshots:[],screenIds:['home']}});
     assert.equal(correction.status,200);assert.equal(seen.at(-1).payload.designMd,data.designMd);

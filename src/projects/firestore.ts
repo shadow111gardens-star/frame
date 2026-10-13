@@ -174,7 +174,7 @@ export class FirestoreProjects implements ProjectRepository {
           );
         }
         if(artifact){md.forEach((data,index)=>transaction.set(doc(revision,"chunks",`design-md-${index}`),{kind:"design-md",index,data,userId:uid,artifactType:"design-md",byteLength:new TextEncoder().encode(data).length,checksum:null,createdAt:serverTimestamp()}));
-          if(runRef&&run?.exists()&&run.data().status==="generating"){transaction.update(runRef,{status:artifact.status,currentStage:"complete",revisionId:write.writeId,attemptCounts:artifact.attemptCounts,warnings:artifact.warnings,error:null,updatedAt:serverTimestamp(),completedAt:serverTimestamp()});}
+          if(runRef&&run?.exists()&&run.data().status==="generating"){transaction.update(runRef,{status:artifact.status,currentStage:"complete",revisionId:write.writeId,attemptCounts:artifact.attemptCounts,...(artifact.cost?{cost:artifact.cost}:{}),warnings:artifact.warnings,error:null,updatedAt:serverTimestamp(),completedAt:serverTimestamp()});}
         }
         transaction.set(ref!, {
           ...(old?.generationStatus==="generating"?{userId:uid,generationStatus:"generating",currentGenerationRunId:old.currentGenerationRunId}:{}),
@@ -224,15 +224,15 @@ export class FirestoreProjects implements ProjectRepository {
       tx.update(ref!,{userId:uid,generationStatus:"generating",currentGenerationRunId:input.generationRunId,updatedAt:serverTimestamp()});
     }));
   }
-  async updateGeneration(input:GenerationRunStart,stage:import('../../shared/generationProgress').GenerationStage){
-    const {uid,ref}=this.scope(input.projectId);await this.perform("generation-progress",uid,()=>runTransaction(this.db,async tx=>{const runRef=doc(ref!,"generationRuns",input.generationRunId),run=await tx.get(runRef);this.assertOwner(uid);if(run.exists()&&run.data().status==="generating")tx.update(runRef,{currentStage:stage,updatedAt:serverTimestamp()});}));
+  async updateGeneration(input:GenerationRunStart,stage:import('../../shared/generationProgress').GenerationStage,cost?:import('../../shared/generationCost').GenerationCost){
+    const {uid,ref}=this.scope(input.projectId);await this.perform("generation-progress",uid,()=>runTransaction(this.db,async tx=>{const runRef=doc(ref!,"generationRuns",input.generationRunId),run=await tx.get(runRef);this.assertOwner(uid);if(run.exists()&&run.data().status==="generating")tx.update(runRef,{currentStage:stage,...(cost?{cost}:{}),updatedAt:serverTimestamp()});}));
   }
-  async failGeneration(input:GenerationRunStart,error:{code:string;message:string}){
+  async failGeneration(input:GenerationRunStart,error:{code:string;message:string;cost?:import('../../shared/generationCost').GenerationCost}){
     const {uid,ref}=this.scope(input.projectId);
     await this.perform("fail-generation",uid,()=>runTransaction(this.db,async tx=>{
       const project=await tx.get(ref!),runRef=doc(ref!,"generationRuns",input.generationRunId),run=await tx.get(runRef);this.assertOwner(uid);
       if(!run.exists()||run.data().status!=="generating")return;
-      tx.update(runRef,{status:"failed",currentStage:"complete",error:{code:error.code.slice(0,100),stage:"generation",message:error.message.slice(0,2000),diagnostics:{}},updatedAt:serverTimestamp(),completedAt:serverTimestamp()});
+      tx.update(runRef,{status:"failed",...(error.cost?{cost:error.cost}:{}),currentStage:"complete",error:{code:error.code.slice(0,100),stage:"generation",message:error.message.slice(0,2000),diagnostics:{}},updatedAt:serverTimestamp(),completedAt:serverTimestamp()});
       if(project.exists()&&project.data().currentGenerationRunId===input.generationRunId)tx.update(ref!,{generationStatus:"failed",updatedAt:serverTimestamp()});
     }));
   }

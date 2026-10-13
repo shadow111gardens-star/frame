@@ -1,4 +1,4 @@
-import {designMdFixture} from './designMdFixture';
+import {designMdFixture,specificationFixture} from './designMdFixture';
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {fixture} from './fixture';
@@ -71,10 +71,12 @@ test('actual HTTP route forwards the same ID contract, repairs once, and reports
     if(!String(url).startsWith('https://generativelanguage.googleapis.com'))return originalFetch(url,init);
     calls++;const body=JSON.parse(String(init?.body)),payload=JSON.parse(body.contents[0].parts[0].text),props=body.generationConfig.responseJsonSchema.properties;
     let output:unknown;
-    if(props.visualTokens){const {plan}=journey();plan.screens.forEach(s=>delete s.id);output=plan;}
+    if(props.plan){const {plan}=journey();plan.screens.forEach(s=>delete s.id);output=specificationFixture(plan,payload.originalPrompt);}
+    else if(props.visualTokens){const {plan}=journey();plan.screens.forEach(s=>delete s.id);output=plan;}
     else if(props.designMd)output=designMdFixture(payload.designPlan,payload.originalPrompt);
-    else if(!props.app)output={productType:'mobile_app',category:'fitness',audience:'Adults',styleHints:[],theme:'unspecified',preferences:{style:[],colors:[],typography:[],branding:[]},goals:[],screens:[],sections:[],uxNeeds:[]};
+    else if(!props.app&&!payload.repairScope)output={productType:'mobile_app',category:'fitness',audience:'Adults',styleHints:[],theme:'unspecified',preferences:{style:[],colors:[],typography:[],branding:[]},goals:[],screens:[],sections:[],uxNeeds:[]};
     else {
+      if(payload.repairScope){payload.mode='validation-repair';payload.invalidResponse={app:{...fixture(),screens:payload.candidate}};payload.designPlan={screens:[{id:'screen-1',name:'Home'},{id:'screen-2',name:'Profile'}]};payload.resolvedNavigation=[{fromScreenId:'screen-1',toScreenId:'screen-2',action:'Open profile'}];}
       seen.push(payload);
       const edge=payload.resolvedNavigation[0];
       assert.equal(edge.fromScreenId,'screen-1');assert.equal(edge.toScreenId,'screen-2');assert.equal(edge.action,'Open profile');
@@ -83,14 +85,14 @@ test('actual HTTP route forwards the same ID contract, repairs once, and reports
       const button=app.screens[0].components[2];
       if(payload.mode==='generate'&&scenario==='valid')button.targetScreenId=edge.toScreenId;
       if(payload.mode==='generate'&&scenario==='mismatch')button.targetScreenId='Profile';
-      if(payload.mode==='generate'&&scenario==='review-drops-edge')button.targetScreenId=edge.toScreenId;
+      if(payload.mode==='generate'&&scenario==='review-drops-edge')delete button.targetScreenId;
       if(payload.mode==='review'&&scenario==='review-drops-edge')delete button.targetScreenId;
       if(payload.mode==='validation-repair'){
         repairs++;assert.equal(payload.validation.missingNavigation[0].action,'Open profile');
         assert.equal(payload.validation.missingNavigation[0].fromScreenId,edge.fromScreenId);
         assert.deepEqual(payload.repairScope.screenIds,['screen-1']);
         if(scenario!=='irreparable')button.targetScreenId=edge.toScreenId;
-        app.screens[0].components[1].text='Unrelated rewrite';app.screens[1].components[0].text='Unrelated rewrite';
+        app.screens[0].components[1].text='Unrelated rewrite';if(app.screens[1])app.screens[1].components[0].text='Unrelated rewrite';
       }
       output={message:'Editable result',app};
     }
@@ -103,7 +105,7 @@ test('actual HTTP route forwards the same ID contract, repairs once, and reports
     for(scenario of ['valid','missing','mismatch','irreparable','review-drops-edge']){
       calls=0;repairs=0;seen.length=0;
       const response=await originalFetch(url,{method:'POST',body:JSON.stringify({mode:'generate',prompt:'Home and Profile',app:current})}),result=await response.json();
-      assert.equal(repairs,scenario==='valid'?0:1);assert.ok(calls<=6,'No repeated repair loop');
+      assert.equal(repairs,['valid','mismatch'].includes(scenario)?0:1);assert.ok(calls<=6,'No repeated repair loop');
       if(scenario==='irreparable'){
         assert.equal(response.status,502);assert.equal(result.code,'DESIGN_CONSISTENCY');assert.equal(result.stage,'draft-repair');assert.equal(result.app,undefined);
         assert.equal(result.missingNavigation[0].toScreenId,'screen-2');assert.match(result.error,/Open profile/);

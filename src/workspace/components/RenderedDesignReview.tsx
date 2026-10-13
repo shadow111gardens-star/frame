@@ -7,7 +7,7 @@ import {measureRenderedReflow,inspectRenderedScreen,representativeScreenIds} fro
 import {ExportAssets,renderRasterSvg,svgToImage} from '../../design/imageExport';
 import {designPolicy} from '../../../shared/designPolicy';
 export type RenderReview={issues:QualityIssue[];screenshots:{screenId:string;data:string}[];visualReview?:boolean;screenIds?:string[];reflow?:{screenId:string;layout:ReturnType<typeof measureRenderedReflow>}[]};
-export type ReviewJob={app:DesignApp;snapshot:WorkspaceState;resolve:(review:RenderReview)=>void;reject:(error:Error)=>void};
+export type ReviewJob={app:DesignApp;approvedPlan?:unknown;snapshot:WorkspaceState;resolve:(review:RenderReview)=>void;reject:(error:Error)=>void};
 export function RenderedDesignReview({job}:{job:ReviewJob}){
   const ref=useRef<HTMLDivElement>(null);
   useEffect(()=>{let cancelled=false;const assets=new ExportAssets();
@@ -24,7 +24,7 @@ export function RenderedDesignReview({job}:{job:ReviewJob}){
         const roots=[...ref.current!.querySelectorAll<HTMLElement>('[data-generated-screen]')];
         for(const root of roots){const original=job.app.screens.find(s=>s.id===root.dataset.generatedScreen)!;const screen={...original,width:root.offsetWidth,height:root.offsetHeight};
           if(root.offsetWidth===original.width)reflow.push({screenId:screen.id,layout:measureRenderedReflow(root,screen,job.app)});
-          const found=inspectRenderedScreen(root,screen,job.app).map(i=>({...i,detail:`At ${screen.width}px: ${i.detail}`}));issues.push(...found);
+          const found=inspectRenderedScreen(root,screen,job.app,root.offsetWidth===original.width?job.approvedPlan:undefined).map(i=>({...i,detail:`At ${screen.width}px: ${i.detail}`}));issues.push(...found);
         }
         const selected=representativeScreenIds({...job.app,screens:job.app.screens.filter(s=>job.snapshot.screens.some(reviewed=>reviewed.id===s.id))},issues,designPolicy.quality.maxCaptures);
         for(const id of selected){

@@ -1,6 +1,7 @@
 {
   "indexes": [],
   "fieldOverrides": [
-    { "collectionGroup": "chunks", "fieldPath": "data", "indexes": [] }
+    { "collectionGroup": "chunks", "fieldPath": "data", "indexes": [] },
+    { "collectionGroup": "generationRuns", "fieldPath": "cost", "indexes": [] }
   ]
 }

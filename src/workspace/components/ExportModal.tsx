@@ -119,6 +119,11 @@ export function ExportModal() {
           </button>
         ))}
       </div>
+      {state.generationArtifact?.cost&&<details className="mt-4 text-[11px] text-white/70">
+        <summary>Gemini usage: {state.generationArtifact.cost.requestCount} requests, {state.generationArtifact.cost.repairRequestCount} repair requests · {state.generationArtifact.cost.estimatedUsd===null?'cost unavailable':'estimated $'+state.generationArtifact.cost.estimatedUsd.toFixed(4)}</summary>
+        <div className="mt-2 overflow-auto"><table className="w-full text-left"><thead><tr><th>Stage</th><th>Input</th><th>Output</th><th>Thinking</th><th>USD estimate</th></tr></thead><tbody>{state.generationArtifact.cost.requests.map((request,index)=><tr key={index}><td>{request.stage}</td><td>{request.inputTokens??'unreported'}</td><td>{request.outputTokens??'unreported'}</td><td>{request.thinkingSource==='inferred-zero'?'0 (inferred)':request.thinkingTokens??'unreported'}</td><td>{request.estimatedUsd===null?'unknown':request.estimatedUsd.toFixed(4)}</td></tr>)}</tbody></table></div>
+        <p className="mt-2">{state.generationArtifact.cost.pricing.model}. List-price estimate, not your invoice. {state.generationArtifact.cost.unknownUsageRequests} requests have unreported usage.</p>
+      </details>}
       {format==='design-md'&&<pre aria-label="DESIGN.md preview" className="mt-4 max-h-64 overflow-auto whitespace-pre-wrap text-[11px] text-white/70">{state.generationArtifact?.designMd??'No DESIGN.md exists for this legacy project.'}</pre>}
       {format==='screenshots'&&<div className="mt-4 space-y-3 text-[11px] text-white/60">
         <label className="flex justify-between items-center gap-3">Image format<select aria-label="Image format" className="ws-input px-2 py-1" disabled={busy} value={imageFormat} onChange={e=>{setImageFormat(e.target.value as ImageFormat);setDone(false);}}><option value="png">PNG</option><option value="jpeg">JPG / JPEG</option></select></label>

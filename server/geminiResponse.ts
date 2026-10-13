@@ -1,3 +1,5 @@
+import {requestCost} from './generationCost';
+import type {GenerationCost,RequestCost} from '../shared/generationCost';
 import {readGoogleError,requestRedactions,googleRequestSummary,type GoogleErrorDetails} from './geminiDiagnostics';
 /** Errors expose only controlled messages/metadata, never upstream text or keys. */
 export class GeminiError extends Error {
@@ -57,7 +59,7 @@ export function cancellationAwareDelay(ms:number,signal:AbortSignal):Promise<voi
   });
 }
 
-export async function generateGeminiText(body:unknown,config:{key:string;model:string;deadline:number;signal?:AbortSignal;attemptTimeoutMs?:number;stage?:string},options:{fetch?:typeof fetch;sleep?:(ms:number)=>Promise<void>;random?:()=>number;log?:(details:RequestDiagnostic)=>void}={}):Promise<string> {
+export async function generateGeminiText(body:unknown,config:{key:string;model:string;deadline:number;signal?:AbortSignal;attemptTimeoutMs?:number;stage?:string;maxAttempts?:number;pricing?:GenerationCost['pricing'];onUsage?:(usage:RequestCost)=>void},options:{fetch?:typeof fetch;sleep?:(ms:number)=>Promise<void>;random?:()=>number;log?:(details:RequestDiagnostic)=>void}={}):Promise<string> {
   const fetcher=options.fetch??fetch,random=options.random??Math.random;
   const stage=config.stage??'generation';let lastStatus:number|undefined;const startedAt=Date.now();
   const record=options.log??diagnostic;
@@ -65,12 +67,14 @@ export async function generateGeminiText(body:unknown,config:{key:string;model:s
   const requestConfiguration=googleRequestSummary(body);
   const log=(details:RequestDiagnostic)=>record({...details,model,requestConfiguration,elapsedMs:Date.now()-startedAt});
   const redactions=requestRedactions(body,config.key);
-  for(let attempt=0;attempt<3;attempt++) {
+  const maxAttempts=Math.max(1,Math.min(3,config.maxAttempts??3));
+  for(let attempt=0;attempt<maxAttempts;attempt++) {
     const preflight=stopped(config.signal,config.deadline);if(preflight)throw preflight;
     const attemptController=new AbortController();
     const timeout=setTimeout(()=>attemptController.abort(new DOMException('Gemini attempt timed out.','TimeoutError')),Math.min(config.attemptTimeoutMs??180000,config.deadline-Date.now()));
     const signal=config.signal?AbortSignal.any([config.signal,attemptController.signal]):attemptController.signal;
-    let failure:GeminiError|undefined,response:Response|undefined;
+    let failure:GeminiError|undefined,response:Response|undefined;const attemptStarted=Date.now();let usageRecorded=false;
+    const recordUsage=(data?:unknown)=>{if(usageRecorded)return;usageRecorded=true;try{const usage=requestCost(body,data,stage,model,response?.status??null,Date.now()-attemptStarted,config.pricing);config.onUsage?.(usage);console.info('[FRAME Gemini usage]',JSON.stringify(usage));}catch{console.warn('[FRAME Gemini usage]',JSON.stringify({event:'telemetry_failure',stage,model}));}};
     try {
       response=await fetcher(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(config.model)}:generateContent`,{method:'POST',headers:{'Content-Type':'application/json','x-goog-api-key':config.key},signal,body:JSON.stringify(body)});
       lastStatus=response.status;
@@ -85,6 +89,7 @@ export async function generateGeminiText(body:unknown,config:{key:string;model:s
       }else{
         let data:unknown;
         try{data=await response.json();}catch(e){if(signal.aborted)throw e;throw new GeminiError('Gemini returned malformed API response JSON. Your prompt is preserved.','INVALID_ENVELOPE');}
+        recordUsage(data);
         const stop=stopped(config.signal,config.deadline);if(stop)throw stop;
         if(signal.aborted)throw new DOMException('Gemini attempt timed out.','TimeoutError');
         const text=extractGeminiText(data);log({event:'http_success',stage,attempt:attempt+1,httpStatus:response.status});return text;
@@ -96,7 +101,7 @@ export async function generateGeminiText(body:unknown,config:{key:string;model:s
       const timedOut=attemptController.signal.aborted;
       failure=new GeminiError(timedOut?'Gemini request timed out. Your prompt and existing design are preserved.':'Gemini connection failed. Your prompt and existing design are preserved.',timedOut?'TIMEOUT':'NETWORK',true,timedOut?504:502,lastStatus);
       log({event:timedOut?'timeout':'transport_failure',stage,attempt:attempt+1,httpStatus:lastStatus,errorType:timedOut?'TimeoutError':e instanceof TypeError?'TypeError':'TransportError',retryable:true});
-    }finally{clearTimeout(timeout);}
+    }finally{recordUsage();clearTimeout(timeout);}
     const stop=stopped(config.signal,config.deadline);if(stop)throw stop;
     failure!.stage=stage;
     if(!failure!.retryable)throw failure;
@@ -104,7 +109,7 @@ export async function generateGeminiText(body:unknown,config:{key:string;model:s
     let delayMs=Math.round(base*(1+Math.max(0,Math.min(1,random()))*0.5));
     const raw=response?.headers.get('Retry-After');
     if(raw){const retryMs=/^\d+(?:\.\d+)?$/.test(raw)?Number(raw)*1000:Date.parse(raw)-Date.now();if(Number.isFinite(retryMs)&&retryMs>0){failure!.retryAfterMs=retryMs;delayMs=Math.max(delayMs,retryMs);if(failure!.code==='RATE_LIMIT')failure!.message=`Gemini rate limit reached. Wait at least ${Math.ceil(retryMs/1000)} seconds before retrying. Your prompt and existing design are preserved.`;}}
-    if(attempt===2)throw failure;
+    if(attempt===maxAttempts-1)throw failure;
     if(config.deadline-Date.now()<=delayMs){log({event:'retry_skipped',stage,attempt:attempt+1,httpStatus:lastStatus,errorType:'INSUFFICIENT_DEADLINE',delayMs});throw failure;}
     log({event:'retry',stage,attempt:attempt+1,httpStatus:lastStatus,delayMs,retryable:true});
     const waitController=new AbortController();

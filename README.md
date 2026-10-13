@@ -167,3 +167,5 @@ Authenticated projects now save under `users/{firebaseUID}/projects/{projectID}`
 
 
 The fixed generation workflow, DESIGN.md persistence, compatible metadata fields, verification evidence and deployment requirements are documented in [docs/fixed-generation-flow.md](docs/fixed-generation-flow.md).
+
+The normal Gemini generation path now uses two provider requests. Usage accounting, repair/output budgets, measured benchmark results and deployment details are in [docs/gemini-cost-optimization.md](docs/gemini-cost-optimization.md).

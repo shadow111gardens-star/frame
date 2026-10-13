@@ -1,3 +1,6 @@
+import {generationStage} from '../../shared/generationProgress';
+import type {GenerationCost} from '../../shared/generationCost';
+import {materialRenderedDefects} from '../../shared/materialDefects';
 import type {GenerationArtifact} from '../../shared/generationArtifact';
 import {designPolicy} from '../../shared/designPolicy';
 import {useProjects} from '../projects/ProjectsProvider';
@@ -1189,7 +1192,7 @@ export function WorkspaceProvider({ children }: { children: ReactNode }) {
   const [reviewJob,setReviewJob]=useState<ReviewJob|null>(null);
   const pendingReview=useRef<((e:Error)=>void)|null>(null);
   useEffect(()=>()=>pendingReview.current?.(new Error('Review cancelled.')),[]);
-  async function reviewApp(app:DesignApp,screenIds?:string[]):Promise<RenderReview> {
+  async function reviewApp(app:DesignApp,screenIds?:string[],approvedPlan?:unknown):Promise<RenderReview> {
     // jsdom has no layout. Production browsers always take the measured path.
     if(typeof ResizeObserver==='undefined'||!document.fonts||typeof requestAnimationFrame==='undefined')return {issues:[],screenshots:[]};
     const run=()=>{const snapshot:WorkspaceState={...latestState.current,productType:app.productType,designSystem:app.designSystem,tokens:{...app.designSystem.colors,radius:app.designSystem.radii[0]??0},components:Object.fromEntries(app.screens.flatMap(s=>s.components.map(c=>[c.id,c]))),screens:app.screens.filter(s=>!screenIds||screenIds.includes(s.id)).map(s=>({...s,label:s.name,components:s.components.map(c=>c.id),createdAt:0}))};
@@ -1198,7 +1201,7 @@ export function WorkspaceProvider({ children }: { children: ReactNode }) {
       const fail=(e:Error)=>{finish();reject(e);};
       const timer=setTimeout(()=>fail(new Error('Browser layout review timed out. Your original prompt and design are preserved.')),25000);
       pendingReview.current=fail;
-      setReviewJob({app,snapshot,resolve:r=>{finish();resolve(r);},reject:fail});
+      setReviewJob({app,snapshot,approvedPlan,resolve:r=>{finish();resolve(r);},reject:fail});
     });
     };
     const first=await run();let changed=false;
@@ -1224,12 +1227,15 @@ export function WorkspaceProvider({ children }: { children: ReactNode }) {
     dispatch({type:"AI_RESPOND",message:{id:`tasks-${Date.now()}`,role:"assistant",content:modify?"Updating your current design...":"Creating your editable screens...",tasks:[{id:"request",label:modify?"Apply instruction to the current screen and design":"Generate all requested screens and editable components",status:"active"}],timestamp:Date.now()}});
     const generationRunId=crypto.randomUUID();
     const run={projectId:state.projectId,generationRunId,idempotencyKey:generationRunId,originalPrompt:prompt};
+    let generationCost:GenerationCost|undefined;
+    const onCost=async(cost:GenerationCost)=>{generationCost=cost;if(active()&&cloud)await cloud.store.updateGeneration(run,generationStage(cost.requests[cost.requests.length-1]?.stage??'analysis'),cost);};
     const startedAt=Date.now();
     const onStage=async(stage:import('../../shared/generationProgress').GenerationStage)=>{if(!active())return;dispatch({type:'AI_RESPOND',message:{id:'stage-'+generationRunId+'-'+stage,role:'assistant',content:stage.replace(/-/g,' ')+' - '+Math.round((Date.now()-startedAt)/1000)+'s elapsed',timestamp:Date.now()}});if(cloud)await cloud.store.updateGeneration(run,stage);};
     const before=JSON.stringify({screens:state.screens,components:state.components,tokens:state.tokens,designSystem:state.designSystem,name:state.projectName,productType:state.productType});
     try {
       if(cloud)await cloud.store.startGeneration(run);
-      let result=await requestDesign(prompt,modify?workspaceToApp(state):undefined,state.currentScreen,productType,undefined,abort.signal,{editScope,projectId:state.projectId,generationRunId,idempotencyKey:generationRunId,generationArtifact:modify?state.generationArtifact:undefined,onStage});
+      let result=await requestDesign(prompt,modify?workspaceToApp(state):undefined,state.currentScreen,productType,undefined,abort.signal,{editScope,projectId:state.projectId,generationRunId,idempotencyKey:generationRunId,generationArtifact:modify?state.generationArtifact:undefined,onStage,onCost});
+      generationCost=result.cost??generationCost;
       if(!active())return;
       await onStage('render-review');
       let quality:RenderReview={issues:[],screenshots:[]};
@@ -1237,14 +1243,15 @@ export function WorkspaceProvider({ children }: { children: ReactNode }) {
       const reviewScreenIds=modify&&editScope==='screen'?[state.currentScreen]:result.app.screens.map(s=>s.id);
       if(modify&&editScope==='screen')result.app=mergeScreenEdit(workspaceToApp(state),result.app,reviewScreenIds);
       if(!modify||designPolicy.quality.reviewModifications){
-        quality=await reviewApp(result.app,reviewScreenIds);
+        quality=await reviewApp(result.app,reviewScreenIds,modify?undefined:result.generationArtifact?.approvedPlan);
         if(!active())return;
-        if(quality.visualReview||quality.issues.some(i=>i.severity==='error'||i.code==='contrast'||i.code==='empty-area'||i.code==='navigation'||i.code==='spacing'&&i.detail.includes('Peer control row'))){
+        if(materialRenderedDefects(quality.issues).length){
           dispatch({type:'AI_RESPOND',message:{id:`review-${Date.now()}`,role:'assistant',content:'Checking the rendered layout and correcting measured issues...',timestamp:Date.now()}});
-          result=await requestDesign(prompt,result.app,undefined,productType,quality,abort.signal,{projectId:state.projectId,generationRunId,idempotencyKey:generationRunId,generationArtifact:result.generationArtifact,onStage});
+          result=await requestDesign(prompt,result.app,undefined,productType,quality,abort.signal,{projectId:state.projectId,generationRunId,idempotencyKey:generationRunId,generationArtifact:result.generationArtifact,onStage,onCost});
+          generationCost=result.cost??generationCost;
           if(!active())return;
           visualReviewedIds=quality.screenshots.map(s=>s.screenId);
-          quality=await reviewApp(result.app,reviewScreenIds); // One bounded correction, never a retry loop.
+          quality=await reviewApp(result.app,reviewScreenIds,modify?undefined:result.generationArtifact?.approvedPlan); // One bounded correction, never a retry loop.
         }
         if(quality.issues.some(i=>i.severity==='error'))throw new DesignRequestError('The rendered design still has clipping or overflow after one correction: '+quality.issues.filter(i=>i.severity==='error').slice(0,3).map(i=>i.screenId+'/'+i.componentIds.join(',')+' ('+i.code+')').join('; ')+'. Your prompt and existing design are preserved.',false,'RENDER_QUALITY');
       }
@@ -1257,7 +1264,7 @@ export function WorkspaceProvider({ children }: { children: ReactNode }) {
       dispatch({type:"APPLY_DESIGN",app:result.app,generationArtifact:result.generationArtifact});
       dispatch({type:"AI_RESPOND",message:{id:`done-${Date.now()}`,role:"assistant",content:(result.generationArtifact?.status==='partial'?'Partial result. ':'')+result.message+(result.generationArtifact?.warnings.length?'\n'+result.generationArtifact.warnings.join('\n'):'')+(visualReviewedIds.length?' Rendered captures reviewed for '+visualReviewedIds.join(', ')+'.':'')+(quality.issues.length?' Browser review flagged '+quality.issues.length+' advisory layout/asset issues; review these before publishing.':''),tasks:result.app.screens.map(s=>({id:s.id,label:s.name,status:"done"})),timestamp:Date.now()}});
     } catch(e) {
-      if(cloud)try{await cloud.store.failGeneration(run,{code:e instanceof DesignRequestError?e.code??"GENERATION_FAILED":"GENERATION_FAILED",message:e instanceof Error?e.message:"Generation failed."});}catch(saveError){cloud.store.report(saveError);}
+      if(cloud)try{await cloud.store.failGeneration(run,{code:e instanceof DesignRequestError?e.code??"GENERATION_FAILED":"GENERATION_FAILED",message:e instanceof Error?e.message:"Generation failed.",cost:e instanceof DesignRequestError?e.cost??generationCost:generationCost});}catch(saveError){cloud.store.report(saveError);}
       if(active()) dispatch({type:"FINISH_TASKS",success:false});
       if(active()) dispatch({type:"AI_RESPOND",message:{retryPrompt:prompt,retryModify:modify,retryProductType:productType,retryEditScope:editScope,retryable:e instanceof DesignRequestError?e.retryable:true,id:`error-${Date.now()}`,role:"assistant",content:e instanceof Error?e.message:"Generation failed. Your prompt is preserved.",timestamp:Date.now()}});
     } finally { if(active()){requestLock.current=false;controller.current=null;dispatch({type:"AI_TYPING",typing:false});} }

@@ -22,7 +22,7 @@ export function requestRedactions(body:unknown,key:string):string[]{
     const request=body as {contents?:{parts?:{text?:unknown}[]}[];systemInstruction?:{parts?:{text?:unknown}[]}};
     for(const part of [...(request.contents??[]).flatMap(c=>c.parts??[]),...(request.systemInstruction?.parts??[])]){
       if(typeof part.text!=='string')continue;redactions.push(part.text);
-      try{const data=JSON.parse(part.text);if(typeof data.prompt==='string')redactions.push(data.prompt);}catch{/* Plain text is already redacted. */}
+      try{const data=JSON.parse(part.text);for(const key of ['prompt','originalPrompt','designMd'])if(typeof data[key]==='string')redactions.push(data[key]);}catch{/* Plain text is already redacted. */}
     }
   }
   return redactions;

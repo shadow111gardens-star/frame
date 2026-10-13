@@ -1,4 +1,4 @@
-import {reflowText} from '../src/design/textLayout';
+import {reflowText,flowOuterHeight} from '../src/design/textLayout';
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {flowSizing} from '../src/design/layoutStyle';
@@ -49,4 +49,8 @@ test('painted glyph bounds exclude unused font metric space without accepting ac
  const clipped=paintedTextBounds(range,{fontBoundingBoxAscent:32,actualBoundingBoxAscent:34,actualBoundingBoxDescent:15,actualBoundingBoxLeft:2,actualBoundingBoxRight:119});
  assert.equal(clipped.top,60);assert.equal(clipped.bottom,109);assert.equal(clipped.left,38);
  assert.deepEqual(paintedTextBounds(range,{fontBoundingBoxAscent:NaN,actualBoundingBoxAscent:24,actualBoundingBoxDescent:2,actualBoundingBoxLeft:0,actualBoundingBoxRight:119}),range);
+});
+test('bordered flow measurement is stable across re-renders and still expands actual overflow',()=>{
+ let height=900;for(let render=0;render<100;render++)height=flowOuterHeight(height-2,height,2,0);
+ assert.equal(height,900);assert.equal(flowOuterHeight(950,900,2,0),952);assert.equal(flowOuterHeight(890,892,2,4),900);
 });

@@ -1,4 +1,4 @@
-import {designMdFixture} from './designMdFixture';
+import {designMdFixture,specificationFixture} from './designMdFixture';
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
@@ -101,15 +101,17 @@ test('HTTP pipeline preserves normalized requirements, stages and the design on 
     if(!String(url).startsWith('https://generativelanguage.googleapis.com'))return nativeFetch(url,init);
     const body=JSON.parse(String(init?.body)),payload=JSON.parse(body.contents[0].parts[0].text),props=body.generationConfig.responseJsonSchema.properties;seen.push(payload);
     let output:any;
-    if(props.visualTokens){
+    if(props.plan){plans++;const raw=structuredClone(expectedPlan);if((scenario==='planning-missing'&&plans===1)||scenario==='planning-irreparable')raw.screens.pop();if(payload.invalidSpecification)raw.screens[0].composition='Unrelated recomposition';output=specificationFixture(raw,payload.originalPrompt,{productType:'mobile_app',screens:[' HOME ','Profile']});}
+    else if(props.visualTokens){
       plans++;output=structuredClone(expectedPlan);
       if((scenario==='planning-missing'&&plans===1)||scenario==='planning-irreparable')output.screens.pop();
       if(payload.mode==='planning-repair'){
         assert.equal(payload.missingScreens[0].expectedName,'Profile');assert.ok(payload.missingScreens[0].requiredContent);output.screens[0].composition='Unrelated recomposition';
       }
     }else if(props.designMd)output=designMdFixture(payload.designPlan,payload.originalPrompt);
-    else if(!props.app)output={productType:'mobile_app',screens:[' HOME ','Profile']};
+    else if(!props.app&&!payload.repairScope)output={productType:'mobile_app',screens:[' HOME ','Profile']};
     else{
+      if(payload.repairScope){payload.mode='validation-repair';payload.invalidResponse={app:{...expectedApp,screens:structuredClone(expectedApp.screens.slice(0,1))}};payload.designPlan=expectedPlan;}
       const app=payload.mode==='review'?structuredClone(payload.candidateDesign):payload.mode==='validation-repair'?structuredClone(payload.invalidResponse.app):structuredClone(expectedApp);
       app.screens.forEach((screen:any)=>{screen.id=payload.designPlan.screens.find((s:any)=>s.name===screen.name).id;});
       app.screens[0].components[2].targetScreenId=payload.designPlan.screens.find((s:any)=>s.name==='Profile').id;
@@ -136,9 +138,9 @@ test('HTTP pipeline preserves normalized requirements, stages and the design on 
       const response=await nativeFetch(url,{method:'POST',body:JSON.stringify({mode:'generate',prompt:'Include screens named Home and Profile.',app:expectedApp})}),result=await response.json();
       if(scenario.endsWith('irreparable')){
         assert.equal(response.status,502);assert.equal(result.code,'REQUIREMENT_SCREEN');assert.equal(result.missingScreens[0].expectedName,'Profile');assert.equal(result.app,undefined);
-        assert.equal(result.stage,scenario.startsWith('planning')?'planning-repair':'draft-repair');if(scenario.startsWith('planning'))assert.equal(drafts,0);
+        assert.equal(result.stage,scenario.startsWith('planning')?'specification-repair':'draft-repair');if(scenario.startsWith('planning'))assert.equal(drafts,0);
       }else{
-        assert.equal(response.status,200);assert.equal(result.app.screens[0].name,'Home');assert.equal(result.app.screens[1].name,'Profile');
+        assert.equal(response.status,200,JSON.stringify(result));assert.equal(result.app.screens[0].name,'Home');assert.equal(result.app.screens[1].name,'Profile');
         const expectedComponents=structuredClone(expectedApp.screens[0].components);expectedComponents[2].targetScreenId=result.app.screens[1].id;
         assert.deepEqual(result.app.screens[0].components,expectedComponents);
       }
