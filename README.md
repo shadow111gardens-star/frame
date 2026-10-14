@@ -42,7 +42,7 @@ For optional live semantic verification with the configured model: `npx tsx scri
 
 ## Design-quality instructions
 
-`server/designInstructions.ts` adapts static principles from [Appllama's app-design skill](https://github.com/Appllama/appllama-skills/blob/main/skills/appllama-app-design-skill/SKILL.md) into Gemini's existing generation instructions. Mobile requests receive platform-aware hierarchy, spacing, navigation, touch-target and state guidance; website requests receive separate desktop guidance. Both use the existing editable JSON schema and a consistent design system across screens.
+`server/designInstructions.ts` supplies the editable schema, renderer contract, validated-plan translation and scoped-edit instructions. Product dimensions come from FRAME product configuration.
 
 Initial generation now has two creative stages after intent detection: `server/designPlanning.ts` asks the configured Gemini model for a validated internal product plan, semantic visual tokens, and screen compositions; visual generation translates that plan into the existing component schema and makes a focused critique/revision call before publishing the result. This review addresses hierarchy, text fit, repetitive composition and invented personal data in the draft. Neither the plan nor draft is rendered as user content. Final validation requires the planned screens and exact shared design system, visible component bounds, available fonts and populated control labels. Invalid plans/results leave the editor unchanged and expose the existing retry flow. Planning and review add API calls and latency; all stages share a deadline within the existing client timeout. No additional model is hardcoded. Simple modifications skip initial planning/review and retain their single scoped request.
 
@@ -50,23 +50,13 @@ Rich planning roles (type sizes/weights, semantic status colors, spacing, radii 
 
 For fresh generated designs, text-bearing leaf cards/lists/inputs/search fields receive missing insets from the planned spacing roles so labels do not sit against surface edges. Explicit padding and all nested child coordinates are preserved; modifications skip this normalization. Common 999px pill tokens are canonicalized to the existing 500px shared token limit before plan validation.
 
-Modification instructions preserve manual edits, component and screen IDs, unrelated content, and existing design tokens unless the user requests changes. These are model instructions, with schema validation still enforcing response structure. No Appllama service, MCP, API, credits, runtime skill download, or copied screens/assets are introduced.
+Modification instructions preserve manual edits, component and screen IDs, unrelated content, and existing design tokens unless the user requests changes. These are model instructions, with schema validation still enforcing response structure. No external design-research integration is used.
 
 Optional live acceptance check: `npx tsx scripts/check-design-quality.tsx`. It generates the requested premium travel and fitness projects, validates all four screens, renders them through the actual editable component renderer, and checks scoped AI refinements preserve tokens, IDs and other screens. It writes JSON and HTML previews to ignored `artifacts/design-quality/` for visual review; these are never runtime demo data. This sends real requests to the configured Gemini model. Automated checks cannot certify subjective visual quality.
 
-## Local Claude design intelligence
+## Prompt analysis
 
-FRAME combines the existing Appllama instructions with selected adaptations of the Claude `ui-ux-pro-max` skill. Source files, pinned upstream revision, MIT notice and conflict decisions are documented in [third_party/ui-ux-pro-max/SOURCES.md](third_party/ui-ux-pro-max/SOURCES.md).
-
-The existing initial intent call now also analyzes audience, category, positive style/theme/brand/color/type preferences, goals, requested screen names, website sections and UX needs. `server/designKnowledge/selection.ts` retrieves at most six relevant records from `catalog.ts`, plus optional feasible font/palette suggestions. Explicit preferences override industry defaults; palette suggestions are suppressed for explicit visual requirements. When a direction is unspecified, deterministic selection among relevant alternatives avoids a single default art direction. Unknown categories use identified general guidance, not a fictitious dataset match.
-
-Actual flow: prompt → semantic analysis and authoritative productType → local knowledge selection → validated internal plan → editable Gemini draft → critique/revision with the same selected knowledge → schema/type/plan/renderer validation → existing editor and prototype. Named requested screens must survive planning. Neither analysis nor selected rules are exposed in the editor.
-
-Chat uses the existing currentDesign, active screen and exact instruction. Local edit retrieval supplies only relevant refinements; the current tokens, component IDs, manual edits and unrelated screens remain authoritative. There is no extra model call for knowledge retrieval or chat analysis. Initial generation retains its existing four calls (analysis, planning, draft, review); simple modifications retain one. No new dependencies, provider, CLI, plugin, MCP, repository fetch or paid design service are added.
-
-This is a curated subset, not the whole upstream catalog. Local edit matching is conservative and may fall back to general guidance for an unfamiliar product or phrasing. Original instructions still reach Gemini intact. Design quality and semantic interpretation depend on the configured model; responsive breakpoints, unsupported fonts/effects, advanced charts and native/complete accessibility behaviors remain outside the current editable schema.
-
-Optional live verification of semantic analysis and retrieval: `npx tsx scripts/check-design-knowledge.ts`. It sends two public prompts using the configured model, including indirect website intent and explicit editorial mobile intent, and checks that brand/color/font requests survive while default palettes/fonts are suppressed. This checks live analysis, not final visual quality.
+The existing intent call preserves product type, audience, explicit user preferences, goals, named screens, sections and requirements. Planning normalizes and validates these requirements before editable JSON generation. Scoped edits use currentDesign directly, preserving manual edits and unrelated screens. No local skill catalog, guidance selection or research service enriches the prompt. The existing analysis, planning, draft and review call structure is unchanged.
 
 ## Canvas scrolling
 

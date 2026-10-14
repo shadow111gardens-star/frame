@@ -3,20 +3,20 @@ import assert from 'node:assert/strict';
 import {GeminiError,extractGeminiText,generateGeminiText,parseGeminiJson} from '../server/geminiResponse';
 import {analyzeDesignPrompt,promptAnalysisJsonSchema} from '../server/designKnowledge/analysis';
 
-const valid={productType:'website',category:'creative',audience:'Visitors',styleHints:['minimal','editorial','bold'],theme:'unspecified',preferences:{style:[],colors:[],typography:[],branding:[]},goals:[],screens:[],sections:[],uxNeeds:[]};
+const valid={productType:'website',audience:'Visitors',theme:'unspecified',preferences:{style:[],colors:[],typography:[],branding:[]},goals:[],screens:[],sections:[]};
 const envelope=(text:string)=>({candidates:[{finishReason:'STOP',content:{parts:[{text}]}}]});
 const config=()=>({key:'secret-not-for-logs',model:'configured-model',deadline:Date.now()+10000});
 
 test('regression: request schema enforces the validator bounds that caused live analysis rejection',async()=>{
   const schema=promptAnalysisJsonSchema as any;
-  assert.equal(schema.properties.styleHints.maxItems,3);
-  assert.equal(schema.properties.uxNeeds.maxItems,9);
+  assert.equal(schema.properties.styleHints,undefined);
+  assert.equal(schema.properties.uxNeeds,undefined);assert.equal(schema.properties.category,undefined);
   for(const field of ['goals','screens','sections'])assert.equal(schema.properties[field].maxItems,20);
   for(const field of ['style','colors','typography','branding'])assert.equal(schema.properties.preferences.properties[field].maxItems,20);
   assert.equal(schema.properties.audience.description,'At most 500 characters.');
   assert.ok(!JSON.stringify(schema).includes('"default"'));
   let calls=0;
-  await assert.rejects(analyzeDesignPrompt('Create portfolio',async()=>{calls++;return JSON.stringify({...valid,styleHints:['minimal','editorial','bold','accessible']});}),(error:unknown)=>error instanceof GeminiError && error.code==='ANALYSIS_SCHEMA' && !error.retryable && /styleHints \(too_big\)/.test(error.message));
+  await assert.rejects(analyzeDesignPrompt('Create portfolio',async()=>{calls++;return JSON.stringify({...valid,goals:Array(21).fill('Goal')});}),(error:unknown)=>error instanceof GeminiError && error.code==='ANALYSIS_SCHEMA' && !error.retryable && /goals \(too_big\)/.test(error.message));
   assert.equal(calls,1); // Permanent schema errors never trigger another model request.
   assert.equal((await analyzeDesignPrompt('Create portfolio',async()=>JSON.stringify(valid))).productType,'website');
 });
@@ -24,7 +24,7 @@ test('regression: request schema enforces the validator bounds that caused live 
 test('JSON parsing accepts only complete JSON or whole fences and keeps schema validation strict',async()=>{
   for(const text of [JSON.stringify(valid),`\uFEFF  ${JSON.stringify(valid)}  `,`\n\`\`\`json\n${JSON.stringify(valid)}\n\`\`\`\n`])assert.equal((await analyzeDesignPrompt('Portfolio',async()=>text)).productType,'website');
   for(const text of ['', '   ', '{bad json}', 'Here is the result: '+JSON.stringify(valid), '```json\n{"productType":"website"}', JSON.stringify(valid)+JSON.stringify(valid)])await assert.rejects(analyzeDesignPrompt('Portfolio',async()=>text),GeminiError);
-  for(const data of [{...valid,productType:'desktop'},{...valid,styleHints:'minimal'},{...valid,preferences:{style:[]}},{...valid,goals:Array(21).fill('Goal')},{analysis:valid},null,[]])await assert.rejects(analyzeDesignPrompt('Portfolio',async()=>JSON.stringify(data)),(e:unknown)=>e instanceof GeminiError && e.code==='ANALYSIS_SCHEMA');
+  for(const data of [{...valid,productType:'desktop'},{...valid,theme:'unknown'},{...valid,preferences:{style:[]}},{...valid,goals:Array(21).fill('Goal')},{analysis:valid},null,[]])await assert.rejects(analyzeDesignPrompt('Portfolio',async()=>JSON.stringify(data)),(e:unknown)=>e instanceof GeminiError && e.code==='ANALYSIS_SCHEMA');
   assert.throws(()=>parseGeminiJson('{"a":1,}','analysis'),/malformed JSON/);
 });
 
@@ -58,8 +58,8 @@ test('transient transport/status failures retry at most twice; permanent or malf
 test('debug diagnostics report schema paths without generated content, prompts or secrets',async()=>{
   const previous=process.env.GEMINI_DEBUG,log=console.warn;process.env.GEMINI_DEBUG='1';const logs:unknown[][]=[];console.warn=(...args)=>{logs.push(args);};
   try {
-    await assert.rejects(analyzeDesignPrompt('secret-user-prompt',async()=>JSON.stringify({...valid,audience:'secret-generated-text',styleHints:['minimal','editorial','bold','accessible']})));
-    const text=JSON.stringify(logs);assert.ok(text.includes('styleHints'));assert.ok(text.includes('too_big'));assert.ok(!text.includes('secret-user-prompt'));assert.ok(!text.includes('secret-generated-text'));
+    await assert.rejects(analyzeDesignPrompt('secret-user-prompt',async()=>JSON.stringify({...valid,audience:'secret-generated-text',goals:Array(21).fill('Goal')})));
+    const text=JSON.stringify(logs);assert.ok(text.includes('goals'));assert.ok(text.includes('too_big'));assert.ok(!text.includes('secret-user-prompt'));assert.ok(!text.includes('secret-generated-text'));
   } finally {console.warn=log;if(previous===undefined)delete process.env.GEMINI_DEBUG;else process.env.GEMINI_DEBUG=previous;}
 });
 

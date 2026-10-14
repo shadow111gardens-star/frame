@@ -33,7 +33,7 @@ Measurements include bounds/clipping, actual wrapping, flow overflow, fonts/asse
 - `shared/frame-design-system.json` (new), `shared/designPolicy.ts` (new), `shared/editScope.ts` (new).
 - `shared/design.ts`, `shared/designQuality.ts`.
 - `server/designRequirements.ts` (new), `server/designPlanning.ts`, `server/designInstructions.ts`, `server/gemini.ts`.
-- `server/designKnowledge/analysis.ts`, `server/designKnowledge/selection.ts`, `server/designKnowledge/catalog.ts` (correct the supported-weight description).
+- `server/designKnowledge/analysis.ts` (core request analysis; imported catalog and selection were subsequently removed).
 - `src/design/api.ts`, `src/design/designProperties.ts`, `src/design/imageExport.ts`, `src/design/renderQuality.ts`, `src/design/textLayout.ts`.
 - `src/workspace/store.tsx`, `src/workspace/types.ts`.
 - `src/workspace/components/ChatPanel.tsx`, `DesignPropertiesPanel.tsx`, `GeneratedSurface.tsx`, `RenderedDesignReview.tsx`.
@@ -58,3 +58,43 @@ Image critique currently samples at most two screens per correction. All affecte
 Arbitrary natural-language feature exclusions, semantic journey completeness and aesthetic quality need contextual model/human judgment. A valid navigation graph does not prove that the inferred flow is the best one. Multiple responsive breakpoints and real transactional behavior remain unsupported. Prototype inputs and navigation are not a backend or payment/booking system.
 
 Next evaluation should use live prompts for several unrelated original products and website types, capture their actual output, and assess product understanding, visual distinctiveness, flow correctness and screen-count compliance. Model availability and asset loading can still affect this workflow. Do not interpret successful fixture/browser tests as universal aesthetic validation.
+
+## Imported skill removal (2026-10-14)
+
+Pre-check passed: branch `firebase-clean-work`, HEAD `4c3aa5e` (actual subject `firebase done properally`), clean working tree. The branch and baseline commit remain unchanged.
+
+Removed the imported skill catalog, selector, classification fields, guidance/precedence injection, research quick action and unsupported integration claims. Retained core semantic product detection, exact preferences, named screens, requirement normalization, planning/journey validation, editable schema and renderer contracts, scoped edits, cancellation/timeouts, and the existing baseline generation stages. The attribution files described only the deleted catalog/selection adaptations; no adapted catalog content or callers remain. No new architecture or dependencies were introduced.
+
+Exact modified files (21):
+- `README.md`
+- `docs/universal-design-improvements.md`
+- `scripts/check-analysis-response.ts`
+- `scripts/check-design-plan.ts`
+- `server/designInstructions.ts`
+- `server/designKnowledge/analysis.ts`
+- `server/designPlanning.ts`
+- `server/gemini.ts`
+- `src/components/pages/Changelog.tsx`
+- `src/components/pages/Docs.tsx`
+- `src/components/pages/Features.tsx`
+- `src/components/pages/Roadmap.tsx`
+- `src/components/pages/blogData.ts`
+- `src/home/components/CenterStage.tsx`
+- `src/home/components/GenerationOverlay.tsx`
+- `tests/designPolicy.test.tsx`
+- `tests/editor.test.tsx`
+- `tests/geminiResponse.test.ts`
+- `tests/knowledge.test.ts`
+- `tests/screenCounts.test.ts`
+- `tests/server.test.ts`
+
+Exact deleted files (5):
+- `server/designKnowledge/catalog.ts`
+- `server/designKnowledge/selection.ts`
+- `scripts/check-design-knowledge.ts`
+- `third_party/ui-ux-pro-max/LICENSE.txt`
+- `third_party/ui-ux-pro-max/SOURCES.md`
+
+Verification: `npm run typecheck` passed; `npm test` passed all 87 tests with zero failures/skips; `npm run build` passed. Existing Zod/Rollup annotation warnings are nonblocking. Tracked-source search found integration names only in negative regression assertions, with no runtime imports, selectors or UI claims remaining. Authentication/session and editor storage/undo/renderer/export source files are unchanged. This baseline contains no Firestore project save/load; it was neither implemented nor verified.
+
+Final Git status: 21 modified files and 5 deleted files, no untracked files. No environment/Firebase configuration, rules/indexes, dependencies, cloud data, stashes or history changes. No paid API requests, deployment, commit or push.

@@ -3,7 +3,6 @@ import {generateGeminiText,parseGeminiJson} from '../server/geminiResponse';
 import {planDesign,designPlanSchema} from '../server/designPlanning';
 import {readFile} from 'node:fs/promises';
 import {analyzeDesignPrompt} from '../server/designKnowledge/analysis';
-import {selectDesignGuidance} from '../server/designKnowledge/selection';
 import {createServer} from 'node:http';
 import {validateApp} from '../shared/design';
 import assert from 'node:assert/strict';
@@ -18,7 +17,7 @@ for(const [prompt,type] of [
   try {
     const promptAnalysis=await analyzeDesignPrompt(prompt,body=>generateGeminiText(body,{key,model,deadline:Date.now()+180000}));
     console.log(JSON.stringify({analysisProductType:promptAnalysis.productType,namedScreens:promptAnalysis.screens.length,sections:promptAnalysis.sections.length}));
-    const selectedGuidance=selectDesignGuidance(prompt,promptAnalysis,'generate');
+
     const plan=await planDesign(prompt,type,async body=>{
       const text=await generateGeminiText(body,{key,model,deadline:Date.now()+180000},{fetch:(async(url,init)=>{
         const response=await fetch(url,init);
@@ -34,7 +33,7 @@ for(const [prompt,type] of [
         console.log(JSON.stringify({colorMatches:[d.background===c.background,d.surface===c.surface,d.card===c.elevatedSurface,d.accent===c.accent,d.text===c.text,d.textMuted===c.mutedText,d.border===c.border],spacingRoles:p.visualTokens.spacing.map(s=>s.role),radiusRoles:p.visualTokens.radii.map(s=>s.role),touchTarget:p.visualTokens.touchTarget,fontMatches:[p.designSystem.typography.font===p.visualTokens.typography.find(t=>t.role==='body')?.font,p.designSystem.typography.display===p.visualTokens.typography.find(t=>t.role==='display')?.font]}));
       }
       return text;
-    },{promptAnalysis,selectedGuidance});
+    },{promptAnalysis});
     console.log(`${type}: plan accepted (${plan.screens.length} screens).`);
   }catch(e){process.exitCode=1;console.log(e instanceof Error?e.message:'Planning failed.');}
 }

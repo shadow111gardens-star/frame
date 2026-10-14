@@ -46,17 +46,6 @@ const QUICK_ACTIONS = [
       </svg>
     ),
   },
-  {
-    id: "research",
-    label: "Research mobile patterns",
-    desc: "Search design references with Appllama",
-    icon: (
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <circle cx="11" cy="11" r="7" />
-        <path d="M21 21l-4.35-4.35" />
-      </svg>
-    ),
-  },
 ];
 
 export function CenterStage() {
@@ -79,15 +68,6 @@ export function CenterStage() {
       dispatch({ type: "OPEN_MODAL", modal: { type: "templates" } });
     } else if (id === "import") {
       dispatch({ type: "OPEN_MODAL", modal: { type: "import" } });
-    } else if (id === "research") {
-      dispatch({
-        type: "SET_PROMPT",
-        value:
-          "Research current premium mobile design patterns for " +
-          (state.prompt || "a productivity app") +
-          ".",
-      });
-      focusPrompt();
     }
   };
 

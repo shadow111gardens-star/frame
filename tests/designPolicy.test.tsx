@@ -8,7 +8,6 @@ import {componentSchema,colorRoles,textRoles,validateApp,validateGeneratedFonts}
 import {resolveRequirements,enforceScreenRequirements,explicitCounts} from '../server/designRequirements';
 import {mergeScreenEdit} from '../shared/editScope';
 import {analyzeDesignPrompt} from '../server/designKnowledge/analysis';
-import {selectDesignGuidance} from '../server/designKnowledge/selection';
 import {planDesign,validateJourney,validatePlannedDesign} from '../server/designPlanning';
 import {designRoute} from '../server/gemini';
 import {resolveStyles} from '../src/design/designProperties';
@@ -46,8 +45,7 @@ test('semantic analysis respects selection, validated exclusions and no category
   const raw={productType:'mobile_app',category:'general',audience:'Independent musicians',goals:['Arrange sound'],screens:['Studio','Archive'],requirements:{purpose:'Sound composition tool',requestedScreenCount:2,countEvidence:'2 screens',excludedScreens:[{name:'Login',evidence:'No Login'}],exclusions:['No Login'],conflicts:[]}};
   const prompt='Design a website with 2 screens: Studio and Archive. No Login.';
   const result=await analyzeDesignPrompt(prompt,async()=>JSON.stringify(raw),'website');assert.equal(result.productType,'website');
-  const a=selectDesignGuidance(prompt,result,'generate'),b=selectDesignGuidance('Different wording',result,'generate');
-  assert.equal(a.direction,'derive-from-request');assert.deepEqual(a,b);assert.equal(a.paletteSuggestion,undefined);
+  assert.equal('category' in result,false);assert.equal('styleHints' in result,false);assert.equal('uxNeeds' in result,false);
   const conflicting={...raw,requirements:{...raw.requirements,conflicts:[{reason:'Contradictory layout requirements',evidence:['No Login']}]}};
   await assert.rejects(analyzeDesignPrompt(prompt,async()=>JSON.stringify(conflicting),'website'),/clarify/);
 });

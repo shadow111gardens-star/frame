@@ -27,7 +27,7 @@ for(const prompt of [
       } catch {console.log(JSON.stringify({jsonValid:false,length:text.length,fenced:text.trim().startsWith('```')}));}
       return response;
     }) as typeof fetch}));
-    assert.equal(analysis.productType,'website');assert.ok(analysis.styleHints.length<=3);
+    assert.equal(analysis.productType,'website');
     assert.ok(analysis.sections.length>=3);
     console.log('Analysis accepted.');
   } catch(e) {process.exitCode=1;console.log(e instanceof Error?e.message:'Analysis failed.');}

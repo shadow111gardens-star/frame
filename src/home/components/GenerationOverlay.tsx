@@ -104,10 +104,10 @@ export function GenerationOverlay() {
           ))}
         </div>
 
-        {/* Appllama tag */}
+        {/* Generation label */}
         <div className="mt-6 pt-5 border-t border-white/[0.04] flex items-center justify-center gap-2 text-[10.5px] text-white/30 font-mono">
           <span className="h-1 w-1 rounded-full bg-white/30" />
-          Powered by Frame AI · Appllama MCP
+          Powered by FRAME AI
         </div>
       </motion.div>
     </motion.div>

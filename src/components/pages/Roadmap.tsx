@@ -20,12 +20,6 @@ const ITEMS: { quarter: string; label: string; items: Item[] }[] = [
         desc: "Preview your design in MacBook, Dell, or ThinkPad frames. Web design support is now first-class.",
       },
       {
-        title: "Appllama MCP integration",
-        tag: "AI",
-        status: "shipped",
-        desc: "Research-driven design generation using the Appllama mobile design corpus.",
-      },
-      {
         title: "Credits & billing",
         tag: "Account",
         status: "shipped",

@@ -1,7 +1,6 @@
 import {z} from 'zod';
 import {appSchema,type DesignApp} from '../shared/design';
 import {previewConfig,type ProductType} from '../shared/product';
-import {KNOWLEDGE_PRECEDENCE,type SelectedGuidance} from './designKnowledge/selection';
 import type {PromptAnalysis} from './designKnowledge/analysis';
 import {parseGeminiJson,GeminiError} from './geminiResponse';
 import {textLineHeight} from '../shared/typography';
@@ -60,8 +59,9 @@ Every required text field must contain nonempty text; use "None" or "Not applica
 Do not output a second, duplicated designSystem. visualTokens is the canonical source: FRAME derives the editable designSystem from these roles and scales, so they cannot disagree. FRAME maps visualTokens.accent to colors.accent (primary may be a distinct high-contrast action color), elevatedSurface to card, mutedText to textMuted; choose a neutral secondary role. The body and display typography roles provide the font pairing, and the loaded JetBrains Mono supplies the mono fallback. Spacing/radii arrays are derived from the chosen role values. Rich role names stay internal; never extend the app schema. Status colors have semantic meaning, not decorative purposes. Shadow policy may use none/subtle/medium/strong, with restraint. Optional lineHeight output is a multiplier. Font variants must be available: Instrument Serif 400 only; Inter and JetBrains Mono 300?800 normal/italic.
 ${productType==='mobile_app'?'Use native mobile hierarchy, safe-area allowances, touch targets at least 44 logical pixels, compact readable content and peer tabs only where useful. Use drill-down for detail; forms need labels. Design specifically for a phone, never a shrunken desktop. Plan content to fit the visible viewport: keep primary navigation/actions visible and allow supporting content to scroll if needed.':'Use desktop/web composition, navigation, readable columns and intentional browser-width sections; do not impose mobile safe areas or tab bars. Website content scrolls vertically: plan full-length sections and footer instead of compressing the page into the initial viewport. The output screen height may extend to 20000 pixels. Use same-page section anchors where appropriate.'}
 Use realistic product-specific catalog/editorial content when appropriate (such as destination names), never lorem ipsum, Card title, Item 1 or fabricated personal records, account balances or live activity. Unless supplied by the user, profile is unsigned-in or unset, saved items are empty, fitness metrics/activity are unrecorded, and trip detail is a clearly labeled destination/itinerary preview rather than a confirmed booking. Do not plan fake membership tiers, loyalty points, passport details, cache sizes, live forecasts or confirmed flights. Use useful empty states for unknown personal data. Plan editable HTTPS images only where helpful, with aspect ratio, crop, size, placement and coherent visual language. Never use UI screenshots. Navigation must connect requested screens. Detail pages are drill-down destinations, not automatic peer tabs. Loading/error states belong only where relevant, not all at once.
-Before returning, critique each composition: obvious purpose and primary action, differentiated hierarchy, rhythm, balanced density, consistent system, product identity, no generic card stack or unfinished empty areas. Revise weak plans silently. Use only static design principles; no external tools, research claims, MCP or Appllama runtime services.`;
+Before returning, critique each composition: obvious purpose and primary action, differentiated hierarchy, rhythm, balanced density, consistent system, product identity, no generic card stack or unfinished empty areas. Revise weak plans silently. Use only static design principles; no external tools, research claims, MCP or runtime research services.`;
 }
+<<<<<<< Updated upstream
 export async function planDesign(prompt:string,productType:ProductType,generate:(body:unknown,stage?:string)=>Promise<string>,knowledge?:{promptAnalysis:PromptAnalysis;selectedGuidance:SelectedGuidance}):Promise<DesignPlan> {
   const requiredScreens=requestedScreenDetails(prompt,knowledge?.promptAnalysis.screens??[]),requiredNames=requiredScreens.map(s=>s.expectedName);
   const requirements=resolveRequirements(prompt,requiredNames,knowledge?.promptAnalysis.requirements);
@@ -70,6 +70,13 @@ export async function planDesign(prompt:string,productType:ProductType,generate:
   let raw=await generate({systemInstruction:{parts:[{text:planningInstructions(productType)+(knowledge?'\n\n'+KNOWLEDGE_PRECEDENCE:'')}]},contents:[{role:'user',parts:[{text:JSON.stringify({prompt,productType,requiredScreens,...normalizedKnowledge})}]}],generationConfig:configuration});
   let partial:DesignPlan|undefined,repairBase:DesignPlan|undefined,missingToRepair:ScreenRequirement[]=[];
   for(let attempt=0;attempt<2;attempt++)try {
+=======
+export async function planDesign(prompt:string,productType:ProductType,generate:(body:unknown)=>Promise<string>,context?:{promptAnalysis:PromptAnalysis}):Promise<DesignPlan> {
+  const requirements=resolveRequirements(prompt,context?.promptAnalysis.screens??[],context?.promptAnalysis.requirements);
+  const normalizedContext=context?{promptAnalysis:{...context.promptAnalysis,requirements}}:undefined;
+  const raw=await generate({systemInstruction:{parts:[{text:planningInstructions(productType)}]},contents:[{role:'user',parts:[{text:JSON.stringify({prompt,productType,...normalizedContext})}]}],generationConfig:{responseMimeType:'application/json',responseJsonSchema:planningJsonSchema(productType)}});
+  try {
+>>>>>>> Stashed changes
     const input=parseGeminiJson(raw,'design plan') as any;
     // The common 999px pill convention is equivalent here to 500px, the
     // existing shared token limit. Canonicalize it before validating the plan.
@@ -92,10 +99,18 @@ export async function planDesign(prompt:string,productType:ProductType,generate:
     plan.screens.forEach((screen,index)=>{screen.id??=requiredScreens.find(required=>required.key===screenNameKey(screen.name))?.id??`screen-${index+1}`;});
     partial=plan;
     if(!plan.journey||!plan.visualRationale)throw new GeminiError('The design plan omitted its journey or product-specific visual rationale. Your prompt is preserved.','PLAN_CONSISTENCY');
+<<<<<<< Updated upstream
     enforceScreenRequirements(plan.screens,requiredNames,requirements,prompt,requiredScreens);
     if(plan.journey)validateJourney(plan);
     if(plan.productType!==productType)throw new Error('Type mismatch');
     if(new Set(plan.screens.map(s=>screenNameKey(s.name))).size!==plan.screens.length)throw new Error('Duplicate screens');
+=======
+    enforceScreenRequirements(plan.screens,context?.promptAnalysis.screens??[],requirements,prompt);
+    if(plan.journey)validateJourney(plan);
+    if(plan.productType!==productType)throw new Error('Type mismatch');
+    if(new Set(plan.screens.map(s=>s.name)).size!==plan.screens.length)throw new Error('Duplicate screens');
+    if(context?.promptAnalysis.screens.some(name=>!plan.screens.some(screen=>screen.name.toLowerCase()===name.toLowerCase())))throw new Error('Missing requested screen');
+>>>>>>> Stashed changes
     if(new Set(plan.visualTokens.typography.map(t=>t.role)).size!==7)throw new Error('Duplicate typography roles');
     for(const [roles,expected] of [[plan.visualTokens.spacing,['xs','sm','md','lg','xl','2xl']],[plan.visualTokens.radii,['small','medium','large','pill']]] as const) {
       if(!expected.every(role=>roles.some(t=>t.role===role)))throw new Error('Missing scale roles');

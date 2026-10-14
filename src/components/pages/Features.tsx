@@ -32,7 +32,7 @@ const SECTIONS = [
     items: [
       {
         title: "Frame 1 / Pro / Research",
-        desc: "Three models, one interface. Frame Research uses Appllama MCP for pattern-grounded generation.",
+        desc: "Three models, one interface. Generate and refine editable designs using the configured server-side Gemini model.",
         icon: "▷",
       },
       {

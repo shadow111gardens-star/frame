@@ -74,16 +74,6 @@ export const POSTS: BlogPost[] = [
     author: "Daniel Okafor",
   },
   {
-    slug: "research-with-appllama",
-    title: "How we use Appllama to research mobile patterns at scale",
-    excerpt:
-      "A behind-the-scenes look at the research pipeline that powers FRAME's AI — and the design lessons we learned from analyzing 50,000 mobile screens.",
-    category: "AI",
-    readTime: "11 min read",
-    date: "Feb 18, 2026",
-    author: "Jonas Lindqvist",
-  },
-  {
     slug: "principles-of-restraint",
     title: "The principles of restraint: how we designed FRAME",
     excerpt:

@@ -30,7 +30,7 @@ test('generation, independent screens, nested selection, property edits, AI modi
   globalThis.fetch=(async(_url,init)=>{
     const input=JSON.parse(String(init?.body));requests.push(input);
     if(release===undefined || holdNext) {holdNext=false;await new Promise<void>(resolve=>{release=resolve;});}
-    if(fail)return new Response(JSON.stringify({error:failSchema?'Gemini returned invalid prompt analysis: styleHints (too_big). Your original prompt is preserved.':'Invalid design response',...(failSchema?{code:'ANALYSIS_SCHEMA',retryable:false}:{})}),{status:502});
+    if(fail)return new Response(JSON.stringify({error:failSchema?'Gemini returned invalid prompt analysis: goals (too_big). Your original prompt is preserved.':'Invalid design response',...(failSchema?{code:'ANALYSIS_SCHEMA',retryable:false}:{})}),{status:502});
     const app=input.app??fixture();if(input.mode==='modify')app.screens[0].components.find((c:any)=>c.id==='button').styles.background='#8000ff';
     return new Response(JSON.stringify({message:input.mode==='modify'?'Updated primary button':'Created Home and Profile',app}));
   }) as typeof fetch;

@@ -14,11 +14,10 @@ const ENTRIES: Entry[] = [
     version: "v2.0.0",
     date: "May 4, 2026",
     type: "Major",
-    title: "Laptop preview · Appllama integration · Credits system",
+    title: "Laptop preview and Credits system",
     items: [
       "New device selector with MacBook Pro 16, MacBook Air 13, Dell XPS 15, ThinkPad X1 and more.",
       "Real laptop mockups in Prototype mode — open your web design in a MacBook frame.",
-      "Appllama MCP integration for research-driven design generation.",
       "Per-project credit usage tracking with monthly reset.",
       "New AI preferences: model selection (Frame 1 / Pro / Research) and tone control.",
     ],

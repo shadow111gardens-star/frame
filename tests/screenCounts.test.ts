@@ -3,7 +3,6 @@ import assert from 'node:assert/strict';
 import {resolveRequirements,screenCountConstraints,enforceScreenRequirements} from '../server/designRequirements';
 import {analyzeDesignPrompt} from '../server/designKnowledge/analysis';
 import {planDesign} from '../server/designPlanning';
-import {selectDesignGuidance} from '../server/designKnowledge/selection';
 import {fixture} from './fixture';
 import {planFixture} from './planFixture';
 
@@ -34,7 +33,7 @@ test('analysis and planning discard invented counts without changing the origina
  const prompt='Create an original mobile app for independent artists.';
  const analyzed=await analyzeDesignPrompt(prompt,async()=>JSON.stringify({productType:'mobile_app',requirements:invented}),'mobile_app');
  assert.equal(analyzed.requirements?.requestedScreenCount,null);
- const knowledge={promptAnalysis:{...analyzed,requirements:invented},selectedGuidance:selectDesignGuidance(prompt,analyzed,'generate')};
+ const knowledge={promptAnalysis:{...analyzed,requirements:invented}};
  let request:any;
  const plan=await planDesign(prompt,'mobile_app',async body=>{request=JSON.parse((body as any).contents[0].parts[0].text);return JSON.stringify(planFixture(fixture()));},knowledge);
  assert.equal(request.prompt,prompt);assert.equal(request.promptAnalysis.requirements.requestedScreenCount,null);

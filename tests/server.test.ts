@@ -19,9 +19,13 @@ test('server forwards exact prompts, uses the server key and validates generatio
       forwarded.push(request);
       if(upstreamFail)return new Response('{}',{status:503});
       const properties=request.generationConfig.responseJsonSchema.properties;
+<<<<<<< Updated upstream
       if(properties.plan){const a=fixture();a.productType=productType;a.screens.forEach(screen=>{screen.width=previewConfig(productType).viewportWidth;screen.height=previewConfig(productType).viewportHeight;});const spec=specificationFixture(planFixture(a),JSON.parse(request.contents[0].parts[0].text).originalPrompt,badAnalysis?{}:{productType:analysisType??productType,screens:[]});if(badPlan)spec.plan={} as any;return Response.json({candidates:[{finishReason:'STOP',content:{parts:[{text:JSON.stringify(spec)}]}}]});}
       if(properties.designMd){const payload=JSON.parse(request.contents[0].parts[0].text);return Response.json({candidates:[{finishReason:"STOP",content:{parts:[{text:JSON.stringify(designMdFixture(payload.designPlan,payload.originalPrompt))}]}}]});}
       if(!properties.app && !properties.visualTokens) return new Response(JSON.stringify({candidates:[{finishReason:'STOP',content:{parts:[{text:badAnalysis?'{}':JSON.stringify({productType:analysisType??productType,category:'fitness',audience:'Adults',styleHints:[],theme:'unspecified',preferences:{style:[],colors:[],typography:[],branding:[]},goals:[],screens:[],sections:[],uxNeeds:['data']})}]}}]}));
+=======
+      if(!properties.app && !properties.visualTokens) return new Response(JSON.stringify({candidates:[{finishReason:'STOP',content:{parts:[{text:badAnalysis?'{}':JSON.stringify({productType:analysisType??productType,audience:'Adults',theme:'unspecified',preferences:{style:[],colors:[],typography:[],branding:[]},goals:[],screens:[],sections:[]})}]}}]}));
+>>>>>>> Stashed changes
       const app=fixture();app.productType=productType;
       app.screens.forEach(s=>{s.width=previewConfig(productType).viewportWidth;s.height=previewConfig(productType).viewportHeight;});
       if(properties.visualTokens)return new Response(JSON.stringify({candidates:[{finishReason:'STOP',content:{parts:[{text:badPlan?'{}':JSON.stringify(planFixture(app))}]}}]}));
@@ -39,6 +43,7 @@ test('server forwards exact prompts, uses the server key and validates generatio
   try {
     const prompt='  Create a Fitness app.\nHome and Profile.  ';
     const result=await post({mode:'generate',prompt});assert.equal(result.status,200);
+<<<<<<< Updated upstream
     assert.equal(JSON.parse((forwarded[0] as any).contents[0].parts[0].text).originalPrompt,prompt);
     assert.ok((forwarded[0] as any).systemInstruction.parts[0].text.includes('COMBINED SPECIFICATION'));
     const generated=JSON.parse((forwarded[1] as any).contents[0].parts[0].text);
@@ -54,6 +59,38 @@ test('server forwards exact prompts, uses the server key and validates generatio
     assert.equal(editInput.activeScreen,'home');assert.equal(editInput.designMd,undefined);
 
     const modification=(forwarded[2] as any).systemInstruction.parts[0].text;
+=======
+    assert.equal(JSON.parse((forwarded[0] as any).contents[0].parts[0].text).prompt,prompt);
+    const planning=(forwarded[1] as any);
+    assert.ok(planning.systemInstruction.parts[0].text.includes('DESIGN PLANNING STAGE'));
+    assert.equal(JSON.parse(planning.contents[0].parts[0].text).prompt,prompt);
+    const planInput=JSON.parse(planning.contents[0].parts[0].text);
+    assert.equal('selectedGuidance' in planInput,false);
+    assert.equal(planInput.promptAnalysis.productType,'mobile_app');
+    const generated=JSON.parse((forwarded[2] as any).contents[0].parts[0].text);
+    assert.equal(generated.prompt,prompt);
+    assert.deepEqual(generated.designPlan.designSystem,fixture().designSystem);
+    assert.equal('selectedGuidance' in generated,false);
+    const reviewed=JSON.parse((forwarded[3] as any).contents[0].parts[0].text);
+    assert.equal(reviewed.mode,'review');assert.equal(reviewed.prompt,prompt);
+    assert.equal('selectedGuidance' in reviewed,false);
+    assert.deepEqual(reviewed.candidateDesign,fixture());
+    assert.ok((forwarded[3] as any).systemInstruction.parts[0].text.includes('FINAL VISUAL CRITIQUE AND REVISION'));
+    const mobileInstruction=(forwarded[2] as any).systemInstruction.parts[0].text;
+    assert.ok(mobileInstruction.includes('authoritative productType is mobile_app'));
+    assert.ok(mobileInstruction.includes('PROJECT DESIGN SYSTEM'));
+    assert.ok(mobileInstruction.includes('STRUCTURED EDITABLE OUTPUT'));
+    assert.ok(!mobileInstruction.includes('WEBSITE DESIGN QUALITY'));
+    assert.ok(!(forwarded[0] as any).systemInstruction.parts[0].text.includes('MOBILE DESIGN QUALITY'));
+    const update=await post({mode:'modify',prompt:'Make the button purple',app:fixture(),activeScreen:'home'});assert.equal(update.status,200);
+    assert.equal(JSON.parse((forwarded[4] as any).contents[0].parts[0].text).currentDesign.screens[0].components[1].text,'Daily activity');
+    assert.equal(forwarded.length,5);
+    assert.equal(JSON.parse((forwarded[4] as any).contents[0].parts[0].text).designPlan,undefined);
+    const editInput=JSON.parse((forwarded[4] as any).contents[0].parts[0].text);
+    assert.equal(editInput.activeScreen,'home');assert.equal('selectedGuidance' in editInput,false);
+    assert.equal('promptAnalysis' in editInput,false);
+    const modification=(forwarded[4] as any).systemInstruction.parts[0].text;
+>>>>>>> Stashed changes
     assert.ok(modification.includes('MODIFY THE EXISTING DESIGN'));
     assert.ok(modification.includes('Treat currentDesign as the source of truth'));
     assert.ok(modification.includes('do not recolor unrelated screens or rewrite content'));
@@ -74,7 +111,7 @@ test('server forwards exact prompts, uses the server key and validates generatio
     assert.equal(website.status,200);
     const websiteApp=(await website.json()).app;
     const webInstruction=(forwarded[forwarded.length-1] as any).systemInstruction.parts[0].text;
-    assert.ok(webInstruction.includes('WEBSITE DESIGN QUALITY'));
+    assert.ok(webInstruction.includes('authoritative productType is website'));
     assert.ok(!webInstruction.includes('MOBILE DESIGN QUALITY'));
     assert.ok(!webInstruction.includes('44 logical pixels'));
     assert.ok(webInstruction.includes('1440 by 900'));
@@ -83,7 +120,7 @@ test('server forwards exact prompts, uses the server key and validates generatio
     assert.equal((await post({mode:'modify',prompt:'Add a settings page.',app:websiteApp,editScope:'project'})).status,200);
     assert.equal(forwarded.length,calls+1); // Existing product type skips classification.
     const webUpdate=(forwarded[forwarded.length-1] as any).systemInstruction.parts[0].text;
-    assert.ok(webUpdate.includes('WEBSITE DESIGN QUALITY'));
+    assert.ok(webUpdate.includes('authoritative productType is website'));
     assert.ok(webUpdate.includes('MODIFY THE EXISTING DESIGN'));
     assert.ok(!webUpdate.includes('MOBILE DESIGN QUALITY'));
     assert.ok(!/mcp\.appllama|appllama-usage|Appllama API/.test(webUpdate));

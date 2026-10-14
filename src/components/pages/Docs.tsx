@@ -16,7 +16,7 @@ const SECTIONS = [
     title: "AI & generation",
     pages: [
       { id: "prompts", title: "Writing great prompts", body: "Describe the audience, the main task, and the feeling. The more specific you are, the closer the first version is to what you want. Mention platforms (iOS / Android), reference apps, or specific colors." },
-      { id: "models", title: "Models & tone", body: "FRAME offers three models. Frame 1 is fast. Frame 1 Pro is the default. Frame Research uses the Appllama MCP for pattern-grounded generation. Each request is a single, undoable transaction." },
+      { id: "models", title: "Models & tone", body: "FRAME offers three models. Frame 1 is fast. Frame 1 Pro is the default. Design generation uses the configured server-side Gemini model. Model labels do not enable external research. Each request is a single, undoable transaction." },
       { id: "actions", title: "AI actions", body: "FRAME's AI produces structured actions against your project: update component styles, add a screen, move components, change tokens. The actions are validated before they're applied, so you can trust the result." },
     ],
   },

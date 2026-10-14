@@ -16,7 +16,11 @@ import {qualityReviewSchema} from '../shared/designQuality';
 import {buildDesignInstructions} from "./designInstructions";
 import type { IncomingMessage, ServerResponse } from 'node:http';
 import { responseJsonSchema, responseSchema, validateApp,validateGeneratedFonts } from '../shared/design';
+<<<<<<< Updated upstream
 import {editAnalysis} from './designKnowledge/selection';
+=======
+import {analyzeDesignPrompt} from './designKnowledge/analysis';
+>>>>>>> Stashed changes
 import { previewConfig } from '../shared/product';
 import {validatePlannedDesign,validatePlannedScreens,applyPlannedInsets,completePlannedSystem,resolvedPlanNavigation,designPlanSchema,type DesignPlan} from './designPlanning';
 import {parseGeminiJson,GeminiError,generateGeminiText} from './geminiResponse';
@@ -127,6 +131,7 @@ export function designRoute(env: Record<string,string|undefined>,identity=verify
       if(reservation?.replay){const result=await reservation.replay;return send(result.status,result.data);}
       completeReplay=reservation?.complete;
       const deadline=Date.now()+Math.min(timeoutMs,input.timeoutMs===undefined?timeoutMs:Math.max(1000,input.timeoutMs-5000));
+<<<<<<< Updated upstream
       streaming=req.headers.accept==='application/x-ndjson';
       if(streaming){res.writeHead(200,{'Content-Type':'application/x-ndjson','Cache-Control':'no-store','X-Accel-Buffering':'no'});}
       const generate=(body:unknown)=>generateAt(body,current?qualityReview?'rendered-review':'modification':'draft');
@@ -185,6 +190,18 @@ currentStage=name;attemptCounts[name]=(attemptCounts[name]??0)+1;if(streaming&&!
         artifact.warnings=missing.map(r=>'Missing '+r.kind+' "'+r.text+'" on '+r.screenName+' ('+r.screenId+').');
 
         artifact.status=artifact.warnings.length?'partial':'complete';
+=======
+      let stage=0;const stages=current?[qualityReview?'rendered-review':'modification']:['analysis','planning','draft','review'];
+      const generate=(body:unknown)=>generateGeminiText(body,{key,model,deadline,attemptTimeoutMs,signal:controller.signal,stage:stages[stage++]??'generation'});
+      const promptAnalysis=current?undefined:await analyzeDesignPrompt(input.prompt,generate,input.productType);
+      const productType=current?.productType??promptAnalysis!.productType;
+      const config=previewConfig(productType);
+      const designPlan=input.mode==='generate'?await planDesign(input.prompt,productType,generate,{promptAnalysis:promptAnalysis!}):undefined;
+      let text=await generate({systemInstruction:{parts:[{text:buildDesignInstructions(productType,input.mode)+(current&&!qualityReview?`\nAUTHORIZED EDIT SCOPE: ${editScope}. ${editScope==='screen'?'Redesign only screen '+activeScreen+'. Keep all unrelated screens and shared design settings exactly unchanged. New/remove/recompose components only inside that screen.':'The user explicitly selected project scope; apply only the requested project-wide changes.'}`:'')+(qualityReview?'\nRENDERED QUALITY CORRECTION: The currentDesign is an unpublished generated candidate. Review actual attached rendered captures against the original prompt: hierarchy, composition, typography, spacing, readability, product-specific visual identity and responsive intent. Improve weak compositions, not merely geometry. Fix measured defects contextually. If already deliberate and polished, return it unchanged. Captures may be downscaled and sampled; do not claim all screens or breakpoints were visually verified. When no capture exists, use measurements only and never claim image-based verification. Preserve screen IDs, designSystem and all screens outside qualityReview.screenIds (or named issues/captures when screenIds is absent). Preserve useful component IDs; limit all corrections to that authorized review scope. Use the original user prompt for product intent. Warnings about whitespace, contrast or overlaps require contextual judgment; do not add filler, remove intentional layers or indiscriminately pack empty states. Return the complete app.':'' )}]},contents:[{role:'user',parts:[{text:JSON.stringify({mode:input.mode,prompt:input.prompt,productType,viewport:{width:config.viewportWidth,height:config.viewportHeight},promptAnalysis,designPlan,currentDesign:current,activeScreen,editScope,policyVersion:designPolicy.version,qualityReview:qualityReview?{issues:qualityReview.issues,visualReview:qualityReview.visualReview,screenIds:qualityReview.screenIds}:undefined})},...(qualityReview?.screenshots??[]).flatMap(image=>[{text:'Rendered screen '+image.screenId},{inlineData:{mimeType:'image/jpeg',data:image.data}}])]}],generationConfig:{responseMimeType:'application/json',responseJsonSchema}});
+      if(designPlan) {
+        const candidate=parseDesignOutput(text,'design draft',productType);
+        text=await generate({systemInstruction:{parts:[{text:buildVisualReviewInstructions(productType)}]},contents:[{role:'user',parts:[{text:JSON.stringify({mode:'review',prompt:input.prompt,productType,promptAnalysis,designPlan,candidateDesign:candidate.app,structuralQuality:inspectStructure(candidate.app)})}]}],generationConfig:{responseMimeType:'application/json',responseJsonSchema}});
+>>>>>>> Stashed changes
       }
       if(current&&!qualityReview&&editScope==='screen'){
         if(result.app.screens.some(s=>!current.screens.some(original=>original.id===s.id)))return send(422,{error:'Adding screens requires Entire project scope in the AI Designer. Select it and resend. Your prompt and existing design are preserved.',code:'EDIT_SCOPE',retryable:false});
